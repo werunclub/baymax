@@ -1,25 +1,22 @@
 package model
 
 import (
-    "github.com/jinzhu/gorm"
     "time"
-    "os"
-    "text/scanner"
+    "github.com/jinzhu/gorm"
+    "strings"
 )
 
-// gorm.Model 的定义
-// type Model struct {
-//     ID        uint `gorm:"primary_key"`
-//     CreatedAt time.Time
-//     UpdatedAt time.Time
-//     DeletedAt *time.Time
-// }
 
 const userIdSize = 36
 
-type Club struct {
-    gorm.Model
+func init() {
+    gorm.DefaultTableNameHandler = func (db *gorm.DB, defaultTableName string) string  {
+        defaultTableName = strings.Replace(defaultTableName, "_", "", -1)
+        return "baz_" + defaultTableName;
+    }
+}
 
+type Club struct {
     UserID string `gorm:"size:36"`
     Name string `gorm:"size:32;unique"`
     Icon string `gorm:"size:128;default:''"`
@@ -38,6 +35,8 @@ type Club struct {
     IndustryID int
     //  -1位表示 是否参与排序  -2位表示 是否已经验证身份
     CommonByte int `gorm:"default:0"`
+
+    CreateTime time.Time
 
     Teams []Team
     Persons []ClubPerson
@@ -58,14 +57,14 @@ type Club struct {
 
 // 部门
 type Team struct {
-    gorm.Model
-
     ClubID int `gorm:"index"`
     Parent int `gorm:"index"`
 
     Name string `gorm:"size:32"`
     DataBody string `gorm:"size:512;default:''"`
     Count int `gorm:"default:0"`
+
+    CreateTime time.Time
 
     Teams []Team
     Persons []ClubPerson
@@ -76,8 +75,6 @@ type Team struct {
 
 // 俱乐部成员
 type ClubPerson struct {
-    gorm.Model
-
     UserID string `gorm:"size:36;default:'';index:idx_user_club"`
     // FIXME 第一个 index 是否必须
     ClubID int `gorm:"index;index:idx_user_club"`
@@ -88,6 +85,10 @@ type ClubPerson struct {
     Mobile string `gorm:"size:24;default:''"`
     Email string `gorm:"size:64;default:''"`
     State bool `gorm:"default:false"`
+
+    UpdateTime time.Time
+    CreateTime time.Time
+
     Priv string `gorm:"size:10;default:111"`
     DataBody string `gorm:"size:512;default:''"`
 
@@ -99,8 +100,6 @@ type ClubPerson struct {
 
 // 俱乐部部门权限
 type ClubTeamRole struct {
-    gorm.Model
-
     TeamID int `gorm:"index"`
     ClubID int `gorm:"index"`
     Person int `gorm:"index;unique_index"`
@@ -108,6 +107,9 @@ type ClubTeamRole struct {
     // FIXME role_choices = ((1, u'管理员'),)
     Role int `gorm:"default:'0'"`
     LastMsgID int `gorm:"default:'0'"`
+
+    UpdateTime time.Time
+    CreateTime time.Time
 }
 
 
