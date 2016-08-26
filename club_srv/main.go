@@ -41,9 +41,15 @@ func init() {
 
 func main() {
 
+	var database_dsn string
+	var database_type string
+
+	flag.StringVar(&database_type, "database_type", "mysql", "database type")
+	flag.StringVar(&database_dsn, "database_dsn", "root:123456@(127.0.0.1:33060)/club_dev?charset=utf8&parseTime=True&loc=Local", "database dsn")
+
 	flag.Parse()
 
-	db.Init()
+	db.Init(database_type, database_dsn)
 
 	run()
 }
