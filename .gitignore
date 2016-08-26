@@ -122,3 +122,8 @@ _testmain.go
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+/vendor
+.idea
+.vscode
+club-backend.iml
