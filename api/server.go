@@ -1,8 +1,8 @@
 package main
 
 import (
-	"club-backend/api/handler/v1"
-	mw "club-backend/api/middleware"
+	"baymax/api/handler/v1"
+	mw "baymax/api/middleware"
 
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
