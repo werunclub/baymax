@@ -7,25 +7,19 @@ import (
 	"time"
 )
 
-type Log interface {
-	Error(format string, args ...interface{})
-	Info(format string, args ...interface{})
-	Notice(format string, args ...interface{})
-}
-
 // Client represents a RPC client.
 type Client struct {
 	rpcClient *rpc.Client
 	net       string
 	addr      string
 	timeout   time.Duration
-	logger    Log
 }
 
 func NewClient(net, addr string) *Client {
 	return &Client{
-		net:  net,
-		addr: addr,
+		net:     net,
+		addr:    addr,
+		timeout: time.Second * 10,
 	}
 }
 
@@ -51,10 +45,11 @@ func (c *Client) Connect() error {
 }
 
 // 断开连接
-func (c *Client) Close() {
+func (c *Client) Close() error {
 	if c.rpcClient != nil {
-		c.rpcClient.Close()
+		return c.rpcClient.Close()
 	}
+	return nil
 }
 
 // 调用方法

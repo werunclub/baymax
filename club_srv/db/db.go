@@ -20,3 +20,7 @@ func Init(database_url string) {
 	Db.AutoMigrate(&model.Club{})
 	//defer Db.Close()
 }
+
+func Close() {
+	Db.Close()
+}
