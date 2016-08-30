@@ -1,5 +1,11 @@
 package club
 
+const (
+	prefix            = "Club."
+	ServiceGetClub    = prefix + "Get"
+	ServiceCreateClub = prefix + "Create"
+)
+
 type Club struct {
 	Avatar string  `json:"avatar"`
 	Nick   string  `json:"nick"`
@@ -14,8 +20,4 @@ type GetRequest struct {
 type GetResponse struct {
 	TotalNum int64  `json:"total_num"`
 	Data     []Club `json:"data"`
-}
-
-var ClubRpcFuncMap map[string]string = map[string]string{
-	"get": "ClubHandler.Get",
 }

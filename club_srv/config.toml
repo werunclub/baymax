@@ -1,0 +1,11 @@
+ServiceName = "api"
+
+[Server]
+Addr = ":8080"
+
+[Database]
+Address = "root:123456@(127.0.0.1:3306)/club_srv?charset=utf8&parseTime=True&loc=Local"
+
+[Registry]
+Type = "consul"
+Address = "127.0.0.1:8300"

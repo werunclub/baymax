@@ -1,30 +1,21 @@
 package main
 
 import (
-	club_proto "club-backend/club_srv/protocol/club"
-	"club-backend/common/util"
+	"baymax/club_srv/protocol/club"
+	"baymax/rpc/client"
 	"fmt"
-
-	logging "third/go-logging"
 )
 
-var log = logging.MustGetLogger("client")
-
 func main() {
+	c := client.NewClient("tcp", ":8081")
+	defer c.Close()
 
-	var (
-		err    error
-		client *util.RpcClient
-	)
+	var reply club.GetResponse
 
-	client, err = util.NewRpcClient("127.0.0.1:8081", "tcp", club_proto.ClubRpcFuncMap, "club_profile", log)
-	if nil != err {
-		fmt.Println(err)
+	err := c.Call(club.ServiceCreateClub, &club.GetRequest{ClubId: 100}, &reply)
+	if err != nil {
+		panic(err)
 	}
-
-	var reply club_proto.GetResponse
-
-	client.Call("get", &club_proto.GetRequest{ClubId: 1}, &reply)
 
 	fmt.Println(reply)
 }

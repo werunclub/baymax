@@ -1,15 +1,16 @@
 package db
 
 import (
+	"baymax/common/model"
 	"github.com/jinzhu/gorm"
-	"club-backend/common/model"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
+
 var Db *gorm.DB
 
-func Init(database_type string, database_dsn string)  {
+func Init(database_url string) {
 	var err error
-	Db, err = gorm.Open(database_type, database_dsn)
+	Db, err = gorm.Open("mysql", database_url)
 	Db.SingularTable(true)
 
 	if err != nil {
