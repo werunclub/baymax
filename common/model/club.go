@@ -2,21 +2,21 @@ package model
 
 import (
     "time"
-    "github.com/jinzhu/gorm"
     "strings"
+    "github.com/jinzhu/gorm"
 )
-
-
-const userIdSize = 36
 
 func init() {
     gorm.DefaultTableNameHandler = func (db *gorm.DB, defaultTableName string) string  {
         defaultTableName = strings.Replace(defaultTableName, "_", "", -1)
-        return "baz_" + defaultTableName;
+        return "club_" + defaultTableName;
     }
 }
 
+
+// 俱乐部
 type Club struct {
+    ID uint `gorm:"primary_key"`
     UserID string `gorm:"size:36"`
     Name string `gorm:"size:32;unique"`
     Icon string `gorm:"size:128;default:''"`
@@ -33,7 +33,7 @@ type Club struct {
     CityCode string `gorm:"size:8;default:0"`
     // 所属行业
     IndustryID int
-    //  -1位表示 是否参与排序  -2位表示 是否已经验证身份
+    // -1位表示 是否参与排序  -2位表示 是否已经验证身份
     CommonByte int `gorm:"default:0"`
 
     CreateTime time.Time
@@ -54,9 +54,9 @@ type Club struct {
     ClubIndustryWeekSorts []ClubIndustryWeekSort
 }
 
-
 // 部门
 type Team struct {
+    ID uint `gorm:"primary_key"`
     ClubID int `gorm:"index"`
     Parent int `gorm:"index"`
 
@@ -72,9 +72,9 @@ type Team struct {
     Matchs []Match
 }
 
-
 // 俱乐部成员
 type ClubPerson struct {
+    ID uint `gorm:"primary_key"`
     UserID string `gorm:"size:36;default:'';index:idx_user_club"`
     // FIXME 第一个 index 是否必须
     ClubID int `gorm:"index;index:idx_user_club"`
@@ -100,6 +100,7 @@ type ClubPerson struct {
 
 // 俱乐部部门权限
 type ClubTeamRole struct {
+    ID uint `gorm:"primary_key"`
     TeamID int `gorm:"index"`
     ClubID int `gorm:"index"`
     Person int `gorm:"index;unique_index"`
@@ -115,6 +116,7 @@ type ClubTeamRole struct {
 
 // 俱乐部成员数据修复
 type ClubPersonFixedData struct {
+    ID uint `gorm:"primary_key"`
     PersonID int `gorm:"index;index:'idx_person_curday'"`
     Curday time.Time `gorm:"index:'idx_person_curday"`
     Steps int `gorm:"default:0"`
@@ -125,6 +127,7 @@ type ClubPersonFixedData struct {
 
 // 俱乐部公告
 type ClubBoard struct {
+    ID uint `gorm:"primary_key"`
     UserID string `gorm:"size:36"`
     ClubID int `gorm:"index"`
     Notice string `gorm:"type:text;default:''"`
@@ -134,6 +137,7 @@ type ClubBoard struct {
 
 // 俱乐部话题
 type Topic struct {
+    ID uint `gorm:"primary_key"`
     ClubID int `gorm:"index"`
     UserId string `gorm:"size:36"`
 
@@ -162,6 +166,7 @@ type Topic struct {
 
 // 活动
 type Activity struct {
+    ID uint `gorm:"primary_key"`
     ClubID int `gorm:"index"`
     UserID string `gorm:"size:36"`
 
@@ -185,6 +190,7 @@ type Activity struct {
 
 // 活动参与人员
 type ActivityPerson struct {
+    ID uint `gorm:"primary_key"`
     ActivityID int `gorm:"index;index:idx_activity_user"`
     UserID string `gorm:"size:36;index:idx_activity_user"`
     JoinName string `gorm:"size:32"`
@@ -200,6 +206,7 @@ type Match struct {
     // data_type_choices = ((0, u'追踪器(走跑类)'), (1, u'码表(骑行类)'), (2, u'手机咕咚(路线类)'))
     // data_use_type_choices = ((0, u'步'), (1, u'米'),)
 
+    ID uint `gorm:"primary_key"`
     ClubID int `gorm:"index"`
     UserID string `gorm:"size:36;index"`
     TeamId int `gorm:"index"`
@@ -232,6 +239,7 @@ type Match struct {
 
 // 竞赛团队
 type MatchTeam struct {
+    ID uint `gorm:"primary_key"`
     MatchID int `gorm:"index;index:index:idx_match_name"`
     Name string `gorm:"size:32;default:'';index:idx_match_name"`
     UpdateTime time.Time
@@ -246,6 +254,7 @@ type MatchTeam struct {
 
 // 竞赛成员
 type MatchPerson struct {
+    ID uint `gorm:"primary_key"`
     UserID string `gorm:"size:32;index;index:idx_match_user"`
     MatchID int `gorm:"index;index:idx_match_user"`
     TeamID int `gorm:"index"`
@@ -271,6 +280,7 @@ type Challenge struct {
     // data_type_choices = ((0, u'追踪器(走跑类)'), (1, u'码表(骑行类)'), (2, u'手机咕咚
     // (路线类)'))
 
+    ID uint `gorm:"primary_key"`
     ClubID int `gorm:"index"`
     MapID int `gorm:"index"`
     UserID string `gorm:"size:36"`
@@ -297,6 +307,7 @@ type Challenge struct {
 
 // 竞赛团队
 type ChallengeTeam struct {
+    ID uint `gorm:"primary_key"`
     Name string `gorm:"size:32:index:idx_challenge_name"`
     ChallengeID int `gorm:"index;index:idx_challenge_name"`
     UpdateTime time.Time
@@ -313,6 +324,7 @@ type ChallengeTeam struct {
 
 // 挑战成员表
 type ChallengePerson struct {
+    ID uint `gorm:"primary_key"`
     UserID string `gorm:"size:36;index:idx_challenge_user"`
     ChallengeID int `gorm:"index;index:idx_challenge_user"`
     TeamID int `gorm:"index"`
@@ -328,6 +340,7 @@ type ChallengePerson struct {
 
 // 挑战者对应的线路
 type Map struct {
+    ID uint `gorm:"primary_key"`
     Name string `gorm:"size:32"`
     TotalDistance float32
     Img string `gorm:"size:128"`
@@ -343,6 +356,7 @@ type Map struct {
 
 // 线路对应的点
 type Point struct {
+    ID uint `gorm:"primary_key"`
     MapID int `gorm:"index"`
     // 距离起点距离
     Distance float32
@@ -357,6 +371,7 @@ type Point struct {
 
 // 俱乐部推荐阅读
 type Book struct {
+    ID uint `gorm:"primary_key"`
     Summary string `gorm:"type:text"`
     Img string `gorm:"size:128"`
     Url string `gorm:"size:128"`
@@ -369,6 +384,7 @@ type Book struct {
 
 // 俱乐部申请
 type ClubApply struct {
+    ID uint `gorm:"primary_key"`
     Name string `gorm:"size:128"`
     Email string `gorm:"size:128"`
     Nick string `gorm:"size:128"`
@@ -387,6 +403,7 @@ type ClubApply struct {
 
 // 运营俱乐部中奖名单
 type ClubApplyLottery struct {
+    ID uint `gorm:"primary_key"`
     Name string `gorm:"size:128"`
     Mobile string `gorm:"size:11"`
     Email string `gorm:"size:128"`
@@ -397,6 +414,7 @@ type ClubApplyLottery struct {
 // 俱乐部消息中心
 type ClubMessage struct {
     // FIXME msg_type_choices = ((0, u'俱乐部昨天加入成员'), (1, u'活动蒋开始消息'), (2, u'活动将结束通知'))
+    ID uint `gorm:"primary_key"`
     ClubID int `gorm:"index"`
     TeamID int `gorm:"default:0"`
     MsgType int `gorm:"default:0"`
@@ -409,6 +427,7 @@ type ClubMessage struct {
 
 // 俱乐部平均步数
 type ClubWeekSort struct {
+    ID uint `gorm:"primary_key"`
     ClubID int `gorm:"index;index:idx_club_curday"`
     Curday time.Time `gorm:"index;index:idx_club_curday"`
     Steps int `gorm:"default:0"`
@@ -420,6 +439,7 @@ type ClubWeekSort struct {
 
 // 俱乐部内用户周数据
 type ClubPersonWeekSort struct {
+    ID uint `gorm:"primary_key"`
     ClubID int `gorm:"index"`
     TeamID int `gorm:"default:0;index"`
     UserID string `gorm:"size:36;index"`
@@ -433,6 +453,7 @@ type ClubPersonWeekSort struct {
 
 // 用户周数据
 type UserWeekSteps struct {
+    ID uint `gorm:"primary_key"`
     UserID string `gorm:"size:36;index;index:idx_user_curday"`
     Curday time.Time `gorm:"index;index:idx_user_curday"`
     Steps int `gorm:"default:0"`
@@ -441,6 +462,7 @@ type UserWeekSteps struct {
 
 // 用户月数据
 type UserMonthSteps struct {
+    ID uint `gorm:"primary_key"`
     ClubID int `gorm:"default:0;index"`
     UserID string `gorm:"size:36;index"`
     Curday time.Time `gorm:"index"`
@@ -451,6 +473,7 @@ type UserMonthSteps struct {
 // 俱乐部帮助中心
 type ClubHelpMsg struct {
     // FIXME msg_type_choices = ((0, u'常见问题'), (1, u'申请俱乐部'), (2, u'管理俱乐部'), (3, u'活动'), (4, u'统计'),)
+    ID uint `gorm:"primary_key"`
     MsgType int `gorm:"default:0"`
     Title string `gorm:"size:128;"`
     Summary string `gorm:"type:text;default:''"`
@@ -465,6 +488,7 @@ type ClubHelpMsg struct {
 
 // 创建竞赛后竞赛部门和俱乐部部门对应表
 type MatchTeamInfo struct {
+    ID uint `gorm:"primary_key"`
     MatchID int `gorm:"index"`
     TeamID int `gorm:"default:0"`
     MatchTeamID int `gorm:"default:0"`
@@ -474,6 +498,7 @@ type MatchTeamInfo struct {
 
 // 俱乐部API权限对应表
 type ClubAuthorization struct {
+    ID uint `gorm:"primary_key"`
     ClubID int `gorm:"default:0;index"`
     Token string `gorm:"size:128"`
     // 0：普通；1：调试中
@@ -484,6 +509,7 @@ type ClubAuthorization struct {
 
 // 俱乐部用户GPS数据搜集表
 type ClubGpsRecord struct {
+    ID uint `gorm:"primary_key"`
     ClubID string `gorm:"size:36;index"`
     RouteId string `gorm:"size:36"`
     UserID string `gorm:"size:36;index"`
@@ -493,6 +519,7 @@ type ClubGpsRecord struct {
 
 // 俱乐部用户计步数据搜集表
 type ClubStepRecord struct {
+    ID uint `gorm:"primary_key"`
     ClubID string `gorm:"size:36;index"`
     UserID string `gorm:"size:36;index"`
     UploadTime time.Time
@@ -503,6 +530,7 @@ type ClubStepRecord struct {
 // 俱乐部广告
 type ClubAdvertisement struct {
     // FIXME vtype_choices = ((0, u'非俱乐部用户可见'), (1, u'俱乐部用户可见'), (2, u'全部用户可见'))
+    ID uint `gorm:"primary_key"`
     ImageUrl string `gorm:"size:256;default=''"`
     NextUrl string `gorm:"size:256;default=''"`
     StartTime time.Time `gorm:"index"`
@@ -518,6 +546,7 @@ type ClubAdvertisement struct {
 
 // 用户俱乐部汇总表-总表 自用户加入俱乐部后开始
 type ClubSummaryStepsRank struct {
+    ID uint `gorm:"primary_key"`
     Person int `gorm:"index"`
     TodayCurday time.Time `gorm:"index"`
     TodaySteps time.Time `gorm:"default:0"`
@@ -536,6 +565,7 @@ type ClubSummaryStepsRank struct {
 
 // 俱乐部行业
 type ClubIndustry struct {
+    ID uint `gorm:"primary_key"`
     Name string `gorm:"size:256"`
     Parent int `gorm:index`
     SortNum int `gorm:"default:0"`
@@ -548,6 +578,7 @@ type ClubIndustry struct {
 
 // 俱乐部行业周排名
 type ClubIndustryWeekSort struct {
+    ID uint `gorm:"primary_key"`
     ClubId int `gorm:"index"`
     Curday time.Time `gorm:index`
     // 俱乐部的父行业
@@ -559,6 +590,7 @@ type ClubIndustryWeekSort struct {
 
 // 俱乐部认证信息
 type ClubAuthenticateInfo struct {
+    ID uint `gorm:"primary_key"`
     ClubId int `gorm:"index"`
     // 公司全称
     Name string `gorm:"size:256"`
@@ -586,11 +618,13 @@ type ClubAuthenticateInfo struct {
 
 // 用户周数据V2版 , 加入了有户加入俱乐部日期的判断
 type UserWeekStepsV2 struct {
+    ID uint `gorm:"primary_key"`
     ClubId int `gorm:"default:0;index;index:idx_club_user_curday"`
-    UserId string `gorm:"size:36;index;index:idx_club_user_curday""`
+    UserId string `gorm:"size:36;index;index:idx_club_user_curday"`
     // 每周 1
-    Curday time.Time `gorm:"index;index:idx_club_user_curday""`
+    Curday time.Time `gorm:"index;index:idx_club_user_curday"`
     Steps int `gorm:"default:0"`
     UpdateTime time.Time
     CreateTime time.Time
 }
+
