@@ -3,7 +3,6 @@ package handler
 import (
 	"baymax/club_srv/model"
 	proto "baymax/club_srv/protocol/club"
-	"fmt"
 )
 
 type ClubHandler struct {}
