@@ -31,6 +31,7 @@ func main() {
 	err = server.Subscribe(server.NewSubscriber(
 		"go.testing.topic.good",
 		Handler,
+		pubsub.SubscriberQueue("testing"),
 	))
 
 	if err != nil {
@@ -40,6 +41,7 @@ func main() {
 	err = server.Subscribe(server.NewSubscriber(
 		"go.testing.topic.bad",
 		BadHandler,
+		pubsub.SubscriberQueue("testing"),
 	))
 
 	if err != nil {

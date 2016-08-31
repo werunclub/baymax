@@ -35,7 +35,7 @@ func sub() {
 	_, err := broker.Subscribe(topic, func(p broker.Publication) error {
 		fmt.Println("[sub] received message:", string(p.Message().Body), "header", p.Message().Header)
 		return nil
-	})
+	}, broker.Queue("testing"))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -52,6 +52,7 @@ func main() {
 	}
 
 	go pub()
+	go sub()
 	go sub()
 
 	<-time.After(time.Second * 10)
