@@ -18,7 +18,7 @@ func Init(database_url string) {
 	DB.SingularTable(true)
 
 	// DB.AutoMigrate(&model.Club{})
-	defer DB.Close()
+	// defer DB.Close()
 }
 
 func Close() {
