@@ -4,4 +4,4 @@ import:
   version: ^1.0.0
 - package: golang.org/x/net
   subpackages:
-  - http2
+   - http2

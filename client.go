@@ -2,14 +2,14 @@ package main
 
 import (
 	"baymax/club_srv/protocol/club"
-	"baymax/rpcx"
+	"baymax/rpc"
 	"fmt"
 	"log"
 	"time"
 )
 
 func main() {
-	client := rpcx.NewClient("tcp", ":8085", time.Duration(24*365)*time.Hour)
+	client := rpc.NewClient("tcp", ":8085", time.Duration(24*365)*time.Hour)
 	defer client.Close()
 
 	var reply club.GetResponse
