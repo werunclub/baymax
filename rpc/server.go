@@ -1,4 +1,4 @@
-package server
+package rpc
 
 import (
 	"net"
@@ -33,11 +33,6 @@ func (s *Server) Serve(network, address string) {
 		}
 		go s.rpcServer.ServeCodec(jsonrpc.NewServerCodec(c))
 	}
-}
-
-// 注册服务
-func (s *Server) Register(service interface{}) {
-	s.rpcServer.Register(service)
 }
 
 // 使用名称注册服务

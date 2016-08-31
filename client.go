@@ -2,20 +2,21 @@ package main
 
 import (
 	"baymax/club_srv/protocol/club"
-	"baymax/rpc/client"
+	"baymax/rpc"
 	"fmt"
+	"log"
+	"time"
 )
 
 func main() {
-	c := client.NewClient("tcp", ":8081")
-	defer c.Close()
+	client := rpc.NewClient("tcp", ":8081", time.Duration(24*365)*time.Hour)
+	defer client.Close()
 
 	var reply club.GetResponse
 
-	err := c.Call(club.ServiceCreateClub, &club.GetRequest{ClubId: 100}, &reply)
+	err := client.Call(club.ServiceCreateClub, &club.GetRequest{ClubId: 100}, &reply)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
-
 	fmt.Println(reply)
 }

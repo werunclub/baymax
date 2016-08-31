@@ -5,7 +5,7 @@ import (
 
 	"baymax/club_srv/db"
 	"baymax/club_srv/handler"
-	"baymax/rpc/server"
+	"baymax/rpc"
 
 	"github.com/jinzhu/configor"
 )
@@ -34,9 +34,9 @@ func main() {
 	// 连接数据库
 	db.Init(Config.Database.Address)
 
-	s := server.NewServer()
-	s.RegisterName("Club", new(handler.ClubHandler))
+	server := rpc.NewServer()
+	server.RegisterName("Club", new(handler.ClubHandler))
 
 	// 启动服务
-	s.Serve("tcp", Config.Server.Addr)
+	server.Serve("tcp", Config.Server.Addr)
 }

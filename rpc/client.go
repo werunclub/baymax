@@ -1,4 +1,4 @@
-package client
+package rpc
 
 import (
 	"net"
@@ -15,16 +15,16 @@ type Client struct {
 	timeout   time.Duration
 }
 
-func NewClient(net, addr string) *Client {
+func NewClient(net, addr string, timeout time.Duration) *Client {
 	return &Client{
 		net:     net,
 		addr:    addr,
-		timeout: time.Second * 10,
+		timeout: timeout,
 	}
 }
 
 // 建立连接
-func (c *Client) Connect() error {
+func (c *Client) connect() error {
 
 	if c.rpcClient != nil {
 		return nil
@@ -46,10 +46,7 @@ func (c *Client) Connect() error {
 
 // 断开连接
 func (c *Client) Close() error {
-	if c.rpcClient != nil {
-		return c.rpcClient.Close()
-	}
-	return nil
+	return c.rpcClient.Close()
 }
 
 // 调用方法
@@ -57,7 +54,7 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) error 
 
 	var err error
 
-	if err = c.Connect(); err != nil {
+	if err = c.connect(); err != nil {
 		return err
 	}
 
