@@ -1,14 +1,18 @@
 package rpc
 
 import (
+	"fmt"
 	"net"
 	"net/rpc"
 	"net/rpc/jsonrpc"
+
+	"baymax/broker"
 )
 
 type Server struct {
-	rpcServer *rpc.Server
-	listener  net.Listener
+	rpcServer   *rpc.Server
+	listener    net.Listener
+	subscribers map[*subscriber][]broker.Subscriber
 }
 
 func NewServer() *Server {
@@ -43,4 +47,31 @@ func (s *Server) RegisterName(name string, service interface{}) {
 // 关闭服务
 func (s *Server) Close() error {
 	return s.listener.Close()
+}
+
+func (s *Server) NewSubscriber(topic string, sb interface{}, opts ...SubscriberOption) Subscriber {
+	return newSubscriber(topic, sb, opts...)
+}
+
+func (s *rpcServer) Subscribe(sb Subscriber) error {
+	sub, ok := sb.(*subscriber)
+	if !ok {
+		return fmt.Errorf("invalid subscriber: expected *subscriber")
+	}
+	if len(sub.handlers) == 0 {
+		return fmt.Errorf("invalid subscriber: no handler functions")
+	}
+
+	if err := validateSubscriber(sb); err != nil {
+		return err
+	}
+
+	s.Lock()
+	_, ok = s.subscribers[sub]
+	if ok {
+		return fmt.Errorf("subscriber %v already exists", s)
+	}
+	s.subscribers[sub] = nil
+	s.Unlock()
+	return nil
 }
