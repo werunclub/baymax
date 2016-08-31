@@ -21,9 +21,10 @@ type Client struct {
 	once   sync.Once
 }
 
-func NewClient(opts ...broker.Option) *Client {
+func NewClient(addrs ...string) *Client {
+	opt := broker.Addrs(addrs...)
 	return &Client{
-		broker: broker.NewBroker(opts...),
+		broker: broker.NewBroker(opt),
 		once:   sync.Once{},
 	}
 }

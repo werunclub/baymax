@@ -24,11 +24,11 @@ func BadHandler(ctx context.Context, msg *Message) error {
 
 func main() {
 
-	server := pubsub.NewServer()
+	server := pubsub.NewServer("127.0.0.1:4150")
 
 	var err error
 
-	err = server.Subscribe(pubsub.NewSubscriber(
+	err = server.Subscribe(server.NewSubscriber(
 		"go.testing.topic.good",
 		Handler,
 	))
@@ -37,7 +37,7 @@ func main() {
 		log.Fatalf("fail")
 	}
 
-	err = server.Subscribe(pubsub.NewSubscriber(
+	err = server.Subscribe(server.NewSubscriber(
 		"go.testing.topic.bad",
 		BadHandler,
 	))

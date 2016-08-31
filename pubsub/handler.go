@@ -10,22 +10,8 @@ type Subscriber interface {
 	Options() SubscriberOptions
 }
 
-type HandlerOptions struct {
-	Internal bool
-	Metadata map[string]map[string]string
-}
-
 type SubscriberOptions struct {
-	Queue    string
-	Internal bool
-}
-
-// Internal Subscriber options specifies that a subscriber is not advertised
-// to the discovery system.
-func InternalSubscriber(b bool) SubscriberOption {
-	return func(o *SubscriberOptions) {
-		o.Internal = b
-	}
+	Queue string
 }
 
 // Shared queue name distributed messages across subscribers

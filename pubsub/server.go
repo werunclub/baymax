@@ -19,9 +19,11 @@ type Server struct {
 	subscribers map[*subscriber][]broker.Subscriber
 }
 
-func NewServer(opts ...broker.Option) *Server {
+func NewServer(addrs ...string) *Server {
+	opt := broker.Addrs(addrs...)
+
 	return &Server{
-		broker:      broker.NewBroker(opts...),
+		broker:      broker.NewBroker(opt),
 		subscribers: make(map[*subscriber][]broker.Subscriber),
 		exit:        make(chan chan error),
 	}
@@ -29,7 +31,7 @@ func NewServer(opts ...broker.Option) *Server {
 
 // 新建订阅器
 func (s *Server) NewSubscriber(topic string, sb interface{}, opts ...SubscriberOption) Subscriber {
-	return NewSubscriber(topic, sb, opts...)
+	return newSubscriber(topic, sb, opts...)
 }
 
 func (s *Server) Subscribe(sb Subscriber) error {

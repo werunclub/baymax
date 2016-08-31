@@ -17,7 +17,7 @@ type Message struct {
 // publishes a message
 func pub2(i int) {
 
-	client := pubsub.NewClient()
+	client := pubsub.NewClient("127.0.0.1:4150")
 
 	msg := client.NewPublication("go.testing.topic.good", Message{
 		Say: fmt.Sprintf("This is a publication %d", i),

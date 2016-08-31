@@ -32,7 +32,7 @@ type subscriber struct {
 	opts       SubscriberOptions
 }
 
-func NewSubscriber(topic string, sub interface{}, opts ...SubscriberOption) Subscriber {
+func newSubscriber(topic string, sub interface{}, opts ...SubscriberOption) Subscriber {
 	var options SubscriberOptions
 	for _, o := range opts {
 		o(&options)
@@ -56,7 +56,6 @@ func NewSubscriber(topic string, sub interface{}, opts ...SubscriberOption) Subs
 		handlers = append(handlers, h)
 
 	} else {
-
 		for m := 0; m < typ.NumMethod(); m++ {
 			method := typ.Method(m)
 			h := &handler{
@@ -177,7 +176,7 @@ func (s *Server) createSubHandler(sb *subscriber) broker.Handler {
 				return err
 			}
 
-			fn := func(ctx context.Context, msg *rpcPublication) error {
+			fn := func(ctx context.Context, msg *publication) error {
 				var vals []reflect.Value
 				if sb.typ.Kind() != reflect.Func {
 					vals = append(vals, sb.rcvr)
@@ -195,7 +194,7 @@ func (s *Server) createSubHandler(sb *subscriber) broker.Handler {
 				return nil
 			}
 
-			go fn(ctx, &rpcPublication{
+			go fn(ctx, &publication{
 				topic:   sb.topic,
 				message: req.Interface(),
 			})
