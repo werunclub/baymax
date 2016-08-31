@@ -1,36 +1,26 @@
 package handler
 
 import (
-	db "baymax/club_srv/db"
+	"baymax/club_srv/model"
 	proto "baymax/club_srv/protocol/club"
-	"baymax/common/model"
-	"log"
+	"fmt"
 )
 
-type ClubHandler int
+type ClubHandler struct {}
 
-func (handler *ClubHandler) Get(req *proto.GetRequest, resp *proto.GetResponse) error {
-	log.Print("Get Club info")
+func (hdl *ClubHandler) Get(req *proto.GetRequest, resp *proto.GetResponse) error {
 
-	var club model.Club
+	club := model.Club{}
+	err := model.DB.Where("id = ?", req.ClubId).First(&club).Error
 
-	db.Db.First(&club)
-
-	log.Print(club)
-
-	resp.TotalNum = 100
-	return nil
+	if err != nil {
+		return err
+	} else {
+		resp.Data = []proto.Club{}
+		return nil
+	}
 }
 
-func (handler *ClubHandler) Create(req *proto.GetRequest, resp *proto.GetResponse) error {
-	log.Print("Get Club info")
-
-	var club model.Club
-
-	db.Db.First(&club)
-
-	log.Print(club)
-
-	resp.TotalNum = 100
+func (hdl *ClubHandler) Create(req *proto.CreateRequest, resp *proto.CreateResponse) error {
 	return nil
 }

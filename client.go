@@ -1,14 +1,13 @@
 package main
 
 import (
+	"baymax/rpc"
+	"baymax/storage_srv/protocol/storage"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 	"time"
-
-	"baymax/rpc"
-	"baymax/storage_srv/protocol/storage"
 )
 
 func main() {

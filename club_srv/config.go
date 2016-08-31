@@ -8,7 +8,7 @@ var Config = struct {
 	}
 
 	Database struct {
-		Address string
+		DSN string
 	}
 
 	Registry struct {

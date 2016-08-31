@@ -3,12 +3,13 @@ package main
 import (
 	"flag"
 
-	"baymax/club_srv/db"
+	"baymax/club_srv/model"
 	"baymax/club_srv/handler"
 	"baymax/rpc"
 
 	"github.com/jinzhu/configor"
 )
+
 
 func init() {
 	var (
@@ -32,7 +33,7 @@ func init() {
 func main() {
 
 	// 连接数据库
-	db.Init(Config.Database.Address)
+	model.Init(Config.Database.DSN)
 
 	server := rpc.NewServer()
 	server.RegisterName("Club", new(handler.ClubHandler))
