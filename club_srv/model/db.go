@@ -1,24 +1,24 @@
-package db
+package model
 
 import (
-	"baymax/common/model"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
-var Db *gorm.DB
+var DB *gorm.DB
 
 func Init(database_url string) {
 	var err error
-	Db, err = gorm.Open("mysql", database_url)
-	Db.SingularTable(true)
-
+	DB, err = gorm.Open("mysql", database_url)
 	if err != nil {
 		panic("fail to connect database")
 	}
 
-	Db.AutoMigrate(&model.Club{})
-	//defer Db.Close()
+	// 设置默认表名不再是复数
+	DB.SingularTable(true)
+
+	// DB.AutoMigrate(&model.Club{})
+	defer DB.Close()
 }
 
 func Close() {

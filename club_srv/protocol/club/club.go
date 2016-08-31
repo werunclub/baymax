@@ -1,5 +1,6 @@
 package club
 
+
 const (
 	prefix            = "Club."
 	ServiceGetClub    = prefix + "Get"
@@ -7,17 +8,24 @@ const (
 )
 
 type Club struct {
-	Avatar string  `json:"avatar"`
-	Nick   string  `json:"nick"`
-	Score  float64 `json:"score"`
-	Rank   int     `json:""rank`
+	ID uint `json:"id"`
+	UserID string `json:"user_id"`
 }
 
+// 获取单条信息
 type GetRequest struct {
-	ClubId int64 `json:"club_id"`
+	ClubId uint `json:"club_id"`
 }
 
 type GetResponse struct {
-	TotalNum int64  `json:"total_num"`
 	Data     []Club `json:"data"`
+}
+
+// 创建新的俱乐部
+type CreateRequest struct {
+	Name string `json:"name"`
+}
+
+type CreateResponse struct {
+	ClubId uint `json:"club_id"`
 }
