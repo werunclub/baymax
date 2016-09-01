@@ -14,7 +14,7 @@ type Message struct {
 }
 
 func Handler(ctx context.Context, msg *Message) error {
-	log.Print("rev:", msg.Say)
+	//log.Print("rev:", msg.Say)
 	time.Sleep(time.Second * 10)
 	log.Print("done:", msg.Say)
 	return nil

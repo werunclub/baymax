@@ -1,0 +1,18 @@
+ServiceName = "storage"
+
+[Server]
+Addr = ":8080"
+
+[Storage]
+AccessKey = ""
+AccessSecret = ""
+Endpoint = ""
+BucketName = ""
+
+[Url]
+BaseUrl = ""
+Suffixes = ""
+
+[Registry]
+Type = "consul"
+Address = "127.0.0.1:8300"
