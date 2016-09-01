@@ -29,7 +29,6 @@ func main() {
 	if err2 != nil {
 		log.Fatal(err2)
 	}
-
 	req = storage.StorePhotoArgs{
 		UserId:   100,
 		FileType: "jpg",
@@ -44,4 +43,5 @@ func main() {
 	}
 
 	fmt.Println(reply.Url, reply.Suffixes, reply.Width, reply.Height)
+
 }
