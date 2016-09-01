@@ -5,7 +5,7 @@ import (
 	proto "baymax/club_srv/protocol/club"
 )
 
-type ClubHandler struct {}
+type ClubHandler struct{}
 
 func (*ClubHandler) Get(req *proto.GetRequest, resp *proto.GetResponse) error {
 
@@ -63,7 +63,7 @@ func (*ClubHandler) Delete(req *proto.DeleteRequest, resp *proto.DeleteResponse)
 
 // 更新指定的 club
 func (*ClubHandler) Update(req *proto.UpdateRequest, res *proto.UpdateResponse) error {
-	club :=	model.Club{}
+	club := model.Club{}
 
 	var err error
 	err = model.DB.Where("id = ?", req.Club.ID).First(&club).Error

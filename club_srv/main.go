@@ -3,13 +3,12 @@ package main
 import (
 	"flag"
 
-	"baymax/club_srv/model"
 	"baymax/club_srv/handler"
+	"baymax/club_srv/model"
 	"baymax/rpc"
 
 	"github.com/jinzhu/configor"
 )
-
 
 func init() {
 	var (

@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+
 	client := rpc.NewClient("tcp", ":8080", time.Duration(24*365)*time.Hour)
 	//defer client.Close()
 
@@ -29,6 +30,7 @@ func main() {
 	if err2 != nil {
 		log.Fatal(err2)
 	}
+
 	req = storage.StorePhotoArgs{
 		UserId:   100,
 		FileType: "jpg",
@@ -37,11 +39,9 @@ func main() {
 	}
 
 	err := client.Call(storage.StorePhoto, &req, &reply)
-
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	fmt.Println(reply.Url, reply.Suffixes, reply.Width, reply.Height)
-
 }
