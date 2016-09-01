@@ -20,7 +20,7 @@ func pub2(i int) {
 	client := pubsub.NewClient("127.0.0.1:4150")
 
 	msg := client.NewPublication("go.testing.topic.good", Message{
-		Say: fmt.Sprintf("This is a publication %d", i),
+		Say: fmt.Sprintf("%d", i),
 	})
 
 	// create context with metadata
@@ -41,7 +41,7 @@ func pub2(i int) {
 func main() {
 	cmd.Init()
 	fmt.Println("\n--- Publisher example ---\n")
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 100; i++ {
 		pub2(i)
 	}
 }

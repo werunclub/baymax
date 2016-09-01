@@ -104,6 +104,7 @@ func (n *nsqBroker) Connect() error {
 
 		c.c = cm
 
+		//err = c.c.ConnectToNSQLookupds(n.addrs)
 		err = c.c.ConnectToNSQDs(n.addrs)
 		if err != nil {
 			return err
@@ -135,6 +136,7 @@ func (n *nsqBroker) Disconnect() error {
 		// disconnect from all nsq brokers
 		for _, addr := range n.addrs {
 			c.c.DisconnectFromNSQD(addr)
+			//c.c.DisconnectFromNSQLookupd(addr)
 		}
 	}
 
@@ -207,6 +209,7 @@ func (n *nsqBroker) Subscribe(topic string, handler Handler, opts ...SubscribeOp
 	c.AddConcurrentHandlers(h, concurrency)
 
 	err = c.ConnectToNSQDs(n.addrs)
+	//err = c.ConnectToNSQLookupds(n.addrs)
 	if err != nil {
 		return nil, err
 	}
