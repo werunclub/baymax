@@ -22,5 +22,5 @@ func Init(database_url string) {
 }
 
 func Close() {
-	Db.Close()
+	DB.Close()
 }
