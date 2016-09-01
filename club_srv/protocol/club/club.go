@@ -98,3 +98,12 @@ type UpdateRequest struct {
 type UpdateResponse struct {
 	Club
 }
+
+// 获取多条 club 信息
+type GetManyRequest struct {
+
+}
+
+type GetManyResponse struct {
+
+}
