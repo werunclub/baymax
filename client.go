@@ -38,6 +38,7 @@ func main() {
 	}
 
 	err := client.Call(storage.StorePhoto, &req, &reply)
+
 	if err != nil {
 		log.Fatal(err)
 	}
