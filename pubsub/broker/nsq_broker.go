@@ -174,7 +174,6 @@ func (n *nsqBroker) Subscribe(topic string, handler Handler, opts ...SubscribeOp
 		}
 	} else {
 		concurrency = DefaultConcurrentHandlers
-
 	}
 
 	channel := options.Queue

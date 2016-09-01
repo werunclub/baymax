@@ -1,16 +1,121 @@
 hash: d872e1542533c7e9fa0044471f74f74b5fc259823b5d5d74d032a22b0dbdd35e
-updated: 2016-08-25T15:02:46.80771716+08:00
+updated: 2016-09-01T10:39:27.276330509+08:00
 imports:
+- name: github.com/aliyun/aliyun-oss-go-sdk
+  version: 033d39afc575aa38ac40f8e2011710b7bacf9f7a
+  subpackages:
+  - oss
+- name: github.com/appleboy/gin-jwt
+  version: 58e19f4461fd304df1b121574f95156c14974ee2
+- name: github.com/BurntSushi/toml
+  version: 99064174e013895bbd9b025c31100bd1d9b590ca
+- name: github.com/eclipse/paho.mqtt.golang
+  version: 946fb4cba30a0318a7ff7f236e88a89446a6c273
+  subpackages:
+  - packets
+- name: github.com/fvbock/endless
+  version: 67d0a784ad8ab10a69d12107f6de220db0c18002
+- name: github.com/gin-gonic/gin
+  version: f931d1ea80ae95a6fc739213cdd9399bd2967fb6
+  subpackages:
+  - binding
+  - render
 - name: github.com/go-sql-driver/mysql
   version: 0b58b37b664c21f3010e836f1b931e1d0b0b0685
+- name: github.com/golang/protobuf
+  version: 1f49d83d9aa00e6ce4fc8258c71cc7786aec968a
+  subpackages:
+  - proto
+- name: github.com/hashicorp/consul
+  version: 7bcb34d4985ffa4a1334c8f7b18a8ef9e3d854de
+  subpackages:
+  - api
+  - watch
+- name: github.com/hashicorp/errwrap
+  version: 7554cd9344cec97297fa6649b055a8c98c2a1e55
+- name: github.com/hashicorp/go-cleanhttp
+  version: ad28ea4487f05916463e2423a55166280e8254b5
+- name: github.com/hashicorp/go-msgpack
+  version: fa3f63826f7c23912c15263591e65d54d080b458
+  subpackages:
+  - codec
+- name: github.com/hashicorp/go-multierror
+  version: 8c5f0ad9360406a3807ce7de6bc73269a91a6e51
+- name: github.com/hashicorp/net-rpc-msgpackrpc
+  version: a14192a58a694c123d8fe5481d4a4727d6ae82f3
+- name: github.com/hashicorp/serf
+  version: 9432bc08aa8d486e497e27f84878ebbe8c1eab66
+  subpackages:
+  - coordinate
+- name: github.com/jinzhu/configor
+  version: fb7a3183cd987802d006408fe3a4a9e1f6002ece
 - name: github.com/jinzhu/gorm
   version: 5174cc5c242a728b435ea2be8a2f7f998e15429b
   subpackages:
   - dialects/mysql
 - name: github.com/jinzhu/inflection
   version: 74387dc39a75e970e7a3ae6a3386b5bd2e5c5cff
+- name: github.com/manucorporat/sse
+  version: ee05b128a739a0fb76c7ebd3ae4810c1de808d6d
+- name: github.com/micro/cli
+  version: 3d2263bb092286dde294a31049c92665f8373820
+- name: github.com/micro/go-micro
+  version: 419b952fb353ecb1fbea9081cffec63f6067efa8
+  subpackages:
+  - codec
+  - codec/jsonrpc
+  - metadata
+  - cmd
+  - broker
+  - broker/http
+  - broker/mqtt
+  - client
+  - registry
+  - registry/consul
+  - registry/mdns
+  - selector
+  - selector/cache
+  - server
+  - transport
+  - transport/http
+  - errors
+  - codec/protorpc
+  - server/debug
+  - server/debug/proto
+- name: github.com/micro/mdns
+  version: ab413e42fed3fdd8198ac4df3db5a342eb67d6e4
+- name: github.com/micro/misc
+  version: 677e2a0beb40a3dd7418548fe0cdc661e2922859
+  subpackages:
+  - lib/tls
+- name: github.com/miekg/dns
+  version: db96a2b759cdef4f11a34506a42eb8d1290c598e
+- name: github.com/mitchellh/hashstructure
+  version: b098c52ef6beab8cd82bc4a32422cf54b890e8fa
+- name: github.com/mreiferson/go-snappystream
+  version: 028eae7ab5c4c9e2d1cb4c4ca1e53259bbe7e504
+  subpackages:
+  - snappy-go
+- name: github.com/nsqio/go-nsq
+  version: d71fb89c9e0263aaed89645b0b168e11ccf597b1
+- name: github.com/pborman/uuid
+  version: b984ec7fa9ff9e428bd0cf0abf429384dfbe3e37
+- name: github.com/smallnest/rpcx
+  version: 26368d462ae79fa2355c0b8bafb3da7d869b7fb2
 - name: golang.org/x/net
   version: 3a1f9ef983bc408afd0a9e63fd9c962ae853e543
   subpackages:
   - http2
-testImports: []
+  - context
+  - websocket
+  - ipv4
+  - ipv6
+  - bpf
+  - internal/iana
+- name: gopkg.in/dgrijalva/jwt-go.v3
+  version: d2709f9f1f31ebcda9651b03077758c1f3a0018c
+- name: gopkg.in/go-playground/validator.v8
+  version: 5f57d2222ad794d0dffb07e664ea05e2ee07d60c
+- name: gopkg.in/yaml.v2
+  version: e4d366fc3c7938e2958e662b4258c7a89e1f0e3e
+devImports: []

@@ -1,22 +1,47 @@
 package main
 
 import (
-	"baymax/club_srv/protocol/club"
-	"baymax/rpc"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"os"
 	"time"
+
+	"baymax/rpc"
+	"baymax/storage_srv/protocol/storage"
 )
 
 func main() {
-	client := rpc.NewClient("tcp", ":8085", time.Duration(24*365)*time.Hour)
-	defer client.Close()
+	client := rpc.NewClient("tcp", ":8080", time.Duration(24*365)*time.Hour)
+	//defer client.Close()
 
-	var reply club.GetResponse
+	var (
+		//log   = logrus.New()
+		req   storage.StorePhotoArgs
+		reply storage.StorePhotoReply
+	)
 
-	err := client.Call(club.ServiceCreateClub, &club.GetRequest{ClubId: 100}, &reply)
+	f, err1 := os.Open("test.jpg")
+	if err1 != nil {
+		log.Fatal(err1)
+	}
+
+	photo, err2 := ioutil.ReadAll(f)
+	if err2 != nil {
+		log.Fatal(err2)
+	}
+
+	req = storage.StorePhotoArgs{
+		UserId:   100,
+		FileType: "jpg",
+		FileSize: 100000,
+		Photo:    photo,
+	}
+
+	err := client.Call(storage.StorePhoto, &req, &reply)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(reply)
+
+	fmt.Println(reply.Url, reply.Suffixes, reply.Width, reply.Height)
 }
