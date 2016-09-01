@@ -79,9 +79,9 @@ func testClubDelete(c *client.Client) error {
 	}
 }
 
-// func testClubGetMany(c *client.Client) error {
-// 	return nil
-// }
+func testClubGetMany(c *client.Client) error {
+	return nil
+}
 
 func main() {
 	var (
@@ -113,6 +113,11 @@ func main() {
 	}
 
 	err = testClubUpdate(c)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = testClubGetMany(c)
 	if err != nil {
 		log.Fatal(err)
 	}
