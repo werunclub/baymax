@@ -4,6 +4,7 @@ import (
 	"net"
 	"net/rpc"
 	"net/rpc/jsonrpc"
+	"sync"
 	"time"
 )
 
@@ -13,6 +14,7 @@ type Client struct {
 	net       string
 	addr      string
 	timeout   time.Duration
+	once      sync.Once
 }
 
 func NewClient(net, addr string, timeout time.Duration) *Client {
@@ -25,10 +27,6 @@ func NewClient(net, addr string, timeout time.Duration) *Client {
 
 // 建立连接
 func (c *Client) connect() error {
-
-	if c.rpcClient != nil {
-		return nil
-	}
 
 	var conn net.Conn
 	var err error
@@ -52,13 +50,9 @@ func (c *Client) Close() error {
 // 调用方法
 func (c *Client) Call(method string, args interface{}, reply interface{}) error {
 
-	var err error
+	c.once.Do(func() {
+		c.connect()
+	})
 
-	if err = c.connect(); err != nil {
-		return err
-	}
-
-	err = c.rpcClient.Call(method, args, reply)
-
-	return err
+	return c.rpcClient.Call(method, args, reply)
 }

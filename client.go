@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	client := rpc.NewClient("tcp", ":8081", time.Duration(24*365)*time.Hour)
+	client := rpc.NewClient("tcp", ":8085", time.Duration(24*365)*time.Hour)
 	defer client.Close()
 
 	var reply club.GetResponse

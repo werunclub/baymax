@@ -127,3 +127,7 @@ _testmain.go
 .vscode
 *.iml
 config.dev.toml
+
+
+# apps
+club_srv/club_srv
