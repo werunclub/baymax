@@ -18,7 +18,7 @@ func NewClient(net, addr string, timeout time.Duration) *Client {
 		Timeout: timeout,
 	}
 	client := rpcx.NewClient(s)
-	client.ClientCodecFunc = jsonrpc.NewClientCodec
+	//client.ClientCodecFunc = jsonrpc.NewClientCodec
 
 	return &Client{
 		rpcxClient: client,

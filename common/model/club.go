@@ -19,7 +19,7 @@ type Club struct {
 	UserID      string `gorm:"size:36"`
 	Name        string `gorm:"size:32;unique"`
 	Icon        string `gorm:"size:128;default:''"`
-	Des         string `gorm:"type:text"`
+	Description string `gorm:"type:text;column:des"`
 	ShortUrl    string `gorm:"type:"`
 	PersonCount uint   `gorm:"default:0"`
 	SortNum     int    `gorm:"default:0"`
