@@ -17,7 +17,7 @@ func NewServer() *Server {
 	server := &Server{
 		rpcxServer: rpcx.NewServer(),
 	}
-	server.rpcxServer.ServerCodecFunc = jsonrpc.NewServerCodec
+	//server.rpcxServer.ServerCodecFunc = jsonrpc.NewServerCodec
 
 	//plugin := &plugin.EtcdRegisterPlugin{
 	//	ServiceAddress: "tcp@127.0.0.1:8972",

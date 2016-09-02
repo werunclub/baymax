@@ -19,7 +19,7 @@ type Club struct {
 	UserID      string `gorm:"size:36"`
 	Name        string `gorm:"size:32;unique"`
 	Icon        string `gorm:"size:128;default:''"`
-	Des         string `gorm:"type:text"`
+	Description string `gorm:"type:text;column:des"`
 	ShortUrl    string `gorm:"type:"`
 	PersonCount uint   `gorm:"default:0"`
 	SortNum     int    `gorm:"default:0"`
@@ -596,49 +596,48 @@ type UserWeekStepsV2 struct {
 
 // 俱乐部个人pk赛赌注
 type ClubPersonalPkStake struct {
-    ID uint `gorm:"primary_key"`
-    // 赌注标题
-    Title string `gorm:"size:18;default='自由输入'"`
-    // 赌注描述
-    StakeDes string `gorm:"size:36"`
-    State int
-    CreateTime time.Time
+	ID uint `gorm:"primary_key"`
+	// 赌注标题
+	Title string `gorm:"size:18;default='自由输入'"`
+	// 赌注描述
+	StakeDes   string `gorm:"size:36"`
+	State      int
+	CreateTime time.Time
 }
 
 // 俱乐部个人 PK 赛
 type ClubPersonalPk struct {
-    ID uint `gorm:"primary_key"`
-    ClubID uint
-    // 挑战发起人
-    PerUserID string `gorm:"size:36"`
-    // 应战人
-    KerUserID string `gorm:"size:36"`
+	ID     uint `gorm:"primary_key"`
+	ClubID uint
+	// 挑战发起人
+	PerUserID string `gorm:"size:36"`
+	// 应战人
+	KerUserID string `gorm:"size:36"`
 	// 挑战方在pk期间的数据总量
-    PerDataTotal int
-    // 应战方在pk期间的数据总量
-    KerUserTotal int
-    // 挑战发起人获得的点赞数
-    PerPraiseNum int
-    // 应战人获得的点赞数
-    KerPraiseNum int
-    // vp
-    HotPoint int
-    state int
-	stake uint
+	PerDataTotal int
+	// 应战方在pk期间的数据总量
+	KerUserTotal int
+	// 挑战发起人获得的点赞数
+	PerPraiseNum int
+	// 应战人获得的点赞数
+	KerPraiseNum int
+	// vp
+	HotPoint  int
+	state     int
+	stake     uint
 	StartDate time.Time `gorm:"index"`
-	EndDate time.Time `gorm:"index"`
+	EndDate   time.Time `gorm:"index"`
 	// pk赛被拒绝的次数
 	RejectCount int
-	CreateTime time.Time
+	CreateTime  time.Time
 }
 
 // 俱乐部个人pk赛点赞记录,只能给pk赛中一人点赞，且点赞不能取消
 type ClubPersonalPkPraise struct {
-	ID uint `gorm:"primary_key"`
-	PkID int `gorm:"index"`
+	ID   uint `gorm:"primary_key"`
+	PkID int  `gorm:"index"`
 	// 点赞人
-	UserID string `gorm:"size:36"`
-	PraiseTo int
+	UserID     string `gorm:"size:36"`
+	PraiseTo   int
 	CreateTime time.Time
 }
-

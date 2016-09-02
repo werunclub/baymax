@@ -3,14 +3,16 @@ package main
 import (
 	"flag"
 
-	"baymax/club_srv/handler"
-	"baymax/club_srv/model"
 	"baymax/rpc"
-
+	"github.com/Sirupsen/logrus"
 	"github.com/jinzhu/configor"
 )
 
+var log *logrus.Logger
+
 func init() {
+	log = logrus.New()
+
 	var (
 		addr   string
 		config string
@@ -30,12 +32,8 @@ func init() {
 }
 
 func main() {
-
-	// 连接数据库
-	model.Init(Config.Database.DSN)
-
 	server := rpc.NewServer()
-	server.RegisterName("Club", new(handler.ClubHandler))
+	server.RegisterName("Storage", new(storageHandler))
 
 	// 启动服务
 	server.Serve("tcp", Config.Server.Addr)

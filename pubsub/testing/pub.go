@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 
-	"github.com/micro/go-micro/cmd"
 	"github.com/micro/go-micro/metadata"
 	"golang.org/x/net/context"
 
@@ -15,7 +14,7 @@ type Message struct {
 }
 
 // publishes a message
-func pub2(i int) {
+func pub(i int) {
 
 	client := pubsub.NewClient("127.0.0.1:4150")
 
@@ -39,9 +38,8 @@ func pub2(i int) {
 }
 
 func main() {
-	cmd.Init()
 	fmt.Println("\n--- Publisher example ---\n")
 	for i := 0; i < 100; i++ {
-		pub2(i)
+		pub(i)
 	}
 }
