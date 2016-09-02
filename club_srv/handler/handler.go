@@ -86,3 +86,8 @@ func (*ClubHandler) Update(req *proto.UpdateRequest, res *proto.UpdateResponse) 
 		}
 	}
 }
+
+// 获取多条 club 信息
+func (*ClubHandler) GetMany(req *proto.GetManyRequest, res *proto.GetManyResponse) error {
+	return nil
+}

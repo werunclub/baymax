@@ -33,13 +33,14 @@ func (c *Club) TableName() string {
 	return "club_club"
 }
 
-func FromProtocolStruct(ps interface{}) (Club, error) {
-	return nil
+func FromProtocolStruct(protoClub proto.Club) (Club, error) {
+	club := Club{}
+	return club, nil
 }
 
 // 根据 model 实例化一个 proto.Club 结构的实例
 func (m *Club) ToProtocolStruct() (proto.Club, error) {
-	c := Club{}
+	c := proto.Club{}
 
 	c.ID = m.ID
 	c.UserID = m.UserID

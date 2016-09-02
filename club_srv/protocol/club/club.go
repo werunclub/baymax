@@ -14,13 +14,11 @@ const (
 	// 删除俱乐部
 	ServiceDeleteClub = prefix + "Delete"
 	// 获取多个俱乐部
-	ServiceGetManyClub = prefix + "Update"
+	ServiceGetManyClub = prefix + "GetMany"
 	// 修改俱乐部信息
 	ServiceUpdateClub = prefix + "Update"
 )
 
-// TODO 代码复制到这里 注释也不能共享了
-// TODO 参数以及返回值的名字不能命名为 req 以及 res　和　rpc　本身的名字不一样
 type Club struct {
 	ID         uint      `json:"id"`
 	UserID     string    `json:"user_id"`
@@ -77,7 +75,11 @@ type UpdateResponse struct {
 
 // 获取多条 club 信息
 type GetManyRequest struct {
+	Limit uint
+	Offset uint
 }
 
 type GetManyResponse struct {
+	Total uint
+	Data []Club `json:"data"`
 }
