@@ -2,6 +2,7 @@ package model
 
 import (
 	"time"
+	proto "baymax/club_srv/protocol/club"
 )
 
 // 俱乐部
@@ -31,3 +32,31 @@ type Club struct {
 func (c *Club) TableName() string {
 	return "club_club"
 }
+
+func FromProtocolStruct(ps interface{}) (Club, error) {
+	return nil
+}
+
+// 根据 model 实例化一个 proto.Club 结构的实例
+func (m *Club) ToProtocolStruct() (proto.Club, error) {
+	c := Club{}
+
+	c.ID = m.ID
+	c.UserID = m.UserID
+	c.Name = m.Name
+	c.Icon = m.Icon
+	c.Des = m.Des
+	c.ShortUrl = m.ShortUrl
+	c.SortNum = m.SortNum
+	c.State = m.State
+	c.Authorized = m.Authorized
+	c.DataBody = m.DataBody
+	c.Source = m.Source
+	c.CityCode = m.CityCode
+	c.IndustryID = m.IndustryID
+	c.CommonByte = m.CommonByte
+	c.CreateTime = m.CreateTime
+
+	return c, nil
+}
+

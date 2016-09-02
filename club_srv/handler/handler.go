@@ -15,7 +15,7 @@ func (*ClubHandler) Get(req *proto.GetRequest, resp *proto.GetResponse) error {
 	if err != nil {
 		return err
 	} else {
-		c, err := proto.InitFromModel(&club)
+		c, err := club.ToProtocolStruct()
 		if err != nil {
 			return err
 		} else {
@@ -77,7 +77,7 @@ func (*ClubHandler) Update(req *proto.UpdateRequest, res *proto.UpdateResponse) 
 		if err != nil {
 			return err
 		} else {
-			(*res).Club, err = proto.InitFromModel(&club)
+			(*res).Club, err = club.ToProtocolStruct()
 			if err != nil {
 				return err
 			} else {

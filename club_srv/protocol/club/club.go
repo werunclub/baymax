@@ -1,7 +1,6 @@
 package club
 
 import (
-	"baymax/club_srv/model"
 	"time"
 )
 
@@ -38,29 +37,6 @@ type Club struct {
 	IndustryID int       `json:"industry_id"`
 	CommonByte int       `json:"common_byte"`
 	CreateTime time.Time `json:"create_time"`
-}
-
-// 根据 model 实例化一个 Club 结构的实例
-func InitFromModel(m *model.Club) (Club, error) {
-	c := Club{}
-
-	c.ID = m.ID
-	c.UserID = m.UserID
-	c.Name = m.Name
-	c.Icon = m.Icon
-	c.Des = m.Des
-	c.ShortUrl = m.ShortUrl
-	c.SortNum = m.SortNum
-	c.State = m.State
-	c.Authorized = m.Authorized
-	c.DataBody = m.DataBody
-	c.Source = m.Source
-	c.CityCode = m.CityCode
-	c.IndustryID = m.IndustryID
-	c.CommonByte = m.CommonByte
-	c.CreateTime = m.CreateTime
-
-	return c, nil
 }
 
 // 获取单条信息
