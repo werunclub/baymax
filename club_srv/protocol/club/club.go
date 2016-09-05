@@ -8,19 +8,20 @@ const (
 	prefix = "Club."
 
 	// 获取指定的俱乐部信息
-	ServiceGetClub = prefix + "Get"
+	SrvGetOneClub = prefix + "GetOne"
 	// 创建新的俱乐部
-	ServiceCreateClub = prefix + "Create"
-	// 删除俱乐部
-	ServiceDeleteClub = prefix + "Delete"
+	SrvCreateClub = prefix + "Create"
 	// 获取多个俱乐部
-	ServiceGetManyClub = prefix + "GetMany"
+	SrvGetBatchClub = prefix + "GetBatch"
 	// 修改俱乐部信息
-	ServiceUpdateClub = prefix + "Update"
+	SrvUpdateClub = prefix + "Update"
+	// 查询俱乐部
+	SrvSearchClub = prefix + "Search"
 )
 
+
 type Club struct {
-	ID         uint      `json:"id"`
+	ID         int      `json:"id"`
 	UserID     string    `json:"user_id"`
 	Name       string    `json:"name"`
 	Icon       string    `json:"icon"`
@@ -37,49 +38,48 @@ type Club struct {
 	CreateTime time.Time `json:"create_time"`
 }
 
-// 获取单条信息
-type GetRequest struct {
-	ClubID uint `json:"club_id"`
+// 获取指定 id 俱乐部
+type GetOneArgs struct {
+	ClubID int
+}
+type GetOneReply struct {
+	Data Club
 }
 
-type GetResponse struct {
-	Data []Club `json:"data"`
+// 获取多条 id 对应的 club 信息
+type GetBatchArgs struct {
+	ClubIDS []int
+}
+type GetBatchReply struct {
+	Total int
+	Data []Club
 }
 
-// 创建新的俱乐部
-type CreateRequest struct {
-	Club
+// 根据条件查询 club
+// TODO 如何检测类型的范围比如这里的 limit 以及 offset
+type SearchArgs struct {
+	Name string
+	Limit int
+	Offset int
+}
+type SearchReply struct {
+	Total int
+	Data []Club
 }
 
-type CreateResponse struct {
-	ClubID uint `json:"club_id"`
+// 创建新的 club
+type CreateArgs struct {
+	Club Club
+}
+type CreateReply struct {
+	Club Club
 }
 
-// 删除俱乐部
-type DeleteRequest struct {
-	ClubID uint `json:"club_id"`
+// 修改 club
+type UpdateArgs struct {
+	ClubID int
+	NewClub Club
 }
-
-type DeleteResponse struct {
-	ClubID uint `json:"club_id"`
-}
-
-// 更新俱乐部信息
-type UpdateRequest struct {
-	Club
-}
-
-type UpdateResponse struct {
-	Club
-}
-
-// 获取多条 club 信息
-type GetManyRequest struct {
-	Limit uint
-	Offset uint
-}
-
-type GetManyResponse struct {
-	Total uint
-	Data []Club `json:"data"`
+type UpdateReply struct {
+	Club Club
 }
