@@ -8,16 +8,16 @@ import (
 
 // 俱乐部 model
 type Club struct {
-	ID          int   `gorm:"primary_key"`
+	ID          int    `gorm:"primary_key"`
 	UserID      string `gorm:"size:36"`
 	Name        string `gorm:"size:32;unique"`
 	Icon        string `gorm:"size:128;default:''"`
 	Des         string `gorm:"type:text"`
 	ShortUrl    string
-	PersonCount int   `gorm:"default:0"`
-	SortNum     int    `gorm:"default:0"`
-	State       bool   `gorm:"default:true"`
-	Authorized  bool   `gorm:"default:true"`
+	PersonCount int  `gorm:"default:0"`
+	SortNum     int  `gorm:"default:0"`
+	State       bool `gorm:"default:true"`
+	Authorized  bool `gorm:"default:true"`
 	// 保留数据集合
 	DataBody string `gorm:"size:1024;default:''"`
 	Source   int    `gorm:"default:0"`

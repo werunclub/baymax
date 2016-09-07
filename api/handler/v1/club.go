@@ -3,38 +3,119 @@ package v1
 import (
 	"github.com/gin-gonic/gin"
 
+	clubProto "baymax/club_srv/protocol/club"
 	"baymax/errors"
+	"baymax/rpc"
+	"strconv"
+	"time"
+	"log"
 )
 
-type CreateClubRequest struct {
-	// 城市ID
-	CityCode string `form:"city_code" json:"city_code" xml:"city_code"`
-	// 俱乐部描述
-	Description *string `form:"description,omitempty" json:"description,omitempty" xml:"description,omitempty"`
-	// 行业ID
-	IndustryID int `json:"industry_id" valid:"min=21"`
-	// 俱乐部名称
-	Name string `form:"name" json:"name" xml:"name"`
+func getClubRpcConn() *rpc.Client {
+	return rpc.NewClient("tcp", "127.0.0.1:8091", 10*time.Minute)
 }
 
-func GetClubDetail(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": c.Param("clubId"),
-	})
-}
+// 根据 id 获取 club 信息
+func GetClub(c *gin.Context) {
+	var err error
 
-func CreateClub(c *gin.Context) {
-	//userId, ok := c.Get("userID")
-
-	var req CreateClubRequest
-
-	err := c.Bind(&req)
+	clubIDStr := c.Params.ByName("clubId")
+	clubID, err := strconv.Atoi(clubIDStr)
 
 	if err != nil {
-		c.AbortWithError(400, err)
-		c.JSON(400, errors.BadRequest(err.Error()))
-		return
+		c.JSON(400, errors.BadRequest("id", "code"))
+	} else {
+		clubRpcConn := getClubRpcConn()
+
+		var reply clubProto.GetOneReply
+		err = clubRpcConn.Call(clubProto.SrvGetOneClub, &clubProto.GetOneArgs{ClubID: clubID}, &reply)
+
+		if err != nil {
+			c.JSON(400, errors.BadRequest("id", "code"))
+		} else {
+			c.JSON(200, reply.Data)
+		}
+	}
+}
+
+// 创建 club
+type CreateClubQuery struct {
+	CityCode    string `json:"city_code" binding:"required"`
+	Description string `json:"description"`
+	IndustryID  int    `json:"industry_id,string"`
+	Name        string `json:"name"`
+}
+func CreateClub(c *gin.Context) {
+	var (
+		q CreateClubQuery
+		err error
+	)
+
+	err = c.BindJSON(&q)
+	if err != nil {
+		log.Println(err)
+		c.JSON(400, errors.BadRequest("id", "code"))
+	} else {
+		clubRpcConn := getClubRpcConn()
+
+		var reply clubProto.CreateReply
+		args := clubProto.CreateArgs{}
+
+		args.Club.Name = q.Name
+		args.Club.CityCode = q.CityCode
+		args.Club.IndustryID = q.IndustryID
+		args.Club.Des = q.Description
+
+		err = clubRpcConn.Call(clubProto.SrvCreateClub, &args, &reply)
+		if err != nil {
+			c.JSON(400, errors.BadRequest("id", "code"))
+		} else {
+			c.JSON(200, reply.Club)
+		}
+	}
+}
+
+
+func UpdateClub(c *gin.Context) {
+	var (
+		err error
+		q UpdateClubQuery
+	)
+
+	clubIDStr := c.Params.ByName("clubId")
+	clubID, err := strconv.Atoi(clubIDStr)
+
+	if err != nil {
+		log.Println(err)
+		c.JSON(400, errors.BadRequest("id", "code"))
+	} else {
+		err := c.BindJSON(&q)
+
+		if err != nil {
+			log.Println(err)
+			c.JSON(400, errors.BadRequest("id", "code"))
+		} else {
+			clubRpcConn := getClubRpcConn()
+
+			reply := clubProto.UpdateReply{}
+			args := clubProto.UpdateArgs{}
+
+			args.ClubID = clubID
+
+			args.NewClub.CityCode = q.CityCode
+			args.NewClub.Des = q.Description
+			args.NewClub.IndustryID = q.IndustryID
+			args.NewClub.Name = q.Name
+			args.NewClub.VerifyCode = q.VerifyCode
+
+			err := clubRpcConn.Call(clubProto.SrvUpdateClub, &args, &reply)
+			if err != nil {
+				log.Println(err)
+				c.JSON(400, errors.BadRequest("id", "code"))
+			} else {
+				c.JSON(200, reply.Club)
+			}
+		}
 	}
 
-	c.JSON(200, req)
 }

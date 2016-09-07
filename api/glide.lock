@@ -1,0 +1,36 @@
+hash: 869aa7c5858669822e3d15ad944dfd0ca5b88ebef352237e178892dc9fa6ff59
+updated: 2016-09-07T09:39:03.789922411+08:00
+imports:
+- name: github.com/appleboy/gin-jwt
+  version: 7dd16c9587c51fc9f41ad9930f1cfff236377a86
+- name: github.com/BurntSushi/toml
+  version: 99064174e013895bbd9b025c31100bd1d9b590ca
+- name: github.com/fvbock/endless
+  version: 67d0a784ad8ab10a69d12107f6de220db0c18002
+- name: github.com/gin-gonic/gin
+  version: f931d1ea80ae95a6fc739213cdd9399bd2967fb6
+  subpackages:
+  - binding
+  - render
+- name: github.com/golang/protobuf
+  version: 1f49d83d9aa00e6ce4fc8258c71cc7786aec968a
+  subpackages:
+  - proto
+- name: github.com/jinzhu/configor
+  version: fb7a3183cd987802d006408fe3a4a9e1f6002ece
+- name: github.com/jinzhu/gorm
+  version: 5174cc5c242a728b435ea2be8a2f7f998e15429b
+- name: github.com/manucorporat/sse
+  version: ee05b128a739a0fb76c7ebd3ae4810c1de808d6d
+- name: golang.org/x/net
+  version: 1358eff22f0dd0c54fc521042cc607f6ff4b531a
+  subpackages:
+  - context
+  - http2
+- name: gopkg.in/dgrijalva/jwt-go.v3
+  version: d2709f9f1f31ebcda9651b03077758c1f3a0018c
+- name: gopkg.in/go-playground/validator.v8
+  version: 5f57d2222ad794d0dffb07e664ea05e2ee07d60c
+- name: gopkg.in/yaml.v2
+  version: e4d366fc3c7938e2958e662b4258c7a89e1f0e3e
+testImports: []

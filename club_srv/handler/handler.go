@@ -4,6 +4,7 @@ import (
 	"baymax/club_srv/model"
 	protoClub "baymax/club_srv/protocol/club"
 	"log"
+	"strconv"
 )
 
 
@@ -79,19 +80,35 @@ func (*ClubHandler) Create(args *protoClub.CreateArgs, reply *protoClub.CreateRe
 	if err != nil {
 		return err
 	} else {
-		err := model.DB.Create(&club).Error
+		// 这里在 insert 到数据库的同时使用自动 id 来更新 short_url
+		// 因此这里要实现一个事务
+
+		tx := model.DB.Begin()
+		err := tx.Create(&club).Error
+
 		if err != nil {
+			tx.Rollback()
 			return nil
 		} else {
-			protoClub, err := model.ToProtoStruct(club)
+			clubIDStr := strconv.Itoa(club.ID)
+			err := tx.Model(&club).Update("ShortUrl", clubIDStr).Error
 			if err != nil {
-				return err
-			} else {
-				reply.Club = protoClub
+				tx.Rollback()
 				return nil
+			} else {
+				tx.Commit()
+
+				protoClub, err := model.ToProtoStruct(club)
+				if err != nil {
+					return err
+				} else {
+					reply.Club = protoClub
+					return nil
+				}
 			}
 		}
 	}
+
 }
 
 func (*ClubHandler) Update(args *protoClub.UpdateArgs, reply *protoClub.UpdateReply) error {

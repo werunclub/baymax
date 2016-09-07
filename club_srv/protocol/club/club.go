@@ -19,9 +19,8 @@ const (
 	SrvSearchClub = prefix + "Search"
 )
 
-
 type Club struct {
-	ID         int      `json:"id"`
+	ID         int       `json:"id"`
 	UserID     string    `json:"user_id"`
 	Name       string    `json:"name"`
 	Icon       string    `json:"icon"`
@@ -36,6 +35,9 @@ type Club struct {
 	IndustryID int       `json:"industry_id"`
 	CommonByte int       `json:"common_byte"`
 	CreateTime time.Time `json:"create_time"`
+
+	// 在原系统中的 databody 中
+	VerifyCode string `json:"verify_code"`
 }
 
 // 获取指定 id 俱乐部
@@ -52,19 +54,19 @@ type GetBatchArgs struct {
 }
 type GetBatchReply struct {
 	Total int
-	Data []Club
+	Data  []Club
 }
 
 // 根据条件查询 club
 // TODO 如何检测类型的范围比如这里的 limit 以及 offset
 type SearchArgs struct {
-	Name string
-	Limit int
+	Name   string
+	Limit  int
 	Offset int
 }
 type SearchReply struct {
 	Total int
-	Data []Club
+	Data  []Club
 }
 
 // 创建新的 club
@@ -77,7 +79,7 @@ type CreateReply struct {
 
 // 修改 club
 type UpdateArgs struct {
-	ClubID int
+	ClubID  int
 	NewClub Club
 }
 type UpdateReply struct {

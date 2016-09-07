@@ -29,15 +29,18 @@ func StartServer(addr string) {
 	{
 		userHandler := v1.NewUserHandler()
 		api_v1.POST("/auth/login", authMiddleware.LoginHandler)
-		api_v1.GET("/club/:clubId", v1.GetClubDetail)
-		api_v1.GET("/user/:userId", userHandler.UserProfile)
+
+		api_v1.GET("/club/:clubId", v1.GetClub)
+		api_v1.POST("/club/:clubId", v1.UpdateClub)
+		api_v1.POST("/clubs", v1.CreateClub)
 
 		{
 			auth := api_v1.Group("/")
 			auth.Use(authMiddleware.MiddlewareFunc())
 			auth.GET("/auth/refresh_token", authMiddleware.RefreshHandler)
-			auth.POST("/clubs", v1.CreateClub)
-			auth.PATCH("/user/self", userHandler.PatchUser)
+
+			auth.GET("/user", userHandler.UserProfile)
+
 		}
 	}
 
