@@ -6,6 +6,8 @@ import (
 	"net/rpc/jsonrpc"
 	"sync"
 	"time"
+	//"baymax/errors"
+	"baymax/errors"
 )
 
 // Client represents a RPC client.
@@ -26,7 +28,11 @@ func NewClient(net, addr string, timeout time.Duration) *Client {
 }
 
 // 建立连接
-func (c *Client) connect() error {
+func (c *Client) Connect() error {
+
+	if c.rpcClient != nil {
+		return nil
+	}
 
 	var conn net.Conn
 	var err error
@@ -48,11 +54,17 @@ func (c *Client) Close() error {
 }
 
 // 调用方法
-func (c *Client) Call(method string, args interface{}, reply interface{}) error {
+func (c *Client) Call(method string, args interface{}, reply interface{}) *errors.Error {
 
 	c.once.Do(func() {
-		c.connect()
+		c.Connect()
 	})
 
-	return c.rpcClient.Call(method, args, reply)
+	err := c.rpcClient.Call(method, args, reply)
+
+	if err != nil {
+		return errors.Parse(err.Error())
+	}
+
+	return nil
 }

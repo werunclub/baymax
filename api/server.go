@@ -3,16 +3,21 @@ package main
 import (
 	"baymax/api/handler/v1"
 	mw "baymax/api/middleware"
+	util "baymax/api/util"
 
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 )
 
 func StartServer(addr string) {
 
+	binding.Validator = &util.Validator{}
+
 	router := gin.Default()
 	router.Use(gin.Logger())
-	router.Use(gin.Recovery())
+	router.Use(mw.Recovery())
+	//router.Use(gin.Recovery())
 	//router.Use(mw.MaxAllowed(20))
 
 	router.NoRoute(func(c *gin.Context) {
