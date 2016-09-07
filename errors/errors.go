@@ -3,6 +3,8 @@ package errors
 import (
 	"encoding/json"
 	"net/http"
+
+	"github.com/pborman/uuid"
 )
 
 // Errors provide a way to return detailed information
@@ -10,9 +12,9 @@ import (
 // JSON encoded.
 type Error struct {
 	Id     string `json:"id"`
-	Code   int32  `json:"code"`
+	Code   string `json:"code"`
 	Detail string `json:"detail"`
-	Status string `json:"status"`
+	Status int32  `json:"status"`
 }
 
 func (e *Error) Error() string {
@@ -20,12 +22,12 @@ func (e *Error) Error() string {
 	return string(b)
 }
 
-func New(id, detail string, code int32) error {
+func New(id string, code string, detail string, status int32) error {
 	return &Error{
 		Id:     id,
 		Code:   code,
 		Detail: detail,
-		Status: http.StatusText(int(code)),
+		Status: status,
 	}
 }
 
@@ -38,47 +40,47 @@ func Parse(err string) *Error {
 	return e
 }
 
-func BadRequest(id, detail string) error {
+func BadRequest(detail string) error {
 	return &Error{
-		Id:     id,
-		Code:   400,
+		Id:     uuid.New(),
+		Code:   "bad_request",
 		Detail: detail,
-		Status: http.StatusText(400),
+		Status: http.StatusBadRequest,
 	}
 }
 
-func Unauthorized(id, detail string) error {
+func Unauthorized(detail string) error {
 	return &Error{
-		Id:     id,
-		Code:   401,
+		Id:     uuid.New(),
+		Code:   "unauthorized",
 		Detail: detail,
-		Status: http.StatusText(401),
+		Status: http.StatusUnauthorized,
 	}
 }
 
-func Forbidden(id, detail string) error {
+func Forbidden(detail string) error {
 	return &Error{
-		Id:     id,
-		Code:   403,
+		Id:     uuid.New(),
+		Code:   "forbidden",
 		Detail: detail,
-		Status: http.StatusText(403),
+		Status: http.StatusForbidden,
 	}
 }
 
-func NotFound(id, detail string) error {
+func NotFound(detail string) error {
 	return &Error{
-		Id:     id,
-		Code:   404,
+		Id:     uuid.New(),
+		Code:   "not_found",
 		Detail: detail,
-		Status: http.StatusText(404),
+		Status: http.StatusNotFound,
 	}
 }
 
-func InternalServerError(id, detail string) error {
+func InternalServerError(detail string) error {
 	return &Error{
-		Id:     id,
-		Code:   500,
+		Id:     uuid.New(),
+		Code:   "internal_server_error",
 		Detail: detail,
-		Status: http.StatusText(500),
+		Status: http.StatusInternalServerError,
 	}
 }
