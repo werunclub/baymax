@@ -19,7 +19,6 @@ func init() {
 	flag.StringVar(&config, "c", "", "config file")
 	flag.StringVar(&addr, "addr", "", "addr, exmaple: 0.0.0.0:8080")
 	flag.Parse()
-
 	if config != "" {
 		configor.Load(&Config, config)
 	}

@@ -2,9 +2,8 @@ package errors
 
 import (
 	"encoding/json"
-	"net/http"
-
 	"github.com/pborman/uuid"
+	"net/http"
 )
 
 // Errors provide a way to return detailed information
