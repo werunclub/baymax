@@ -18,11 +18,7 @@ func TestErrors(t *testing.T) {
 	}
 
 	for _, e := range testData {
-		ne := New(e.Id, e.Detail, e.Code, e.Status)
-
-		if e.Error() != ne.Error() {
-			t.Fatalf("Expected %s got %s", e.Error(), ne.Error())
-		}
+		ne := New(e.Id, e.Code, e.Detail, e.Status)
 
 		pe := Parse(ne.Error())
 
