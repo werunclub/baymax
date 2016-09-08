@@ -7,8 +7,9 @@ import (
 )
 
 type Server struct {
-	rpcServer *rpc.Server
-	listener  net.Listener
+	rpcServer  *rpc.Server
+	listener   net.Listener
+	registered bool
 }
 
 func NewServer() *Server {
@@ -35,7 +36,7 @@ func (s *Server) Serve(network, address string) {
 	}
 }
 
-// 启动服务
+// 使用协程启动服务
 func (s *Server) Start(network, address string) {
 
 	ln, err := net.Listen(network, address)
