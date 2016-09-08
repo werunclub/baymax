@@ -43,8 +43,8 @@ type UserInfo struct {
 	DNDStart uint `json:"dnd_start"`
 	// 生日
 	Dob    *time.Time `json:"dob"`
-	Email  string    `json:"email"`
-	Gender string    `json:"gender"`
+	Email  string     `json:"email"`
+	Gender string     `json:"gender"`
 	// 目标步数
 	Goal   uint    `json:"goal"`
 	Height uint8   `json:"height"`
@@ -59,17 +59,17 @@ type PatchUser struct {
 	// 免打扰结束时间
 	DNDStart uint `json:"dnd_start"`
 	// 生日
-	Dob    time.Time `json:"dob"`
+	Dob time.Time `json:"dob"`
 	//Email  string    `json:"email"`
-	Gender string    `json:"gender"`
+	Gender string `json:"gender"`
 	// 目标步数
 	Goal   uint    `json:"goal"`
 	Height uint8   `json:"height"`
 	Weight float32 `json:"weight"`
 }
 
-type PatchUserRequest  struct {
-	Id string
+type PatchUserRequest struct {
+	Id      string
 	Payload *UserInfo
 }
 

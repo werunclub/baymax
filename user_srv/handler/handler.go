@@ -3,10 +3,10 @@ package handler
 import (
 	"baymax/rpc"
 	"baymax/user_srv/protocol/user"
-	"reflect"
-	"github.com/jinzhu/gorm"
 	"fmt"
 	log "github.com/Sirupsen/logrus"
+	"github.com/jinzhu/gorm"
+	"reflect"
 )
 
 func RegisterRPCService(server *rpc.Server) {
@@ -16,7 +16,7 @@ func RegisterRPCService(server *rpc.Server) {
 // 将协议转换成 ORM 可以使用的 WhereCondition
 func protocolToConditions(protocol interface{}) *map[string]interface{} {
 	var (
-		rTypes reflect.Type
+		rTypes  reflect.Type
 		rValues reflect.Value
 	)
 	conditions := make(map[string]interface{})
@@ -39,7 +39,6 @@ func protocolToConditions(protocol interface{}) *map[string]interface{} {
 	log.WithField("Conditions", conditions).Debug("解析后的查询条件")
 	return &conditions
 }
-
 
 // 根据 protocol 参数执行 db.where
 func applyWhereFilter(db *gorm.DB, protocol interface{}) *gorm.DB {

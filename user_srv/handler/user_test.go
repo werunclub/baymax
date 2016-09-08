@@ -1,17 +1,16 @@
 package handler
 
 import (
-	userProtocol "baymax/user_srv/protocol/user"
-	"testing"
-	"net/rpc"
 	"baymax/user_srv/model"
-	"github.com/stretchr/testify/suite"
-	"github.com/stretchr/testify/assert"
-	"github.com/pborman/uuid"
-	"time"
+	userProtocol "baymax/user_srv/protocol/user"
 	"github.com/icrowley/fake"
+	"github.com/pborman/uuid"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/suite"
+	"net/rpc"
+	"testing"
+	"time"
 )
-
 
 //func TestUserHandler_Get(t *testing.T) {
 //	once.Do(startRPCServer)
@@ -85,7 +84,7 @@ func (suite *UserHandlerTestSuite) TestCreateUser() {
 	t := time.Now()
 	args := userProtocol.UserInfo{
 		Name: fake.UserName(),
-		Dob: &t,
+		Dob:  &t,
 	}
 	reply := userProtocol.UserDetailReply{}
 	err := suite.client.Call(userProtocol.UserCreate, &args, &reply)
@@ -118,7 +117,7 @@ func (suite *UserHandlerTestSuite) TestUserList() {
 	assert.NotEmpty(suite.T(), *reply.Users, "未获取到用户信息")
 }
 
-func (suite *UserHandlerTestSuite) TestUserListWithEmpty()  {
+func (suite *UserHandlerTestSuite) TestUserListWithEmpty() {
 	reply := userProtocol.UserListReply{}
 	err := suite.client.Call(userProtocol.UserList, []string{}, &reply)
 	assert.Nil(suite.T(), err, "批量获取用户信息失败")
@@ -131,10 +130,10 @@ func (suite *UserHandlerTestSuite) TestPatchUser() {
 	args := userProtocol.PatchUserRequest{
 		Id: user.Id,
 		Payload: &userProtocol.UserInfo{
-			Id: user.Id,
+			Id:         user.Id,
 			DNDEnabled: true,
-			DNDStart: 10,
-			Name: "new name",
+			DNDStart:   10,
+			Name:       "new name",
 		},
 	}
 	reply := userProtocol.UserDetailReply{}

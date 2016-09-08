@@ -6,11 +6,11 @@ import (
 	userProtocol "baymax/user_srv/protocol/user"
 	"encoding/json"
 	"github.com/Sirupsen/logrus"
+	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
+	"io/ioutil"
 	"net/http"
 	"time"
-	"io/ioutil"
-	"github.com/asaskevich/govalidator"
 )
 
 type UserHandler struct {
@@ -25,9 +25,9 @@ func handleRPCError(ctx *gin.Context, err *errors.Error, desc string) {
 	if err != nil {
 		logrus.WithField(
 			"error", logrus.Fields{
-				"Id": err.Id,
+				"Id":     err.Id,
 				"Status": err.Status,
-				"Code": err.Code,
+				"Code":   err.Code,
 				"Detail": err.Detail,
 			}).Error(desc)
 		ctx.JSON(http.StatusInternalServerError, err)
@@ -48,7 +48,6 @@ func (handler *UserHandler) UserProfile(c *gin.Context) {
 	}
 	c.JSON(200, reply)
 }
-
 
 func (handler *UserHandler) PatchUser(ctx *gin.Context) {
 	// Fixme: RPC Client
