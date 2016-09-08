@@ -1,14 +1,14 @@
-hash: 1082410d76c1f9b7d08265745153fcbde15ff8db5784be642cb028ee0a5c6084
-updated: 2016-09-07T21:28:31.163029023+08:00
+hash: be6df4a439e09c6c5466454981fe226920083c125cdfd22979bd15fefab92a8f
+updated: 2016-09-07T19:25:15.658658306+08:00
 imports:
 - name: github.com/aliyun/aliyun-oss-go-sdk
   version: 033d39afc575aa38ac40f8e2011710b7bacf9f7a
   subpackages:
   - oss
 - name: github.com/appleboy/gin-jwt
-  version: 44b20eae31ccd133038563792861b519c1994502
+  version: 7dd16c9587c51fc9f41ad9930f1cfff236377a86
 - name: github.com/asaskevich/govalidator
-  version: 7664702784775e51966f0885f5cd27435916517b
+  version: 593d64559f7600f29581a3ee42177f5dbded27a9
 - name: github.com/BurntSushi/toml
   version: 99064174e013895bbd9b025c31100bd1d9b590ca
 - name: github.com/fvbock/endless
@@ -61,29 +61,21 @@ imports:
 - name: github.com/pborman/uuid
   version: a97ce2ca70fa5a848076093f05e639a89ca34d06
 - name: github.com/Sirupsen/logrus
-  version: 4b6ea7319e214d98c938f12692336f7ca9348d6b
+  version: 3ec0642a7fb6488f65b06f9040adc67e3990296a
 - name: github.com/smallnest/rpcx
-  version: afad6dc6ec37351af704e748ffcc782db06b7970
-- name: github.com/stretchr/testify
-  version: f390dcf405f7b83c997eac1b06768bb9f44dec18
-  subpackages:
-  - assert
-  - suite
-  - require
-- name: github.com/wawandco/fako
-  version: 68d7f8058e3d3a9b9ecc400b89bc1fa83f9f2ad0
+  version: 14aac95c6e87ee07c486af1ed6062261a924027f
 - name: golang.org/x/image
   version: 714f2e47f73aac52208d4f4260e4ba79358a9c28
   subpackages:
-  - webp
   - riff
   - vp8
   - vp8l
+  - webp
 - name: golang.org/x/net
   version: f315505cf3349909cdf013ea56690da34e96a451
   subpackages:
-  - http2
   - context
+  - http2
 - name: golang.org/x/sys
   version: a646d33e2ee3172a661fc09bca23bb4889a41bc8
   subpackages:
@@ -94,16 +86,4 @@ imports:
   version: c193cecd124b5cc722d7ee5538e945bdb3348435
 - name: gopkg.in/yaml.v2
   version: e4d366fc3c7938e2958e662b4258c7a89e1f0e3e
-testImports:
-- name: github.com/davecgh/go-spew
-  version: 5215b55f46b2b919f50a1df0eaa5886afe4e3b3d
-  subpackages:
-  - spew
-- name: github.com/icrowley/fake
-  version: 84bff6d01560fb0b5a396ba29534e93fd00d09c6
-- name: github.com/pmezard/go-difflib
-  version: 792786c7400a136282c1664665ae0a8db921c6c2
-  subpackages:
-  - difflib
-- name: github.com/serenize/snaker
-  version: d88cc11617e4f179fa2c821a60908d5fabd7bdad
+testImports: []

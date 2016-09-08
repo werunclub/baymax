@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 
 	clubProto "baymax/club_srv/protocol/club"
-	"baymax/errors"
 	"baymax/rpc"
 	"strconv"
 	"time"
@@ -23,7 +22,7 @@ func GetClub(c *gin.Context) {
 	clubID, err := strconv.Atoi(clubIDStr)
 
 	if err != nil {
-		c.JSON(400, errors.BadRequest("id", "code"))
+		c.JSON(400, err)
 	} else {
 		clubRpcConn := getClubRpcConn()
 
@@ -31,7 +30,7 @@ func GetClub(c *gin.Context) {
 		err = clubRpcConn.Call(clubProto.SrvGetOneClub, &clubProto.GetOneArgs{ClubID: clubID}, &reply)
 
 		if err != nil {
-			c.JSON(400, errors.BadRequest("id", "code"))
+			c.JSON(400, err)
 		} else {
 			c.JSON(200, reply.Data)
 		}
@@ -54,7 +53,7 @@ func CreateClub(c *gin.Context) {
 	err = c.BindJSON(&q)
 	if err != nil {
 		log.Println(err)
-		c.JSON(400, errors.BadRequest("id", "code"))
+		c.JSON(400, err)
 	} else {
 		clubRpcConn := getClubRpcConn()
 
@@ -68,7 +67,7 @@ func CreateClub(c *gin.Context) {
 
 		err = clubRpcConn.Call(clubProto.SrvCreateClub, &args, &reply)
 		if err != nil {
-			c.JSON(400, errors.BadRequest("id", "code"))
+			c.JSON(400, err)
 		} else {
 			c.JSON(200, reply.Club)
 		}
@@ -87,13 +86,12 @@ func UpdateClub(c *gin.Context) {
 
 	if err != nil {
 		log.Println(err)
-		c.JSON(400, errors.BadRequest("id", "code"))
+		c.JSON(400, err)
 	} else {
 		err := c.BindJSON(&q)
 
 		if err != nil {
-			log.Println(err)
-			c.JSON(400, errors.BadRequest("id", "code"))
+			c.JSON(400, err)
 		} else {
 			clubRpcConn := getClubRpcConn()
 
@@ -111,7 +109,7 @@ func UpdateClub(c *gin.Context) {
 			err := clubRpcConn.Call(clubProto.SrvUpdateClub, &args, &reply)
 			if err != nil {
 				log.Println(err)
-				c.JSON(400, errors.BadRequest("id", "code"))
+				c.JSON(400, err)
 			} else {
 				c.JSON(200, reply.Club)
 			}

@@ -7,3 +7,5 @@ import:
   - http2
 - package: github.com/appleboy/gin-jwt
   version: ^2.1.0
+- package: github.com/pborman/uuid
+  version: ^1.0.0
