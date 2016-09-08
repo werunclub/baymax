@@ -1,9 +1,9 @@
 package model
 
 import (
+	log "github.com/Sirupsen/logrus"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	log "github.com/Sirupsen/logrus"
 )
 
 var DB *gorm.DB
@@ -26,4 +26,3 @@ func Init(database_url string, logMode bool) {
 func Close() {
 	DB.Close()
 }
-

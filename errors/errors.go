@@ -21,6 +21,10 @@ func (e *Error) Error() string {
 	return string(b)
 }
 
+func NewId() string {
+	return uuid.New()
+}
+
 func New(id string, code string, detail string, status int32) error {
 	return &Error{
 		Id:     id,
@@ -41,7 +45,7 @@ func Parse(err string) *Error {
 
 func BadRequest(detail string) error {
 	return &Error{
-		Id:     uuid.New(),
+		Id:     NewId(),
 		Code:   "bad_request",
 		Detail: detail,
 		Status: http.StatusBadRequest,
@@ -50,7 +54,7 @@ func BadRequest(detail string) error {
 
 func Unauthorized(detail string) error {
 	return &Error{
-		Id:     uuid.New(),
+		Id:     NewId(),
 		Code:   "unauthorized",
 		Detail: detail,
 		Status: http.StatusUnauthorized,
@@ -59,7 +63,7 @@ func Unauthorized(detail string) error {
 
 func Forbidden(detail string) error {
 	return &Error{
-		Id:     uuid.New(),
+		Id:     NewId(),
 		Code:   "forbidden",
 		Detail: detail,
 		Status: http.StatusForbidden,
@@ -68,7 +72,7 @@ func Forbidden(detail string) error {
 
 func NotFound(detail string) error {
 	return &Error{
-		Id:     uuid.New(),
+		Id:     NewId(),
 		Code:   "not_found",
 		Detail: detail,
 		Status: http.StatusNotFound,
@@ -77,7 +81,7 @@ func NotFound(detail string) error {
 
 func InternalServerError(detail string) error {
 	return &Error{
-		Id:     uuid.New(),
+		Id:     NewId(),
 		Code:   "internal_server_error",
 		Detail: detail,
 		Status: http.StatusInternalServerError,

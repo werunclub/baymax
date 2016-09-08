@@ -6,11 +6,11 @@ import (
 	"baymax/user_srv/model"
 	"flag"
 	"fmt"
-	"net/rpc"
 	"github.com/jinzhu/configor"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/wawandco/fako"
+	"net/rpc"
 	"net/rpc/jsonrpc"
 	"sync"
 	"testing"
@@ -71,15 +71,15 @@ func init() {
 }
 
 type User struct {
-	Id       string `fako:"digits"`
-	Name string     `fako:""`
-	Dob      time.Time
+	Id   string `fako:"digits"`
+	Name string `fako:""`
+	Dob  time.Time
 }
 
 type UserDetailProtocol struct {
-	Id       string `condition:"id = ?" fako:"digits"`
-	Name  string `condition:"name = ?" fako:"user_name"`
-	Dob time.Time `condition:"dob >= ?"`
+	Id   string    `condition:"id = ?" fako:"digits"`
+	Name string    `condition:"name = ?" fako:"user_name"`
+	Dob  time.Time `condition:"dob >= ?"`
 }
 
 type UserRequestTestSuite struct {

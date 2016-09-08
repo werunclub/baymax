@@ -1,12 +1,12 @@
 package main
 
 import (
+	"baymax/rpc"
+	"baymax/user_srv/handler"
+	"baymax/user_srv/model"
 	"flag"
 	"github.com/Sirupsen/logrus"
 	"github.com/jinzhu/configor"
-	"baymax/user_srv/handler"
-	"baymax/user_srv/model"
-	"baymax/rpc"
 )
 
 func init() {

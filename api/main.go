@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
+	"github.com/Sirupsen/logrus"
 	"github.com/jinzhu/configor"
 	"runtime"
-	"github.com/Sirupsen/logrus"
 )
 
 func init() {
@@ -13,7 +13,7 @@ func init() {
 
 // settingLogrus 这里设置的是 logrus 的 std logger
 func settingLogrus() {
-	debugLevel, err:= logrus.ParseLevel(Config.Logger.Level)
+	debugLevel, err := logrus.ParseLevel(Config.Logger.Level)
 	if err != nil {
 		debugLevel = logrus.InfoLevel
 		logrus.WithError(err).Warningf("接收到粗无的参数 debug[%v], 默认使用 logrus.InfoLevel", debugLevel)
