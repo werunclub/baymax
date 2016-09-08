@@ -41,7 +41,7 @@ func GetClub(c *gin.Context) {
 type CreateClubQuery struct {
 	CityCode    string `json:"city_code" binding:"required"`
 	Description string `json:"description"`
-	IndustryID  int    `json:"industry_id,string"`
+	IndustryID  int    `json:"industry_id"`
 	Name        string `json:"name"`
 }
 func CreateClub(c *gin.Context) {
