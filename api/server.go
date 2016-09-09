@@ -38,9 +38,8 @@ func StartServer(addr string) {
 			auth := api_v1.Group("/")
 			auth.Use(authMiddleware.MiddlewareFunc())
 			auth.GET("/auth/refresh_token", authMiddleware.RefreshHandler)
-
-			auth.GET("/user", userHandler.UserProfile)
-
+			auth.POST("/clubs", v1.CreateClub)
+			auth.PATCH("/user/self", userHandler.PatchUser)
 		}
 	}
 
