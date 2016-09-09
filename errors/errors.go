@@ -25,9 +25,9 @@ func NewId() string {
 	return uuid.New()
 }
 
-func New(id string, code string, detail string, status int32) error {
+func New(code string, detail string, status int32) error {
 	return &Error{
-		Id:     id,
+		Id:     NewId(),
 		Code:   code,
 		Detail: detail,
 		Status: status,
