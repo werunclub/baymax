@@ -1,12 +1,10 @@
 package rpc
 
 import (
-	"net"
 	"net/rpc"
-	"net/rpc/jsonrpc"
 	"sync"
 	"time"
-	//"baymax/errors"
+
 	"baymax/errors"
 )
 
@@ -14,55 +12,50 @@ import (
 type Client struct {
 	rpcClient *rpc.Client
 	net       string
-	addr      string
-	timeout   time.Duration
-	once      sync.Once
+	Addr      string
+
+	pool    *pool
+	timeout time.Duration
+	once    sync.Once
 }
 
 func NewClient(net, addr string, timeout time.Duration) *Client {
 	return &Client{
 		net:     net,
-		addr:    addr,
+		Addr:    addr,
 		timeout: timeout,
+		pool:    newPool(100, time.Minute*30),
 	}
 }
 
-// 建立连接
-func (c *Client) Connect() error {
-
-	if c.rpcClient != nil {
-		return nil
-	}
-
-	var conn net.Conn
-	var err error
-
-	conn, err = net.DialTimeout(c.net, c.addr, c.timeout)
-
-	if err != nil {
-		return err
-	}
-
-	c.rpcClient = jsonrpc.NewClient(conn)
-
-	return nil
+func (c *Client) SetPoolSize(size int) {
+	c.pool.size = size
 }
 
 // 断开连接
 func (c *Client) Close() error {
-	return c.rpcClient.Close()
+	return nil
 }
 
 // 调用方法
+// TODO: 优化连接池
 func (c *Client) Call(method string, args interface{}, reply interface{}) *errors.Error {
 
-	c.once.Do(func() {
-		c.Connect()
-	})
+	conn, e := c.pool.GetConn(c.Addr, c.timeout)
+	if e != nil {
+		return errors.Parse(e.Error())
+	}
 
-	err := c.rpcClient.Call(method, args, reply)
+	var grr error
 
+	defer func() {
+		// 使用后释放
+		c.pool.release(c.Addr, conn, grr)
+	}()
+
+	err := conn.Call(method, args, reply)
 	if err != nil {
+		grr = err
 		return errors.Parse(err.Error())
 	}
 
