@@ -54,7 +54,7 @@ var (
 func startServer() {
 	server = NewServer()
 	server.RegisterName("Arith", new(Arith))
-	server.Start("tcp", "127.0.0.1:0")
+	server.Start()
 }
 
 func TestClient(t *testing.T) {
@@ -64,7 +64,6 @@ func TestClient(t *testing.T) {
 
 	args := &Args{7, 8}
 	reply := new(Reply)
-	client.Connect()
 
 	err := client.Call("Arith.Add", args, reply)
 	if err != nil {
