@@ -2,87 +2,142 @@ package handler
 
 import (
 	"baymax/club_srv/model"
-	proto "baymax/club_srv/protocol/club"
+	protoClub "baymax/club_srv/protocol/club"
+	"log"
+	"strconv"
 )
+
 
 type ClubHandler struct{}
 
-func (*ClubHandler) Get(req *proto.GetRequest, resp *proto.GetResponse) error {
+func (*ClubHandler) GetOne(args *protoClub.GetOneArgs, reply *protoClub.GetOneReply) error {
+	log.Println("call GetOne")
 
-	club := model.Club{}
-	err := model.DB.Where("id = ?", req.ClubID).First(&club).Error
+	var club model.Club
+	err := model.DB.Where("id = ?", args.ClubID).First(&club).Error
 
 	if err != nil {
 		return err
 	} else {
-		c, err := proto.InitFromModel(&club)
+		c, err := model.ToProtoStruct(club)
 		if err != nil {
 			return err
 		} else {
-			resp.Data = []proto.Club{c}
+			reply.Data = c
 			return nil
 		}
 	}
 }
 
-// 创建新的 club 返回 id
-func (*ClubHandler) Create(req *proto.CreateRequest, resp *proto.CreateResponse) error {
+func (*ClubHandler) GetBatch(args *protoClub.GetBatchArgs, reply *protoClub.GetBatchReply) error {
+	log.Println("call GetBatch")
 
-	club := model.Club{}
-
-	// TODO 两种类型的 struct 之间的转换
-	club.Name = req.Name
-
-	var err error
-	err = model.DB.Create(&club).Error
+	var clubs []model.Club
+	err := model.DB.Where("id in (?)", args.ClubIDS).Find(&clubs).Error
 
 	if err != nil {
 		return err
 	} else {
-		resp.ClubID = club.ID
-		return nil
-	}
-}
-
-// 删除指定的 club
-func (*ClubHandler) Delete(req *proto.DeleteRequest, resp *proto.DeleteResponse) error {
-
-	club := model.Club{ID: req.ClubID}
-
-	var err error
-	// 原数据库没有 delete_at 字段, 指定记录会被直接删除
-	err = model.DB.Delete(&club).Error
-	if err != nil {
-		return err
-	} else {
-		resp.ClubID = club.ID
+		protoClubs, err := model.ToBatchProtoStruct(clubs)
+		if err != nil {
+			return err
+		} else {
+			reply.Total = len(protoClubs)
+			reply.Data = protoClubs
+			return nil
+		}
 	}
 
 	return nil
 }
 
-// 更新指定的 club
-func (*ClubHandler) Update(req *proto.UpdateRequest, res *proto.UpdateResponse) error {
+func (*ClubHandler) Search(args *protoClub.SearchArgs, reply *protoClub.SearchReply) error {
+	log.Println("call Search")
 
-	club := model.Club{}
-	var err error
-	err = model.DB.Where("id = ?", req.Club.ID).First(&club).Error
+	var clubs []model.Club
+
+	likeArg := "%" + args.Name + "%"
+	err := model.DB.Where("name LIKE ?", likeArg).Find(&clubs).Offset(args.Offset).Limit(args.Limit).Error
+
+	if err != nil {
+		return nil
+	} else {
+		protoClubs, err := model.ToBatchProtoStruct(clubs)
+		if err != nil {
+			return err
+		} else {
+			reply.Total = len(protoClubs)
+			reply.Data = protoClubs
+			return nil
+		}
+	}
+}
+
+func (*ClubHandler) Create(args *protoClub.CreateArgs, reply *protoClub.CreateReply) error {
+	log.Println("call Create")
+	club, err := model.FromProtoStruct(args.Club)
 
 	if err != nil {
 		return err
 	} else {
-		club.Name = req.Name
+		// 这里在 insert 到数据库的同时使用自动 id 来更新 short_url
+		// 因此这里要实现一个事务
 
-		err = model.DB.Model(&club).Update().Error
+		tx := model.DB.Begin()
+		err := tx.Create(&club).Error
+
 		if err != nil {
-			return err
+			tx.Rollback()
+			return nil
 		} else {
-			(*res).Club, err = proto.InitFromModel(&club)
+			clubIDStr := strconv.Itoa(club.ID)
+			err := tx.Model(&club).Update("ShortUrl", clubIDStr).Error
 			if err != nil {
-				return err
-			} else {
+				tx.Rollback()
 				return nil
+			} else {
+				tx.Commit()
+
+				protoClub, err := model.ToProtoStruct(club)
+				if err != nil {
+					return err
+				} else {
+					reply.Club = protoClub
+					return nil
+				}
 			}
 		}
 	}
+
+}
+
+func (*ClubHandler) Update(args *protoClub.UpdateArgs, reply *protoClub.UpdateReply) error {
+	log.Println("call Update")
+
+	var club model.Club
+	err := model.DB.Where("id = ?", args.ClubID).First(&club).Error
+
+	if err != nil {
+		return err
+	} else {
+		newClub, err := model.FromProtoStruct(args.NewClub)
+		if err != nil {
+			return err
+		} else {
+			err := model.DB.Model(&club).Update(newClub).Error
+			if err != nil {
+				return err
+			} else {
+				c, err := model.ToProtoStruct(club)
+				if err != nil {
+					return nil
+				} else {
+					reply.Club = c
+					return nil
+				}
+			}
+		}
+	}
+
+	return nil
 }

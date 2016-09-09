@@ -2,9 +2,8 @@ package main
 
 import (
 	"flag"
-	"github.com/Sirupsen/logrus"
-	"github.com/jinzhu/configor"
 	"runtime"
+	"github.com/jinzhu/configor"
 )
 
 func init() {

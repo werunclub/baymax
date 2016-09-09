@@ -1,7 +1,6 @@
 package club
 
 import (
-	"baymax/club_srv/model"
 	"time"
 )
 
@@ -9,21 +8,19 @@ const (
 	prefix = "Club."
 
 	// 获取指定的俱乐部信息
-	ServiceGetClub = prefix + "Get"
+	SrvGetOneClub = prefix + "GetOne"
 	// 创建新的俱乐部
-	ServiceCreateClub = prefix + "Create"
-	// 删除俱乐部
-	ServiceDeleteClub = prefix + "Delete"
+	SrvCreateClub = prefix + "Create"
 	// 获取多个俱乐部
-	ServiceGetManyClub = prefix + "Update"
+	SrvGetBatchClub = prefix + "GetBatch"
 	// 修改俱乐部信息
-	ServiceUpdateClub = prefix + "Update"
+	SrvUpdateClub = prefix + "Update"
+	// 查询俱乐部
+	SrvSearchClub = prefix + "Search"
 )
 
-// TODO 代码复制到这里 注释也不能共享了
-// TODO 参数以及返回值的名字不能命名为 req 以及 res　和　rpc　本身的名字不一样
 type Club struct {
-	ID         uint      `json:"id"`
+	ID         int       `json:"id"`
 	UserID     string    `json:"user_id"`
 	Name       string    `json:"name"`
 	Icon       string    `json:"icon"`
@@ -38,70 +35,53 @@ type Club struct {
 	IndustryID int       `json:"industry_id"`
 	CommonByte int       `json:"common_byte"`
 	CreateTime time.Time `json:"create_time"`
+
+	// 在原系统中的 databody 中
+	VerifyCode string `json:"verify_code"`
 }
 
-// 根据 model 实例化一个 Club 结构的实例
-func InitFromModel(m *model.Club) (Club, error) {
-	c := Club{}
-
-	c.ID = m.ID
-	c.UserID = m.UserID
-	c.Name = m.Name
-	c.Icon = m.Icon
-	c.Des = m.Des
-	c.ShortUrl = m.ShortUrl
-	c.SortNum = m.SortNum
-	c.State = m.State
-	c.Authorized = m.Authorized
-	c.DataBody = m.DataBody
-	c.Source = m.Source
-	c.CityCode = m.CityCode
-	c.IndustryID = m.IndustryID
-	c.CommonByte = m.CommonByte
-	c.CreateTime = m.CreateTime
-
-	return c, nil
+// 获取指定 id 俱乐部
+type GetOneArgs struct {
+	ClubID int
+}
+type GetOneReply struct {
+	Data Club
 }
 
-// 获取单条信息
-type GetRequest struct {
-	ClubID uint `json:"club_id"`
+// 获取多条 id 对应的 club 信息
+type GetBatchArgs struct {
+	ClubIDS []int
+}
+type GetBatchReply struct {
+	Total int
+	Data  []Club
 }
 
-type GetResponse struct {
-	Data []Club `json:"data"`
+// 根据条件查询 club
+// TODO 如何检测类型的范围比如这里的 limit 以及 offset
+type SearchArgs struct {
+	Name   string
+	Limit  int
+	Offset int
+}
+type SearchReply struct {
+	Total int
+	Data  []Club
 }
 
-// 创建新的俱乐部
-type CreateRequest struct {
-	Club
+// 创建新的 club
+type CreateArgs struct {
+	Club Club
+}
+type CreateReply struct {
+	Club Club
 }
 
-type CreateResponse struct {
-	ClubID uint `json:"club_id"`
+// 修改 club
+type UpdateArgs struct {
+	ClubID  int
+	NewClub Club
 }
-
-// 删除俱乐部
-type DeleteRequest struct {
-	ClubID uint `json:"club_id"`
-}
-
-type DeleteResponse struct {
-	ClubID uint `json:"club_id"`
-}
-
-// 更新俱乐部信息
-type UpdateRequest struct {
-	Club
-}
-
-type UpdateResponse struct {
-	Club
-}
-
-// 获取多条 club 信息
-type GetManyRequest struct {
-}
-
-type GetManyResponse struct {
+type UpdateReply struct {
+	Club Club
 }

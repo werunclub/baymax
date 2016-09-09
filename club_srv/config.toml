@@ -1,4 +1,4 @@
-ServiceName = "api"
+ServiceName = "club_srv"
 
 [Server]
 Addr = ":8080"
