@@ -18,7 +18,7 @@ func TestErrors(t *testing.T) {
 	}
 
 	for _, e := range testData {
-		ne := New(e.Id, e.Code, e.Detail, e.Status)
+		ne := New(e.Code, e.Detail, e.Status)
 
 		pe := Parse(ne.Error())
 
