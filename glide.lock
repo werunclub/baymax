@@ -1,12 +1,8 @@
-hash: 1082410d76c1f9b7d08265745153fcbde15ff8db5784be642cb028ee0a5c6084
-updated: 2016-09-07T21:28:31.163029023+08:00
+hash: e3530a95881859709e6b1cee09ad149366c5378d400163b8f24d65570b78b8a4
+updated: 2016-09-09T20:43:56.241242717+08:00
 imports:
-- name: github.com/aliyun/aliyun-oss-go-sdk
-  version: 033d39afc575aa38ac40f8e2011710b7bacf9f7a
-  subpackages:
-  - oss
 - name: github.com/appleboy/gin-jwt
-  version: 44b20eae31ccd133038563792861b519c1994502
+  version: 40c6c8b0d748d11e1b089eaf5cb88cf19ee2f676
 - name: github.com/asaskevich/govalidator
   version: 7664702784775e51966f0885f5cd27435916517b
 - name: github.com/BurntSushi/toml
@@ -14,28 +10,24 @@ imports:
 - name: github.com/fvbock/endless
   version: 67d0a784ad8ab10a69d12107f6de220db0c18002
 - name: github.com/gin-gonic/gin
-  version: f931d1ea80ae95a6fc739213cdd9399bd2967fb6
+  version: e2fa89777e344782ef5d31929f095f4589c35dcc
   subpackages:
   - binding
   - render
 - name: github.com/go-errors/errors
   version: a41850380601eeb43f4350f7d17c6bbd8944aaf8
 - name: github.com/go-sql-driver/mysql
-  version: 0b58b37b664c21f3010e836f1b931e1d0b0b0685
-- name: github.com/golang/protobuf
-  version: 2402d76f3d41f928c7902a765dfc872356dd3aad
+  version: a732e14c62dde3285440047bba97581bc472ae18
+- name: github.com/hashicorp/consul
+  version: 0a34741d7266af34eed36048d1a8e8880a7b17a1
   subpackages:
-  - proto
-- name: github.com/hashicorp/errwrap
-  version: 7554cd9344cec97297fa6649b055a8c98c2a1e55
-- name: github.com/hashicorp/go-msgpack
-  version: fa3f63826f7c23912c15263591e65d54d080b458
+  - api
+- name: github.com/hashicorp/go-cleanhttp
+  version: ad28ea4487f05916463e2423a55166280e8254b5
+- name: github.com/hashicorp/serf
+  version: 9432bc08aa8d486e497e27f84878ebbe8c1eab66
   subpackages:
-  - codec
-- name: github.com/hashicorp/go-multierror
-  version: 8c5f0ad9360406a3807ce7de6bc73269a91a6e51
-- name: github.com/hashicorp/net-rpc-msgpackrpc
-  version: a14192a58a694c123d8fe5481d4a4727d6ae82f3
+  - coordinate
 - name: github.com/jinzhu/configor
   version: fb7a3183cd987802d006408fe3a4a9e1f6002ece
 - name: github.com/jinzhu/gorm
@@ -44,8 +36,12 @@ imports:
   - dialects/mysql
 - name: github.com/jinzhu/inflection
   version: 74387dc39a75e970e7a3ae6a3386b5bd2e5c5cff
-- name: github.com/manucorporat/sse
-  version: ee05b128a739a0fb76c7ebd3ae4810c1de808d6d
+- name: github.com/julienschmidt/httprouter
+  version: b428fda53bb0a764fea9c76c9413512eda291dec
+- name: github.com/mattn/go-colorable
+  version: ed8eb9e318d7a84ce5915b495b7d35e0cfe7b5a8
+- name: github.com/mattn/go-isatty
+  version: 66b8e73f3f5cda9f96b69efd03dd3d7fc4a5cdb8
 - name: github.com/micro/go-micro
   version: 419b952fb353ecb1fbea9081cffec63f6067efa8
   subpackages:
@@ -60,49 +56,42 @@ imports:
   version: d71fb89c9e0263aaed89645b0b168e11ccf597b1
 - name: github.com/pborman/uuid
   version: a97ce2ca70fa5a848076093f05e639a89ca34d06
+- name: github.com/prometheus/common
+  version: c8ea52003c2f56d8cdf260b12741200de4080c70
+  subpackages:
+  - log
 - name: github.com/Sirupsen/logrus
   version: 4b6ea7319e214d98c938f12692336f7ca9348d6b
-- name: github.com/smallnest/rpcx
-  version: afad6dc6ec37351af704e748ffcc782db06b7970
 - name: github.com/stretchr/testify
   version: f390dcf405f7b83c997eac1b06768bb9f44dec18
   subpackages:
   - assert
-  - suite
   - require
+  - suite
 - name: github.com/wawandco/fako
   version: 68d7f8058e3d3a9b9ecc400b89bc1fa83f9f2ad0
-- name: golang.org/x/image
-  version: 714f2e47f73aac52208d4f4260e4ba79358a9c28
-  subpackages:
-  - webp
-  - riff
-  - vp8
-  - vp8l
 - name: golang.org/x/net
-  version: f315505cf3349909cdf013ea56690da34e96a451
+  version: 9313baa13d9262e49d07b20ed57dceafcd7240cc
   subpackages:
-  - http2
   - context
+  - http2
 - name: golang.org/x/sys
-  version: a646d33e2ee3172a661fc09bca23bb4889a41bc8
+  version: 30de6d19a3bd89a5f38ae4028e23aaa5582648af
   subpackages:
   - unix
 - name: gopkg.in/dgrijalva/jwt-go.v3
   version: d2709f9f1f31ebcda9651b03077758c1f3a0018c
-- name: gopkg.in/go-playground/validator.v8
-  version: c193cecd124b5cc722d7ee5538e945bdb3348435
 - name: gopkg.in/yaml.v2
   version: e4d366fc3c7938e2958e662b4258c7a89e1f0e3e
 testImports:
 - name: github.com/davecgh/go-spew
-  version: 5215b55f46b2b919f50a1df0eaa5886afe4e3b3d
+  version: 6d212800a42e8ab5c146b8ace3490ee17e5225f9
   subpackages:
   - spew
 - name: github.com/icrowley/fake
   version: 84bff6d01560fb0b5a396ba29534e93fd00d09c6
 - name: github.com/pmezard/go-difflib
-  version: 792786c7400a136282c1664665ae0a8db921c6c2
+  version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
   subpackages:
   - difflib
 - name: github.com/serenize/snaker
