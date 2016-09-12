@@ -1,8 +1,0 @@
-APPName = "api"
-
-[Server]
-Addr = ":8080"
-
-[Registry]
-Type = "consul"
-Address = "127.0.0.1:8300"
