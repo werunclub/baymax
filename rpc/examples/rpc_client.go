@@ -44,18 +44,9 @@ func (t *Arith) Div(args *Args, reply *Reply) error {
 
 func main() {
 
-	registry := rpc.NewConsulRegistry()
-	registry.Init()
-
-	services, _ := registry.GetService("RpcTest")
-
-	for _, s := range services {
-		log.Print(s.Address)
-	}
-
 	selector := rpc.NewSelector(rpc.PoolSize(10))
 
-	client, err := selector.Select("RpcTest")
+	client, err := selector.Select("Arith")
 
 	if err != nil {
 		log.Printf("error: %v", err.Error())
