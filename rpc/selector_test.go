@@ -21,7 +21,7 @@ func TestSelector(t *testing.T) {
 
 	selector := NewSelector(ConsulAddress("127.0.0.1:8500"))
 
-	client, err := selector.Select("RpcTest")
+	client, err := selector.Select("Arith")
 	if err != nil {
 		t.Errorf("Select: expected no error but got string %q", err.Error())
 	}

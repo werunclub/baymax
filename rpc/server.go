@@ -27,13 +27,15 @@ var (
 type Option func(*Options)
 
 type Server struct {
-	opts   Options
-	nodeId string
+	opts Options
 
 	sync.RWMutex
-	rpcServer  *rpc.Server
-	Registry   *ConsulRegistry
-	listener   net.Listener
+	rpcServer *rpc.Server
+	Registry  *ConsulRegistry
+	listener  net.Listener
+
+	Handlers   map[string]*interface{}
+	nodes      []*Node
 	registered bool
 
 	ticker *time.Ticker
@@ -46,6 +48,7 @@ func NewServer(opts ...Option) *Server {
 		opts:      options,
 		rpcServer: rpc.NewServer(),
 		Registry:  NewConsulRegistry(),
+		Handlers:  make(map[string]*interface{}),
 	}
 
 	server.Registry.ConsulAddress = options.ConsulAddress
@@ -132,42 +135,56 @@ func (s *Server) Register() error {
 		return err
 	}
 
-	// 注册服务
-	node := &Node{
-		Id:       config.Id,
-		Name:     config.Name,
-		Address:  addr + ":" + strconv.Itoa(port),
-		Metadata: config.Metadata,
+	s.RLock()
+
+	for name, _ := range s.Handlers {
+		node := &Node{
+			Id:       name + "-" + uuid.New(),
+			Name:     name,
+			Address:  addr + ":" + strconv.Itoa(port),
+			Metadata: config.Metadata,
+		}
+
+		s.nodes = append(s.nodes, node)
+
+		// 注册服务
+		if err := s.Registry.Register(node); err != nil {
+			return err
+		}
+
+		// 按指定时间上报状态
+		s.ticker = time.NewTicker(s.opts.RegisterInterval)
+		go func() {
+			for range s.ticker.C {
+				s.Registry.CheckPass(node.Id)
+			}
+		}()
 	}
 
-	s.Registry.Register(node)
-	s.nodeId = node.Id
-
-	// 按指定时间上报状态
-	s.ticker = time.NewTicker(s.opts.RegisterInterval)
-	go func() {
-		for range s.ticker.C {
-			s.Registry.CheckPass(s.nodeId)
-		}
-	}()
+	s.RUnlock()
 
 	return nil
 }
 
 func (s *Server) Deregister() error {
 	s.ticker.Stop()
-	s.Registry.Unregister(s.nodeId)
+
+	for _, node := range s.nodes {
+		s.Registry.Unregister(node.Id)
+	}
+
 	return nil
 }
 
 // 使用名称注册处理器
-func (s *Server) Handle(name string, service interface{}) {
-	s.rpcServer.RegisterName(name, service)
+func (s *Server) Handle(serviceName string, service interface{}) {
+	s.rpcServer.RegisterName(serviceName, service)
+	s.Handlers[serviceName] = &service
 }
 
 // alias func Handle
-func (s *Server) RegisterName(name string, service interface{}) {
-	s.Handle(name, service)
+func (s *Server) RegisterName(serviceName string, service interface{}) {
+	s.Handle(serviceName, service)
 }
 
 // 关闭连接
@@ -184,15 +201,18 @@ func (s *Server) RegisterAndRun() error {
 
 	// 启动注册服务
 	if err := s.Registry.Init(); err != nil {
+		log.Fatalf("registry init error: %v", err)
 		return err
 	}
 
 	if err := s.Start(); err != nil {
+		log.Fatalf("start error: %v", err)
 		return err
 	}
 
 	// 注册服务
 	if err := s.Register(); err != nil {
+		log.Fatalf("registr error: %v", err)
 		return err
 	}
 

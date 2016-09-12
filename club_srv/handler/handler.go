@@ -7,7 +7,6 @@ import (
 	"strconv"
 )
 
-
 type ClubHandler struct{}
 
 func (*ClubHandler) GetOne(args *protoClub.GetOneArgs, reply *protoClub.GetOneReply) error {

@@ -5,9 +5,9 @@ import (
 
 	clubProto "baymax/club_srv/protocol/club"
 	"baymax/rpc"
+	"log"
 	"strconv"
 	"time"
-	"log"
 )
 
 func getClubRpcConn() *rpc.Client {
@@ -44,9 +44,10 @@ type CreateClubQuery struct {
 	IndustryID  int    `json:"industry_id"`
 	Name        string `json:"name"`
 }
+
 func CreateClub(c *gin.Context) {
 	var (
-		q CreateClubQuery
+		q   CreateClubQuery
 		err error
 	)
 
@@ -74,11 +75,10 @@ func CreateClub(c *gin.Context) {
 	}
 }
 
-
 func UpdateClub(c *gin.Context) {
 	var (
 		err error
-		q UpdateClubQuery
+		q   UpdateClubQuery
 	)
 
 	clubIDStr := c.Params.ByName("clubId")

@@ -1,6 +1,5 @@
 package handler_test
 
-
 import (
 	"testing"
 
@@ -10,7 +9,7 @@ import (
 )
 
 func getConn() *rpc.Client {
-	return rpc.NewClient("tcp", "127.0.0.1:8091", 10 * time.Minute)
+	return rpc.NewClient("tcp", "127.0.0.1:8091", 10*time.Minute)
 }
 
 // TODO 启动一个 server
@@ -47,7 +46,7 @@ func TestSearchClubs(t *testing.T) {
 	c := getConn()
 	var reply clubProto.SearchReply
 
-	err := c.Call(clubProto.SrvSearchClub, &clubProto.SearchArgs{Name:"咕咚"}, &reply)
+	err := c.Call(clubProto.SrvSearchClub, &clubProto.SearchArgs{Name: "咕咚"}, &reply)
 	if err != nil {
 		t.Error(err)
 	} else {

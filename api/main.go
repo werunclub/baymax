@@ -2,8 +2,8 @@ package main
 
 import (
 	"flag"
-	"runtime"
 	"github.com/jinzhu/configor"
+	"runtime"
 )
 
 func init() {
