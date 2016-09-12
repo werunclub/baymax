@@ -117,6 +117,6 @@ func (s *Selector) Select(serviceName string) (*Client, error) {
 
 // TODO: 标记服务器不可用
 // TODO: 自动移除不可用服务器客户端
-func (s *Selector) Mark(serviceName string, nodeId string, err error) {
-
+func (s *Selector) Mark(serviceName string, address string, err error) {
+	delete(s.clients, address)
 }

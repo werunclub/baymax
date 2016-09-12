@@ -145,29 +145,40 @@ func (s *Server) Register() error {
 			Metadata: config.Metadata,
 		}
 
-		s.nodes = append(s.nodes, node)
-
 		// 注册服务
 		if err := s.Registry.Register(node); err != nil {
+
+			// 注销已注册服务
+			s.Deregister()
 			return err
 		}
 
-		// 按指定时间上报状态
-		s.ticker = time.NewTicker(s.opts.RegisterInterval)
-		go func() {
-			for range s.ticker.C {
-				s.Registry.CheckPass(node.Id)
-			}
-		}()
+		// 注册成功添加到节点列表
+		s.nodes = append(s.nodes, node)
 	}
 
+	s.registered = true
 	s.RUnlock()
+
+	// 按指定时间上报状态
+	s.ticker = time.NewTicker(s.opts.RegisterInterval)
+	go func() {
+		for range s.ticker.C {
+			for _, node := range s.nodes {
+				s.Registry.CheckPass(node.Id)
+			}
+		}
+	}()
 
 	return nil
 }
 
+// 注销服务
 func (s *Server) Deregister() error {
-	s.ticker.Stop()
+
+	if s.ticker != nil {
+		s.ticker.Stop()
+	}
 
 	for _, node := range s.nodes {
 		s.Registry.Unregister(node.Id)
