@@ -1,8 +1,8 @@
-hash: 8a26cab90f60bfceec52fb767d34406de0e47730774bc6a51d7f31a8ffb7dfbb
-updated: 2016-09-12T19:25:00.792971598+08:00
+hash: e3530a95881859709e6b1cee09ad149366c5378d400163b8f24d65570b78b8a4
+updated: 2016-09-09T20:43:56.241242717+08:00
 imports:
 - name: github.com/appleboy/gin-jwt
-  version: 89be89cdc6ee002b5c9b95fb57963ad7e746a82c
+  version: 40c6c8b0d748d11e1b089eaf5cb88cf19ee2f676
 - name: github.com/asaskevich/govalidator
   version: 7664702784775e51966f0885f5cd27435916517b
 - name: github.com/BurntSushi/toml
@@ -62,8 +62,16 @@ imports:
   - log
 - name: github.com/Sirupsen/logrus
   version: 4b6ea7319e214d98c938f12692336f7ca9348d6b
+- name: github.com/stretchr/testify
+  version: f390dcf405f7b83c997eac1b06768bb9f44dec18
+  subpackages:
+  - assert
+  - require
+  - suite
+- name: github.com/wawandco/fako
+  version: 68d7f8058e3d3a9b9ecc400b89bc1fa83f9f2ad0
 - name: golang.org/x/net
-  version: f315505cf3349909cdf013ea56690da34e96a451
+  version: 9313baa13d9262e49d07b20ed57dceafcd7240cc
   subpackages:
   - context
   - http2
