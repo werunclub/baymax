@@ -43,13 +43,13 @@ func NewSelector(opts ...Option) *Selector {
 
 func (s *Selector) AddServices(serviceNames ...string) {
 	for _, name := range serviceNames {
-		s.AddService(name)
+		s.addService(name)
 	}
 }
 
 // 添加一个服务
 // 选择器会定时自动从注册服务器获取可用服务器列表
-func (s *Selector) AddService(serviceName string) {
+func (s *Selector) addService(serviceName string) {
 	_, ok := s.selectors[serviceName]
 	if !ok {
 		s.selectors[serviceName] = NewConsulClientSelector(s.ConsulAddress,
@@ -60,24 +60,40 @@ func (s *Selector) AddService(serviceName string) {
 	}
 }
 
+// 获取或新建一个选择器
 func (s *Selector) getSelector(serviceName string) (*ConsulClientSelector, error) {
+
 	selector, ok := s.selectors[serviceName]
 
 	if !ok {
-		s.AddService(serviceName)
+		s.addService(serviceName)
 		selector, ok = s.selectors[serviceName]
 
 		if !ok {
-			return nil, errors.New("fail")
+			return nil, errors.New("add service fail")
 		}
 	}
 
 	return selector, nil
 }
 
+// 获取或新建一个客户端
+func (s *Selector) getClient(address string) (*Client, error) {
+
+	client, ok := s.clients[address]
+
+	if !ok || client == nil {
+
+		client = NewClient("tcp", address, s.timeout)
+		client.SetPoolSize(s.opts.PoolSize)
+
+		s.clients[address] = client
+	}
+
+	return client, nil
+}
+
 // 选择一个服务器,并创建客户端
-// TODO: 缓存客户端
-// TODO: 自动移除不可用服务器客户端
 func (s *Selector) Select(serviceName string) (*Client, error) {
 
 	var (
@@ -96,13 +112,11 @@ func (s *Selector) Select(serviceName string) (*Client, error) {
 		return nil, err
 	}
 
-	client := NewClient("tcp", node.Address, s.timeout)
-	client.SetPoolSize(s.opts.PoolSize)
-
-	return client, nil
+	return s.getClient(node.Address)
 }
 
 // TODO: 标记服务器不可用
+// TODO: 自动移除不可用服务器客户端
 func (s *Selector) Mark(serviceName string, nodeId string, err error) {
 
 }

@@ -44,7 +44,6 @@ func (t *Arith) Div(args *Args, reply *Reply) error {
 
 func main() {
 	server := rpc.NewServer(
-		rpc.Name("RpcTest"),
 		rpc.ConsulAddress("127.0.0.1:8500"))
 
 	server.Handle("Arith", new(Arith))
