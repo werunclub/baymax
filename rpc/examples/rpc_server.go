@@ -42,10 +42,28 @@ func (t *Arith) Div(args *Args, reply *Reply) error {
 	return nil
 }
 
+type Arith2 int
+
+func (t *Arith2) Add(args *Args, reply *Reply) error {
+	log.Info("add")
+	reply.C = args.A + args.B
+	return nil
+}
+
+type Arith3 int
+
+func (t *Arith3) Add(args *Args, reply *Reply) error {
+	log.Info("add")
+	reply.C = args.A + args.B
+	return nil
+}
+
 func main() {
 	server := rpc.NewServer(
 		rpc.ConsulAddress("127.0.0.1:8500"))
 
 	server.Handle("Arith", new(Arith))
+	server.Handle("Arith2", new(Arith))
+	server.Handle("Arith3", new(Arith))
 	server.RegisterAndRun()
 }
