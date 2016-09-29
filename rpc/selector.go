@@ -12,6 +12,7 @@ type Selector struct {
 	sessionTimeout time.Duration
 	SelectMode     SelectMode
 	timeout        time.Duration
+	connTimeout    time.Duration
 
 	selectors map[string]*ConsulClientSelector
 	clients   map[string]*Client
@@ -26,6 +27,7 @@ func NewSelector(opts ...Option) *Selector {
 		ConsulAddress:  options.ConsulAddress,
 		sessionTimeout: time.Second * 30,
 		timeout:        time.Second * 20,
+		connTimeout:    time.Second * 5,
 
 		// 随机选择模型
 		SelectMode: RandomSelect,
@@ -84,7 +86,7 @@ func (s *Selector) getClient(address string) (*Client, error) {
 
 	if !ok || client == nil {
 
-		client = NewClient("tcp", address, s.timeout)
+		client = NewClient("tcp", address, s.connTimeout)
 		client.SetPoolSize(s.opts.PoolSize)
 
 		s.clients[address] = client

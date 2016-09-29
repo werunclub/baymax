@@ -2,8 +2,8 @@ package validator
 
 import (
 	"fmt"
-	"strings"
 	"reflect"
+	"strings"
 )
 
 /* ========== JSON Form Validator ============ */
