@@ -41,6 +41,7 @@ func (c *Client) Close() error {
 // TODO: 优化连接池
 func (c *Client) Call(method string, args interface{}, reply interface{}) *errors.Error {
 
+	// Fixme: 无法连接到服务器时此处有空指针错误
 	conn, e := c.pool.GetConn(c.Addr, c.timeout)
 	if e != nil {
 		return errors.Parse(e.Error())
