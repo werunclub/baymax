@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"baymax/errors"
+	logger "github.com/Sirupsen/logrus"
 )
 
 // Client represents a RPC client.
@@ -44,19 +45,20 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 	// Fixme: 无法连接到服务器时此处有空指针错误
 	conn, e := c.pool.GetConn(c.Addr, c.timeout)
 	if e != nil {
-		return errors.Parse(e.Error())
+		logger.Errorf("rpc connect error:", e)
+		return errors.InternalServerError(e.Error()).(*errors.Error)
 	}
 
-	var grr error
+	var err error
 
 	defer func() {
 		// 使用后释放
-		c.pool.release(c.Addr, conn, grr)
+		c.pool.release(c.Addr, conn, err)
 	}()
 
-	err := conn.Call(method, args, reply)
+	err = conn.Call(method, args, reply)
 	if err != nil {
-		grr = err
+		logger.Errorf("rpc call error:", err)
 		return errors.Parse(err.Error())
 	}
 
