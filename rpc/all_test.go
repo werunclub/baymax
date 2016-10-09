@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"baymax/errors"
+	"fmt"
 	"sync"
 )
 
@@ -87,6 +88,21 @@ func TestClient(t *testing.T) {
 	reply = new(Reply)
 	err = client.Call("Arith.Div", args, reply)
 	if err == nil {
-		t.Errorf("Div: expected error but got nil")
+		t.Error("Div: expected error but got nil")
 	}
+}
+
+func TestNoneServer(t *testing.T) {
+
+	client := NewClient("tcp", "127.0.0.1:11212", time.Second*5)
+
+	args := &Args{7, 8}
+	reply := new(Reply)
+
+	err := client.Call("Arith.Add", args, reply)
+	if err == nil {
+		t.Error("Add: expected an error but got nil")
+	}
+
+	fmt.Printf("got error: %s", err)
 }
