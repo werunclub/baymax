@@ -5,10 +5,11 @@ import (
 	"github.com/evalphobia/logrus_fluent"
 )
 
-func SetLogrusDefault(logLevel, logFormat string) {
+func SetLogrusDefault(logLevel, logFormat string) error {
 	return SetLogrus(logLevel, logFormat, "stdout", "", 0, "")
 }
 
+// 设置 logrus, 支持同步日志到 fluent
 func SetLogrus(logLevel, logFormat, logOut, fluentHost string, fluentPort int, fluentTag string) error {
 
 	if logOut == "fluent" {
@@ -21,6 +22,9 @@ func SetLogrus(logLevel, logFormat, logOut, fluentHost string, fluentPort int, f
 		hook.SetLevels([]logrus.Level{
 			logrus.PanicLevel,
 			logrus.ErrorLevel,
+			logrus.DebugLevel,
+			logrus.WarnLevel,
+			logrus.InfoLevel,
 		})
 
 		// set static tag
