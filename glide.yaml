@@ -9,3 +9,5 @@ import:
   version: ^2.1.0
 - package: github.com/pborman/uuid
   version: ^1.0.0
+- package: github.com/evalphobia/logrus_fluent
+  version: ~v0.1.0
