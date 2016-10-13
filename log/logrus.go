@@ -1,19 +1,18 @@
 package log
 
 import (
+	"os"
+
 	"github.com/Sirupsen/logrus"
 	"github.com/evalphobia/logrus_fluent"
 )
 
-func SetLogrusDefault(logLevel, logFormat string) error {
-	return SetLogrus(logLevel, logFormat, "stdout", "", 0, "")
-}
-
 // 设置 logrus, 支持同步日志到 fluent
-func SetLogrus(logLevel, logFormat, logOut, fluentHost string, fluentPort int, fluentTag string) error {
+func SetLogrus(logLevel, logFormat, logOut string, fluentdEnable bool,
+	fluentdHost string, fluentdPort int, fluentdTag string) error {
 
-	if logOut == "fluent" {
-		hook, err := logrus_fluent.New(fluentHost, fluentPort)
+	if fluentdEnable {
+		hook, err := logrus_fluent.New(fluentdHost, fluentdPort)
 		if err != nil {
 			return err
 		}
@@ -28,7 +27,7 @@ func SetLogrus(logLevel, logFormat, logOut, fluentHost string, fluentPort int, f
 		})
 
 		// set static tag
-		hook.SetTag(fluentTag + ".tag")
+		hook.SetTag("fluentd." + fluentdTag)
 
 		// ignore field
 		hook.AddIgnore("context")
@@ -43,13 +42,50 @@ func SetLogrus(logLevel, logFormat, logOut, fluentHost string, fluentPort int, f
 	if err != nil {
 		level = logrus.InfoLevel
 	}
-
 	logrus.SetLevel(level)
 
-	if logFormat == "text" {
-		logrus.SetFormatter(&logrus.TextFormatter{})
+	if err := SetLogOut(logOut); err != nil {
+		return err
+	}
+
+	// 设置格式
+	SetLogFormatter(logFormat)
+
+	return nil
+}
+
+func SetLogFormatter(formatString string) {
+	var formatter logrus.Formatter
+
+	if formatString == "json" {
+		formatter = &logrus.JSONFormatter{
+			TimestampFormat: "2006/01/02 - 15:04:05",
+		}
 	} else {
-		logrus.SetFormatter(&logrus.JSONFormatter{})
+		formatter = &logrus.TextFormatter{
+			TimestampFormat: "2006/01/02 - 15:04:05",
+			ForceColors:     true,
+			FullTimestamp:   true,
+		}
+	}
+	logrus.SetFormatter(formatter)
+}
+
+// SetLogOut provide log stdout and stderr output
+func SetLogOut(outString string) error {
+	switch outString {
+	case "stdout":
+		logrus.SetOutput(os.Stdout)
+	case "stderr":
+		logrus.SetOutput(os.Stderr)
+	default:
+		f, err := os.OpenFile(outString, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
+
+		if err != nil {
+			return err
+		}
+
+		logrus.SetOutput(f)
 	}
 
 	return nil

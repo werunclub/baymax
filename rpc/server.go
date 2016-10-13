@@ -139,7 +139,7 @@ func (s *Server) Register() error {
 
 	for name, _ := range s.Handlers {
 		node := &Node{
-			Id:       name + "-" + uuid.New(),
+			Id:       name + "@" + addr + ":" + strconv.Itoa(port),
 			Name:     name,
 			Address:  addr + ":" + strconv.Itoa(port),
 			Metadata: config.Metadata,
@@ -161,11 +161,15 @@ func (s *Server) Register() error {
 	s.RUnlock()
 
 	// 按指定时间上报状态
+	// fixme: 上报状态失败考虑重新注册
 	s.ticker = time.NewTicker(s.opts.RegisterInterval)
 	go func() {
 		for range s.ticker.C {
+			fails := 0
 			for _, node := range s.nodes {
-				s.Registry.CheckPass(node.Id)
+				if err := s.Registry.CheckPass(node.Id); err != nil {
+					fails++
+				}
 			}
 		}
 	}()
