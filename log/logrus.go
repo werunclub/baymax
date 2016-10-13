@@ -27,7 +27,7 @@ func SetLogrus(logLevel, logFormat, logOut string, fluentdEnable bool,
 		})
 
 		// set static tag
-		hook.SetTag("fluentd." + fluentdTag)
+		hook.SetTag(fluentdTag + ".fluentd")
 
 		// ignore field
 		hook.AddIgnore("context")
