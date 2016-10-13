@@ -83,17 +83,17 @@ func (c *ConsulRegistry) Unregister(nodeId string) {
 }
 
 // CheckPass sets check pass
-func (c *ConsulRegistry) CheckPass(nodeId string) {
+func (c *ConsulRegistry) CheckPass(nodeId string) error {
 	agent := c.client.Agent()
 	id := nodeId
-	agent.UpdateTTL("service:"+id, "", api.HealthPassing)
+	return agent.UpdateTTL("service:"+id, "", api.HealthPassing)
 }
 
 // CheckFail sets check fail
-func (c *ConsulRegistry) CheckFail(nodeId string) {
+func (c *ConsulRegistry) CheckFail(nodeId string) error {
 	agent := c.client.Agent()
 	id := nodeId
-	agent.UpdateTTL("service:"+id, "", api.HealthCritical)
+	return agent.UpdateTTL("service:"+id, "", api.HealthCritical)
 }
 
 func (c *ConsulRegistry) GetService(name string) ([]*Node, error) {
