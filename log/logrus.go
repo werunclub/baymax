@@ -1,7 +1,11 @@
 package log
 
 import (
+	"fmt"
 	"os"
+	"runtime"
+	"strings"
+	"time"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/evalphobia/logrus_fluent"
@@ -59,11 +63,11 @@ func SetLogFormatter(formatString string) {
 
 	if formatString == "json" {
 		formatter = &logrus.JSONFormatter{
-			TimestampFormat: "2006/01/02 - 15:04:05",
+			TimestampFormat: time.RFC3339,
 		}
 	} else {
 		formatter = &logrus.TextFormatter{
-			TimestampFormat: "2006/01/02 - 15:04:05",
+			TimestampFormat: time.RFC3339,
 			ForceColors:     true,
 			FullTimestamp:   true,
 		}
@@ -89,4 +93,23 @@ func SetLogOut(outString string) error {
 	}
 
 	return nil
+}
+
+// 带 source 的 logrus
+func SourcedLogrus() *logrus.Entry {
+	log := logrus.StandardLogger()
+	return SourceLogrus(logrus.NewEntry(log))
+}
+
+// 为 logrus 添加 source
+func SourceLogrus(entry *logrus.Entry) *logrus.Entry {
+	_, file, line, ok := runtime.Caller(2)
+	if !ok {
+		file = "<???>"
+		line = 1
+	} else {
+		slash := strings.LastIndex(file, "/")
+		file = file[slash+1:]
+	}
+	return entry.WithField("source", fmt.Sprintf("%s:%d", file, line))
 }
