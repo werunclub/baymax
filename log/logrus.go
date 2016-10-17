@@ -28,6 +28,7 @@ func SetLogrus(logLevel, logFormat, logOut string, fluentdEnable bool,
 			logrus.DebugLevel,
 			logrus.WarnLevel,
 			logrus.InfoLevel,
+			logrus.FatalLevel,
 		})
 
 		// set static tag
