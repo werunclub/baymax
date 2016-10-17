@@ -2,6 +2,7 @@ package rpc
 
 import (
 	"fmt"
+	"io"
 	"math"
 	"net/rpc"
 	"sync"
@@ -130,7 +131,9 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 
 			} else if err != rpc.ErrShutdown &&
 				err != ErrNotFound &&
-				err != ErrNoneAvailable {
+				err != ErrNoneAvailable &&
+				err != io.EOF &&
+				err != io.ErrUnexpectedEOF {
 
 				// ErrShutdown  ErrNotFound ErrNoneAvailable 需要重试的错误
 				// 其它错误直接返回
