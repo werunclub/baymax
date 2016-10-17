@@ -3,11 +3,12 @@ package rpc
 import (
 	"fmt"
 	"math"
+	"net/rpc"
 	"sync"
 	"time"
 
 	"baymax/errors"
-	logger "github.com/Sirupsen/logrus"
+	"baymax/log"
 )
 
 // Client represents a RPC client.
@@ -49,7 +50,7 @@ func (c *Client) call(address, method string, args interface{}, reply interface{
 	// Fixme: 无法连接到服务器时此处有空指针错误
 	conn, e := c.pool.GetConn(address, c.timeout)
 	if e != nil {
-		logger.Errorf("rpc connect error:", e)
+		log.SourcedLogrus().Errorf("rpc connect error:", e)
 		return e
 	}
 
@@ -79,8 +80,10 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 	next, err := c.Selector.SelectNodes(c.ServiceName)
 
 	if err != nil && err == ErrNotFound {
+		log.SourcedLogrus().WithField("method", method).WithError(err).Debugf("rpc call fail")
 		return errors.Parse(errors.NotFound(err.Error()).Error())
 	} else if err != nil {
+		log.SourcedLogrus().WithField("method", method).WithError(err).Debugf("rpc call fail")
 		return errors.Parse(errors.InternalServerError(err.Error()).Error())
 	}
 
@@ -107,7 +110,7 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 
 		// 调用rpc
 		err = c.call(address, method, args, reply)
-		c.Selector.Mark(c.ServiceName, address, err)
+		//c.Selector.Mark(c.ServiceName, address, err)
 		return err
 	}
 
@@ -124,10 +127,22 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 			// 调用成功
 			if err == nil {
 				return nil
+
+			} else if err != rpc.ErrShutdown &&
+				err != ErrNotFound &&
+				err != ErrNoneAvailable {
+
+				// ErrShutdown  ErrNotFound ErrNoneAvailable 需要重试的错误
+				// 其它错误直接返回
+				log.SourcedLogrus().WithField("method", method).WithError(err).Debugf("rpc call fail")
+				return errors.Parse(err.Error())
 			}
 			gerr = err
 		}
 	}
 
+	if gerr != nil {
+		log.SourcedLogrus().WithField("method", method).WithError(gerr).Debugf("rpc call fail")
+	}
 	return errors.Parse(gerr.Error())
 }

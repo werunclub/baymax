@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"baymax/errors"
-	logger "github.com/Sirupsen/logrus"
+	"baymax/log"
 )
 
 // Client represents a RPC client.
@@ -57,7 +57,7 @@ func (c *DirectClient) Call(method string, args interface{}, reply interface{}) 
 		// Fixme: 无法连接到服务器时此处有空指针错误
 		conn, e := c.pool.GetConn(c.Addr, c.timeout)
 		if e != nil {
-			logger.Errorf("rpc connect error:", e)
+			log.SourcedLogrus().WithField("method", method).Errorf("rpc connect error:", e)
 			return e
 		}
 
@@ -86,9 +86,22 @@ func (c *DirectClient) Call(method string, args interface{}, reply interface{}) 
 			// call 成功即刻返回
 			if err == nil {
 				return nil
+			} else if err != rpc.ErrShutdown &&
+				err != ErrNotFound &&
+				err != ErrNoneAvailable {
+
+				// ErrShutdown  ErrNotFound ErrNoneAvailable 需要重试的错误
+				// 其它错误直接返回
+				log.SourcedLogrus().WithField("method", method).WithError(err).Debugf("rpc call fail")
+				return errors.Parse(err.Error())
 			}
+
 			gerr = err
 		}
+	}
+
+	if gerr != nil {
+		log.SourcedLogrus().WithField("method", method).WithError(gerr).Debugf("rpc call fail")
 	}
 
 	return errors.Parse(gerr.Error())
