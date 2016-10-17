@@ -5,6 +5,18 @@ import (
 	"time"
 )
 
+var (
+	ErrNotFound      = errors.New("not found")
+	ErrNoneAvailable = errors.New("none available")
+)
+
+// Next is a function that returns the next node
+// based on the selector's strategy
+type Next func() (*Node, error)
+
+// Strategy is a selection strategy e.g random, round robin
+type Strategy func([]*Node) Next
+
 type Selector struct {
 	opts          Options
 	ConsulAddress string
@@ -15,7 +27,7 @@ type Selector struct {
 	connTimeout    time.Duration
 
 	selectors map[string]*ConsulClientSelector
-	clients   map[string]*Client
+	clients   map[string]*DirectClient
 }
 
 // 新建选择器
@@ -36,7 +48,7 @@ func NewSelector(opts ...Option) *Selector {
 		selectors: make(map[string]*ConsulClientSelector),
 
 		// 缓存客户端
-		clients: make(map[string]*Client),
+		clients: make(map[string]*DirectClient),
 	}
 	selector.AddServices(options.ServiceNames...)
 
@@ -80,13 +92,13 @@ func (s *Selector) getSelector(serviceName string) (*ConsulClientSelector, error
 }
 
 // 获取或新建一个客户端
-func (s *Selector) getClient(address string) (*Client, error) {
+func (s *Selector) getClient(net, address string) (*DirectClient, error) {
 
 	client, ok := s.clients[address]
 
 	if !ok || client == nil {
 
-		client = NewClient("tcp", address, s.connTimeout)
+		client = NewDirectClient(net, address, s.connTimeout)
 		client.SetPoolSize(s.opts.PoolSize)
 
 		s.clients[address] = client
@@ -96,10 +108,11 @@ func (s *Selector) getClient(address string) (*Client, error) {
 }
 
 // 选择一个服务器,并创建客户端
-func (s *Selector) Select(serviceName string) (*Client, error) {
+func (s *Selector) Select(serviceName string) (*DirectClient, error) {
 
 	var (
 		err      error
+		next     Next
 		node     *Node
 		selector *ConsulClientSelector
 	)
@@ -109,16 +122,36 @@ func (s *Selector) Select(serviceName string) (*Client, error) {
 		return nil, err
 	}
 
-	node, err = selector.Select()
+	next, err = selector.Select()
 	if err != nil {
 		return nil, err
 	}
 
-	return s.getClient(node.Address)
+	node, err = next()
+	if err != nil {
+		return nil, err
+	}
+
+	return s.getClient("tcp", node.Address)
+}
+
+// 选择一个服务器,并创建客户端
+func (s *Selector) SelectNodes(serviceName string) (Next, error) {
+
+	var (
+		err      error
+		selector *ConsulClientSelector
+	)
+
+	selector, err = s.getSelector(serviceName)
+	if err != nil {
+		return nil, err
+	}
+
+	return selector.Select()
 }
 
 // TODO: 标记服务器不可用
-// TODO: 自动移除不可用服务器客户端
 func (s *Selector) Mark(serviceName string, address string, err error) {
 	delete(s.clients, address)
 }

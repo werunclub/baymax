@@ -5,8 +5,6 @@ import (
 	"time"
 
 	"baymax/errors"
-	"fmt"
-	"sync"
 )
 
 type Args struct {
@@ -47,21 +45,16 @@ func (t *Arith) Error(args *Args, reply *Reply) error {
 	panic("ERROR")
 }
 
-var (
-	server *Server
-	once   sync.Once
-)
-
 func startServer() {
 	server = NewServer()
 	server.RegisterName("Arith", new(Arith))
 	server.Start()
 }
 
-func TestClient(t *testing.T) {
+func TestDirectClient(t *testing.T) {
 	once.Do(startServer)
 
-	client := NewClient("tcp", server.Address(), time.Second*5)
+	client := NewDirectClient("tcp", server.Address(), time.Second*5)
 
 	args := &Args{7, 8}
 	reply := new(Reply)
@@ -92,9 +85,9 @@ func TestClient(t *testing.T) {
 	}
 }
 
-func TestNoneServer(t *testing.T) {
+func TestDirectClientNoneServer(t *testing.T) {
 
-	client := NewClient("tcp", "127.0.0.1:11212", time.Second*5)
+	client := NewDirectClient("tcp", "127.0.0.1:11212", time.Second*5)
 
 	args := &Args{7, 8}
 	reply := new(Reply)
@@ -103,6 +96,4 @@ func TestNoneServer(t *testing.T) {
 	if err == nil {
 		t.Error("Add: expected an error but got nil")
 	}
-
-	fmt.Printf("got error: %s", err)
 }

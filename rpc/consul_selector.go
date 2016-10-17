@@ -1,7 +1,6 @@
 package rpc
 
 import (
-	"errors"
 	"math/rand"
 	"time"
 
@@ -66,11 +65,11 @@ func (s *ConsulClientSelector) SetSelectMode(sm SelectMode) {
 	s.SelectMode = sm
 }
 
-func (s *ConsulClientSelector) AllClients() []*Client {
-	var clients []*Client
+func (s *ConsulClientSelector) AllClients() []*DirectClient {
+	var clients []*DirectClient
 
 	for _, sv := range s.Servers {
-		c := NewClient("tcp", sv.Address, s.timeout)
+		c := NewDirectClient("tcp", sv.Address, s.timeout)
 		if c != nil {
 			clients = append(clients, c)
 		}
@@ -128,32 +127,13 @@ func (s *ConsulClientSelector) pullServers() {
 }
 
 // 从已有服务器列表中选择服务器
-func (s *ConsulClientSelector) Select(options ...interface{}) (*Node, error) {
+func (s *ConsulClientSelector) Select(options ...interface{}) (Next, error) {
 
 	if s.len == 0 {
-		return nil, errors.New("no valid server")
+		return nil, ErrNoneAvailable
 	}
 
-	if s.SelectMode == RandomSelect {
-		s.currentServer = s.rnd.Intn(s.len)
-		server := s.Servers[s.currentServer]
-		return server, nil
-
-	} else if s.SelectMode == RandomSelect {
-		s.currentServer = (s.currentServer + 1) % s.len
-		server := s.Servers[s.currentServer]
-		return server, nil
-
-	} else if s.SelectMode == ConsistentHash {
-		if s.HashServiceAndArgs == nil {
-			s.HashServiceAndArgs = JumpConsistentHash
-		}
-		s.currentServer = s.HashServiceAndArgs(s.len, options)
-		server := s.Servers[s.currentServer]
-		return server, nil
-	}
-
-	return nil, errors.New("not supported SelectMode: " + s.SelectMode.String())
+	return Random(s.Servers), nil
 }
 
 // TODO: 标记出错服务器
