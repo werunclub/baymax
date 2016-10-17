@@ -5,7 +5,9 @@ import (
 	"baymax/rpc"
 	//"time"
 	//"time"
+	"github.com/smallnest/rpcx"
 	"log"
+	"time"
 )
 
 type Args struct {
@@ -44,14 +46,7 @@ func (t *Arith) Div(args *Args, reply *Reply) error {
 
 func main() {
 
-	selector := rpc.NewSelector(rpc.PoolSize(10))
-
-	client, err := selector.Select("Arith")
-
-	if err != nil {
-		log.Printf("error: %v", err.Error())
-		return
-	}
+	client := rpc.NewClient("Arith", "127.0.0.1:8500", time.Second*5)
 
 	args := &Args{7, 8}
 	reply := new(Reply)

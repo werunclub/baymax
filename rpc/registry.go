@@ -12,6 +12,7 @@ type Node struct {
 	Id       string
 	Name     string
 	Address  string
+	Port     int
 	Version  string
 	Metadata map[string]string `json:"metadata"`
 }

@@ -5,6 +5,7 @@ import (
 	"baymax/rpc"
 
 	"github.com/prometheus/common/log"
+	"github.com/smallnest/rpcx"
 )
 
 type Args struct {
