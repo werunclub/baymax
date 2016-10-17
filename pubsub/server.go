@@ -2,13 +2,14 @@ package pubsub
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
 	"sync"
 	"syscall"
 
 	"baymax/pubsub/broker"
+	log "github.com/Sirupsen/logrus"
+	"github.com/go-errors/errors"
 )
 
 type Server struct {
@@ -37,20 +38,24 @@ func (s *Server) NewSubscriber(topic string, sb interface{}, opts ...SubscriberO
 func (s *Server) Subscribe(sb Subscriber) error {
 	sub, ok := sb.(*subscriber)
 	if !ok {
-		return fmt.Errorf("invalid subscriber: expected *subscriber")
+		log.Error("invalid subscriber: expected *subscriber")
+		return errors.New("invalid subscriber: expected *subscriber")
 	}
 	if len(sub.handlers) == 0 {
-		return fmt.Errorf("invalid subscriber: no handler functions")
+		log.Error("invalid subscriber: no handler functions")
+		return errors.New("invalid subscriber: no handler functions")
 	}
 
 	if err := validateSubscriber(sb); err != nil {
+		log.Errorf("Subscribe error:%f", err.Error())
 		return err
 	}
 
 	s.Lock()
 	_, ok = s.subscribers[sub]
 	if ok {
-		return fmt.Errorf("subscriber %v already exists", s)
+		log.Errorf("subscriber %v already exists", s)
+		return errors.New(fmt.Sprintf("subscriber %v already exists", s))
 	}
 	s.subscribers[sub] = nil
 	s.Unlock()
@@ -78,7 +83,7 @@ func (s *Server) Register() error {
 func (s *Server) Deregister() error {
 	for sb, subs := range s.subscribers {
 		for _, sub := range subs {
-			log.Printf("Unsubscribing from topic: %s", sub.Topic())
+			log.Infof("Unsubscribing from topic: %s", sub.Topic())
 			sub.Unsubscribe()
 		}
 		s.subscribers[sb] = nil
