@@ -1,7 +1,6 @@
 package rpc
 
 import (
-	"log"
 	"net"
 	"net/rpc"
 	"net/rpc/jsonrpc"
@@ -14,6 +13,8 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 var (

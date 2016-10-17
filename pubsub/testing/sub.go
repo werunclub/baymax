@@ -2,11 +2,12 @@ package main
 
 import (
 	"log"
+	"time"
 
 	"golang.org/x/net/context"
 
 	"baymax/pubsub"
-	"time"
+	"github.com/satori/go.uuid"
 )
 
 type Message struct {
@@ -29,16 +30,17 @@ func main() {
 
 	server := pubsub.NewServer("127.0.0.1:4150")
 
+	queueName := uuid.NewV4().String()
 	var err error
 
 	err = server.Subscribe(server.NewSubscriber(
 		"go.testing.topic.good",
 		Handler,
-		pubsub.SubscriberQueue("testing"),
+		pubsub.SubscriberQueue(queueName),
 	))
 
 	if err != nil {
-		log.Fatalf("fail")
+		log.Fatal("fail")
 	}
 
 	err = server.Subscribe(server.NewSubscriber(
@@ -48,7 +50,7 @@ func main() {
 	))
 
 	if err != nil {
-		log.Fatalf("fail")
+		log.Fatal("fail")
 	}
 
 	server.Run()
