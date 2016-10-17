@@ -2,6 +2,7 @@ package rpc
 
 import (
 	"github.com/go-errors/errors"
+	"net/rpc"
 	"time"
 )
 
@@ -153,5 +154,7 @@ func (s *Selector) SelectNodes(serviceName string) (Next, error) {
 
 // TODO: 标记服务器不可用
 func (s *Selector) Mark(serviceName string, address string, err error) {
-	delete(s.clients, address)
+	if err == rpc.ErrShutdown {
+		delete(s.clients, address)
+	}
 }
