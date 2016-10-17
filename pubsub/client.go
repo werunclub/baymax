@@ -9,6 +9,8 @@ import (
 	mj "github.com/micro/go-micro/codec/jsonrpc"
 	"github.com/micro/go-micro/metadata"
 	"golang.org/x/net/context"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 var (
@@ -42,6 +44,7 @@ func (c *Client) Publish(ctx context.Context, p publication) error {
 	// encode message body
 	b := &buffer{bytes.NewBuffer(nil)}
 	if err := mj.NewCodec(b).Write(&codec.Message{Type: codec.Publication}, p.Message()); err != nil {
+		log.Errorf("encode fail:%s", err.Error())
 		return err
 	}
 	c.once.Do(func() {
