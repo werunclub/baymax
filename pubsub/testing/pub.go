@@ -7,6 +7,7 @@ import (
 	"golang.org/x/net/context"
 
 	"baymax/pubsub"
+	"time"
 )
 
 type Message struct {
@@ -39,7 +40,7 @@ func pub(i int) {
 
 func main() {
 	fmt.Println("\n--- Publisher example ---\n")
-	for i := 0; i < 100; i++ {
-		pub(i)
+	for i := 0; i < 1; i++ {
+		pub(time.Now().Second())
 	}
 }

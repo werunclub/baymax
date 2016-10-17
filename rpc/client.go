@@ -18,6 +18,8 @@ type Client struct {
 	pool    *pool
 	timeout time.Duration
 	once    sync.Once
+
+	retries int
 }
 
 func NewClient(net, addr string, timeout time.Duration) *Client {
@@ -26,6 +28,7 @@ func NewClient(net, addr string, timeout time.Duration) *Client {
 		Addr:    addr,
 		timeout: timeout,
 		pool:    newPool(100, time.Minute*30),
+		retries: 3,
 	}
 }
 
@@ -42,25 +45,44 @@ func (c *Client) Close() error {
 // TODO: 优化连接池
 func (c *Client) Call(method string, args interface{}, reply interface{}) *errors.Error {
 
-	// Fixme: 无法连接到服务器时此处有空指针错误
-	conn, e := c.pool.GetConn(c.Addr, c.timeout)
-	if e != nil {
-		logger.Errorf("rpc connect error:", e)
-		return errors.InternalServerError(e.Error()).(*errors.Error)
+	call := func(i int) error {
+
+		// Fixme: 无法连接到服务器时此处有空指针错误
+		conn, e := c.pool.GetConn(c.Addr, c.timeout)
+		if e != nil {
+			logger.Errorf("rpc connect error:", e)
+			return e
+		}
+
+		var err error
+
+		defer func() {
+			// 使用后释放
+			c.pool.release(c.Addr, conn, err)
+		}()
+
+		err = conn.Call(method, args, reply)
+		return err
 	}
 
-	var err error
+	ch := make(chan error, c.retries)
 
-	defer func() {
-		// 使用后释放
-		c.pool.release(c.Addr, conn, err)
-	}()
+	var gerr error
 
-	err = conn.Call(method, args, reply)
-	if err != nil {
-		logger.Errorf("rpc call error:", err)
-		return errors.Parse(err.Error())
+	for i := 0; i < c.retries; i++ {
+		go func() {
+			ch <- call(i)
+		}()
+
+		select {
+		case err := <-ch:
+			// call 成功即刻返回
+			if err == nil {
+				return nil
+			}
+			gerr = err
+		}
 	}
 
-	return nil
+	return errors.Parse(gerr.Error())
 }

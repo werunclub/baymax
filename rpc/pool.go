@@ -67,9 +67,9 @@ func (p *pool) GetConn(addr string, timeout time.Duration) (*poolConn, error) {
 		}
 
 		p.Unlock()
+
 		return conn, nil
 	}
-
 	p.Unlock()
 
 	// 新连接
