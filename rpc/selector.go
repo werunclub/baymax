@@ -38,7 +38,7 @@ func NewSelector(opts ...Option) *Selector {
 	selector := &Selector{
 		opts:           options,
 		ConsulAddress:  options.ConsulAddress,
-		sessionTimeout: time.Second * 30,
+		sessionTimeout: time.Second * 20,
 		timeout:        time.Second * 20,
 		connTimeout:    time.Second * 5,
 

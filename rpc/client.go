@@ -28,7 +28,7 @@ type Client struct {
 func NewClient(serviceName, consulAddress string, timeout time.Duration) *Client {
 	return &Client{
 		timeout: timeout,
-		pool:    newPool(100, time.Minute*30),
+		pool:    newPool(100, time.Minute*10),
 
 		ServiceName: serviceName,
 		Selector:    NewSelector(ConsulAddress(consulAddress)),
