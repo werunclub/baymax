@@ -7,6 +7,7 @@ import (
 
 	"baymax/errors"
 	"baymax/log"
+	"io"
 )
 
 // Client represents a RPC client.
@@ -49,7 +50,7 @@ func (c *DirectClient) Call(method string, args interface{}, reply interface{}) 
 
 		// 根据执行序号延迟执行
 		if t, err := backoff(method, i); err != nil {
-			return errors.InternalServerError(err.Error())
+			return err
 		} else if t.Seconds() > 0 {
 			time.Sleep(t)
 		}
@@ -88,9 +89,10 @@ func (c *DirectClient) Call(method string, args interface{}, reply interface{}) 
 				return nil
 			} else if err != rpc.ErrShutdown &&
 				err != ErrNotFound &&
-				err != ErrNoneAvailable {
+				err != ErrNoneAvailable &&
+				err != io.EOF {
 
-				// ErrShutdown  ErrNotFound ErrNoneAvailable 需要重试的错误
+				// ErrShutdown ErrNotFound ErrNoneAvailable 需要重试的错误
 				// 其它错误直接返回
 				log.SourcedLogrus().WithField("method", method).WithError(err).Debugf("rpc call fail")
 				return errors.Parse(err.Error())

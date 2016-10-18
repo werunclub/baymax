@@ -37,7 +37,7 @@ func New(code string, detail string, status int32) error {
 func Parse(err string) *Error {
 	e := new(Error)
 	errr := json.Unmarshal([]byte(err), e)
-	if err == nil || errr != nil {
+	if errr != nil {
 		e.Id = NewId()
 		e.Code = "internal_server_error"
 		e.Detail = err
