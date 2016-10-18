@@ -97,10 +97,8 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 
 		// 获取服务地址
 		node, err := next()
-		if err != nil && err == ErrNotFound {
-			return errors.NotFound(err.Error())
-		} else if err != nil {
-			return errors.InternalServerError(err.Error())
+		if err != nil {
+			return err
 		}
 
 		address := node.Address
@@ -109,9 +107,11 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 		}
 
 		// 调用rpc
-		gerr := c.call(address, method, args, reply)
-		//c.Selector.Mark(c.ServiceName, address, gerr)
-		return gerr
+		if err := c.call(address, method, args, reply); err != nil {
+			//c.Selector.Mark(c.ServiceName, address, err)
+			return err
+		}
+		return nil
 	}
 
 	ch := make(chan error, c.Retries)
@@ -136,7 +136,7 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 
 				// ErrShutdown ErrNotFound ErrNoneAvailable 需要重试的错误
 				// 其它错误直接返回
-				log.SourcedLogrus().WithField("method", method).WithError(err).Debugf("rpc call got error")
+				log.SourcedLogrus().WithField("method", method).WithError("error_string", err.Error()).WithError(err).Debugf("rpc call got error")
 				return errors.Parse(err.Error())
 			}
 			gerr = err
