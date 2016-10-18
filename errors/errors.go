@@ -17,8 +17,11 @@ type Error struct {
 }
 
 func (e *Error) Error() string {
-	b, _ := json.Marshal(e)
-	return string(b)
+	if e != nil {
+		b, _ := json.Marshal(e)
+		return string(b)
+	}
+	return ""
 }
 
 func NewId() string {

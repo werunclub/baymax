@@ -7,6 +7,14 @@ import (
 	"github.com/pborman/uuid"
 )
 
+func getNilError() *Error {
+	return nil
+}
+
+func getError() *Error {
+	return Parse(BadRequest("not_found").Error())
+}
+
 func TestErrors(t *testing.T) {
 	testData := []*Error{
 		&Error{
@@ -37,5 +45,13 @@ func TestErrors(t *testing.T) {
 		if pe.Status != e.Status {
 			t.Fatalf("Expected %s got %s", e.Status, pe.Status)
 		}
+	}
+
+	if err := getNilError(); err != nil {
+		t.Fatalf("Expected nil got %s", err)
+	}
+
+	if err := getError(); err == nil {
+		t.Fatal("Expected error got nil")
 	}
 }

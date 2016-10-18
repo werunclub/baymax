@@ -12,6 +12,14 @@ import (
 	"baymax/log"
 )
 
+var (
+	rpcClients map[string]*Client
+)
+
+func init() {
+	rpcClients = make(map[string]*Client)
+}
+
 // Client represents a RPC client.
 type Client struct {
 	pool    *pool
@@ -26,7 +34,12 @@ type Client struct {
 }
 
 func NewClient(serviceName, consulAddress string, timeout time.Duration) *Client {
-	return &Client{
+	key := fmt.Sprintf("%s@%s", serviceName, consulAddress)
+	if client, ok := rpcClients[key]; ok {
+		return client
+	}
+
+	client := &Client{
 		timeout: timeout,
 		pool:    newPool(100, time.Minute*10),
 
@@ -34,6 +47,9 @@ func NewClient(serviceName, consulAddress string, timeout time.Duration) *Client
 		Selector:    NewSelector(ConsulAddress(consulAddress)),
 		Retries:     3,
 	}
+
+	rpcClients[key] = client
+	return client
 }
 
 func (c *Client) SetPoolSize(size int) {
@@ -147,6 +163,7 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 
 	if gerr != nil {
 		log.SourcedLogrus().WithField("method", method).WithError(gerr).Debugf("rpc call got system error")
+		return errors.Parse(gerr.Error())
 	}
-	return errors.Parse(gerr.Error())
+	return nil
 }
