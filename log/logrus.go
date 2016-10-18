@@ -99,7 +99,7 @@ func SetLogOut(outString string) error {
 // 带 source 的 logrus
 func SourcedLogrus() *logrus.Entry {
 	log := logrus.StandardLogger()
-	return SourceLogrus(logrus.NewEntry(log), 3)
+	return SourceLogrus(logrus.NewEntry(log), 2)
 }
 
 // 为 logrus 添加 source
