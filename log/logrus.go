@@ -99,12 +99,12 @@ func SetLogOut(outString string) error {
 // 带 source 的 logrus
 func SourcedLogrus() *logrus.Entry {
 	log := logrus.StandardLogger()
-	return SourceLogrus(logrus.NewEntry(log))
+	return SourceLogrus(logrus.NewEntry(log), 3)
 }
 
 // 为 logrus 添加 source
-func SourceLogrus(entry *logrus.Entry) *logrus.Entry {
-	_, file, line, ok := runtime.Caller(2)
+func SourceLogrus(entry *logrus.Entry, skip int) *logrus.Entry {
+	_, file, line, ok := runtime.Caller(skip)
 	if !ok {
 		file = "<???>"
 		line = 1
