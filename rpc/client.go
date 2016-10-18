@@ -109,9 +109,9 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 		}
 
 		// 调用rpc
-		err = c.call(address, method, args, reply)
-		//c.Selector.Mark(c.ServiceName, address, err)
-		return err
+		gerr := c.call(address, method, args, reply)
+		//c.Selector.Mark(c.ServiceName, address, gerr)
+		return gerr
 	}
 
 	ch := make(chan error, c.Retries)
