@@ -1,6 +1,7 @@
 package rpc
 
 import (
+	"io"
 	"net"
 	"net/rpc"
 	"net/rpc/jsonrpc"
@@ -83,7 +84,11 @@ func (p *pool) GetConn(addr string, timeout time.Duration) (*poolConn, error) {
 func (p *pool) release(addr string, conn *poolConn, err error) {
 
 	// 关闭出错的连接
-	if err != nil {
+	//fin
+	if err == rpc.ErrShutdown ||
+		err == io.ErrUnexpectedEOF ||
+		err == io.EOF {
+
 		conn.Close()
 		return
 	}
