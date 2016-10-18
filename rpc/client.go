@@ -134,7 +134,7 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 				err != io.EOF &&
 				err != io.ErrUnexpectedEOF {
 
-				// ErrShutdown  ErrNotFound ErrNoneAvailable 需要重试的错误
+				// ErrShutdown ErrNotFound ErrNoneAvailable 需要重试的错误
 				// 其它错误直接返回
 				log.SourcedLogrus().WithField("method", method).WithError(err).Debugf("rpc call got error")
 				return errors.Parse(err.Error())
