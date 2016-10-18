@@ -55,14 +55,16 @@ func (c *Client) call(address, method string, args interface{}, reply interface{
 		return e
 	}
 
-	var err error
+	err := conn.Call(method, args, reply)
+	if err != nil {
+		log.SourcedLogrus().WithError(err).
+			WithField("server", address).
+			WithField("method", method).
+			WithField("args", args).
+			Errorf("Call rpc method error")
+	}
+	c.pool.release(address, conn, err)
 
-	defer func() {
-		// 使用后释放
-		c.pool.release(address, conn, err)
-	}()
-
-	err = conn.Call(method, args, reply)
 	return err
 }
 
