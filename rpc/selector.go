@@ -139,12 +139,7 @@ func (s *Selector) Select(serviceName string) (*DirectClient, error) {
 // 选择一个服务器,并创建客户端
 func (s *Selector) SelectNodes(serviceName string) (Next, error) {
 
-	var (
-		err      error
-		selector *ConsulClientSelector
-	)
-
-	selector, err = s.getSelector(serviceName)
+	selector, err := s.getSelector(serviceName)
 	if err != nil {
 		return nil, err
 	}

@@ -51,7 +51,7 @@ func (c *Client) call(address, method string, args interface{}, reply interface{
 	// Fixme: 无法连接到服务器时此处有空指针错误
 	conn, e := c.pool.GetConn(address, c.timeout)
 	if e != nil {
-		log.SourcedLogrus().Errorf("rpc connect error:", e)
+		log.SourcedLogrus().WithError(e).Errorf("rpc connect error")
 		return e
 	}
 
@@ -79,9 +79,8 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 
 	// 获取一个服务地址选择器
 	next, err := c.Selector.SelectNodes(c.ServiceName)
-
 	if err != nil && err == ErrNotFound {
-		log.SourcedLogrus().WithField("method", method).WithError(err).Debugf("rpc call fail")
+		log.SourcedLogrus().WithField("method", method).WithError(err).Debugf("rpc service not found")
 		return errors.Parse(errors.NotFound(err.Error()).Error())
 	} else if err != nil {
 		log.SourcedLogrus().WithField("method", method).WithError(err).Debugf("rpc call fail")
@@ -137,7 +136,7 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 
 				// ErrShutdown  ErrNotFound ErrNoneAvailable 需要重试的错误
 				// 其它错误直接返回
-				log.SourcedLogrus().WithField("method", method).WithError(err).Debugf("rpc call fail")
+				log.SourcedLogrus().WithField("method", method).WithError(err).Debugf("rpc call got error")
 				return errors.Parse(err.Error())
 			}
 			gerr = err
