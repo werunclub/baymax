@@ -90,7 +90,7 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 	call := func(i int) error {
 		// 根据执行序号延迟执行
 		if t, err := backoff(method, i); err != nil {
-			return errors.InternalServerError(err.Error())
+			return err
 		} else if t.Seconds() > 0 {
 			time.Sleep(t)
 		}
@@ -136,7 +136,7 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 
 				// ErrShutdown ErrNotFound ErrNoneAvailable 需要重试的错误
 				// 其它错误直接返回
-				log.SourcedLogrus().WithField("method", method).WithError("error_string", err.Error()).WithError(err).Debugf("rpc call got error")
+				log.SourcedLogrus().WithField("method", method).WithError(err).Debugf("rpc call got error")
 				return errors.Parse(err.Error())
 			}
 			gerr = err
