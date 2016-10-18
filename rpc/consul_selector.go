@@ -130,6 +130,10 @@ func (s *ConsulClientSelector) pullServers() {
 func (s *ConsulClientSelector) Select(options ...interface{}) (Next, error) {
 
 	if s.len == 0 {
+		s.pullServers()
+	}
+
+	if s.len == 0 {
 		return nil, ErrNoneAvailable
 	}
 
