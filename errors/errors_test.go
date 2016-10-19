@@ -7,12 +7,26 @@ import (
 	"github.com/pborman/uuid"
 )
 
+func getError() *Error {
+	return Parse(BadRequest("not_found").Error())
+}
+
 func getNilError() *Error {
 	return nil
 }
 
-func getError() *Error {
-	return Parse(BadRequest("not_found").Error())
+func TestNilError(t *testing.T) {
+	var err1 *Error
+	err1 = getNilError()
+	if err1 != nil {
+		t.Fatalf("Expected nil got %s", err1)
+	}
+
+	var err2 error
+	err2 = getNilError()
+	if err2 == nil {
+		t.Fatal("Expected empty error got nil")
+	}
 }
 
 func TestErrors(t *testing.T) {
