@@ -5,7 +5,6 @@ import (
 	"os"
 	"regexp"
 	"runtime"
-	"strings"
 	"time"
 
 	"github.com/Sirupsen/logrus"

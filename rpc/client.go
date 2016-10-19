@@ -161,7 +161,7 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 		}
 	}
 
-	if gerr != nil {
+	if gerr != nil && err.Error() != "" {
 		log.SourcedLogrus().WithField("method", method).WithError(gerr).Debugf("rpc call got system error")
 		return errors.Parse(gerr.Error())
 	}
