@@ -3,6 +3,7 @@ package log
 import (
 	"fmt"
 	"os"
+	"regexp"
 	"runtime"
 	"strings"
 	"time"
@@ -99,18 +100,21 @@ func SetLogOut(outString string) error {
 // 带 source 的 logrus
 func SourcedLogrus() *logrus.Entry {
 	log := logrus.StandardLogger()
-	return SourceLogrus(logrus.NewEntry(log), 2)
+	return SourceLogrus(logrus.NewEntry(log))
 }
 
 // 为 logrus 添加 source
-func SourceLogrus(entry *logrus.Entry, skip int) *logrus.Entry {
-	_, file, line, ok := runtime.Caller(skip)
-	if !ok {
-		file = "<???>"
-		line = 1
-	} else {
-		slash := strings.LastIndex(file, "/")
-		file = file[slash+1:]
+func SourceLogrus(entry *logrus.Entry) *logrus.Entry {
+	return entry.WithField("source", fileWithLineNum())
+}
+
+// 获取调用位置
+func fileWithLineNum() string {
+	for i := 2; i < 15; i++ {
+		_, file, line, ok := runtime.Caller(i)
+		if ok && (!regexp.MustCompile(`baymax/log/.*.go`).MatchString(file) || regexp.MustCompile(`baymax/log/.*test.go`).MatchString(file)) {
+			return fmt.Sprintf("%v:%v", file, line)
+		}
 	}
-	return entry.WithField("source", fmt.Sprintf("%s:%d", file, line))
+	return ""
 }
