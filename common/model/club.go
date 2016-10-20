@@ -536,7 +536,7 @@ type ClubSummaryStepsRank struct {
 type ClubIndustry struct {
 	ID         uint   `gorm:"primary_key"`
 	Name       string `gorm:"size:256"`
-	Parent     int    `gorm:index`
+	Parent     int    `gorm:"index"`
 	SortNum    int    `gorm:"default:0"`
 	CreateTime time.Time
 
@@ -548,7 +548,7 @@ type ClubIndustry struct {
 type ClubIndustryWeekSort struct {
 	ID     uint      `gorm:"primary_key"`
 	ClubId int       `gorm:"index"`
-	Curday time.Time `gorm:index`
+	Curday time.Time `gorm:"index"`
 	// 俱乐部的父行业
 	IndustryId int `gorm:"index"`
 	AvgSteps   int `gorm:"default:0"`
@@ -585,10 +585,10 @@ type ClubAuthenticateInfo struct {
 // 用户周数据V2版 , 加入了有户加入俱乐部日期的判断
 type UserWeekStepsV2 struct {
 	ID     uint   `gorm:"primary_key"`
-	ClubId int    `gorm:"default:0;index;index:idx_club_user_curday"`
-	UserId string `gorm:"size:36;index;index:idx_club_user_curday"`
+	ClubId int    `gorm:"default:0;index:idx_club_user_curday"`
+	UserId string `gorm:"size:36;index:idx_club_user_curday"`
 	// 每周 1
-	Curday     time.Time `gorm:"index;index:idx_club_user_curday"`
+	Curday     time.Time `gorm:"index:idx_club_user_curday"`
 	Steps      int       `gorm:"default:0"`
 	UpdateTime time.Time
 	CreateTime time.Time
