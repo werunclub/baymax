@@ -192,8 +192,9 @@ func (s *Server) createSubHandler(sb *subscriber) broker.Handler {
 				if err := returnValues[0].Interface(); err != nil {
 					log.SourcedLogrus().WithField("topic", msg.topic).
 						WithField("msg", msg).
-						WithError(err).
+						WithError(err.(error)).
 						Errorf("call msg handler faile")
+
 					return err.(error)
 				}
 				return nil
