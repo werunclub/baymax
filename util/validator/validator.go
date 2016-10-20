@@ -76,8 +76,17 @@ func ValidateJSONStruct(form interface{}, in map[string]interface{}, out *map[st
 			// 3. 执行校验方法
 			for _, validator := range *validators {
 				returnValues := validator.Call([]reflect.Value{reflect.ValueOf(value)})
-				if rtn := returnValues[0].Interface(); rtn != nil {
-					e.AppendError(rtn.(error).Error())
+				if len(returnValues) == 1 {
+					// 1 个返回值时只能返回 error;
+					if rtn := returnValues[0].Interface(); rtn != nil {
+						e.AppendError(rtn.(error).Error())
+					}
+				} else {
+					if rtn := returnValues[1].Interface(); rtn != nil {
+						e.AppendError(rtn.(error).Error())
+					} else {
+						value = returnValues[0].Interface()
+					}
 				}
 			}
 
