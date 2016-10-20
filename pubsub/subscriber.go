@@ -10,8 +10,8 @@ import (
 	"github.com/micro/go-micro/metadata"
 	"golang.org/x/net/context"
 
+	"baymax/log"
 	"baymax/pubsub/broker"
-	"storage-srv/.glide/cache/src/https-github.com-Sirupsen-logrus"
 )
 
 const (
@@ -190,7 +190,7 @@ func (s *Server) createSubHandler(sb *subscriber) broker.Handler {
 
 				returnValues := handler.method.Call(vals)
 				if err := returnValues[0].Interface(); err != nil {
-					logrus.WithField("topic", msg.topic).
+					log.SourcedLogrus().WithField("topic", msg.topic).
 						WithField("msg", msg).
 						WithError(err).
 						Errorf("call msg handler faile")
