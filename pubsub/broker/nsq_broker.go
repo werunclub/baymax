@@ -6,6 +6,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/nsqio/go-nsq"
 	"github.com/pborman/uuid"
 	"golang.org/x/net/context"
@@ -194,6 +195,7 @@ func (n *nsqBroker) Subscribe(topic string, handler Handler, opts ...SubscribeOp
 		var m *Message
 
 		if err := json.Unmarshal(nm.Body, &m); err != nil {
+			logrus.WithError(err).Errorf("can not parse message")
 			return err
 		}
 

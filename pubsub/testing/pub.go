@@ -19,7 +19,7 @@ func pub(i int) {
 
 	client := pubsub.NewClient("127.0.0.1:4150")
 
-	msg := client.NewPublication("go.testing.topic.good", Message{
+	msg := client.NewPublication("go.testing.topic.bad", Message{
 		Say: fmt.Sprintf("%d", i),
 	})
 

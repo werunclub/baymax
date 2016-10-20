@@ -21,8 +21,16 @@ func Handler(ctx context.Context, msg *Message) error {
 	return nil
 }
 
-func BadHandler(ctx context.Context, msg *Message) error {
-	log.Print("bad: ", msg.Say)
+type SubHandler struct {
+}
+
+func (SubHandler) BadHandler(ctx context.Context, msg *Message) error {
+	log.Print("bad1: ", msg.Say)
+	return nil
+}
+
+func (SubHandler) Bad2Handler(ctx context.Context, msg *Message) error {
+	log.Print("bad2: ", msg.Say)
 	return nil
 }
 
@@ -45,7 +53,7 @@ func main() {
 
 	err = server.Subscribe(server.NewSubscriber(
 		"go.testing.topic.bad",
-		BadHandler,
+		new(SubHandler),
 		pubsub.SubscriberQueue("testing"),
 	))
 
