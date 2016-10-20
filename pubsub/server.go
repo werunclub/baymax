@@ -7,8 +7,8 @@ import (
 	"sync"
 	"syscall"
 
+	"baymax/log"
 	"baymax/pubsub/broker"
-	log "github.com/Sirupsen/logrus"
 	"github.com/go-errors/errors"
 )
 
@@ -38,23 +38,23 @@ func (s *Server) NewSubscriber(topic string, sb interface{}, opts ...SubscriberO
 func (s *Server) Subscribe(sb Subscriber) error {
 	sub, ok := sb.(*subscriber)
 	if !ok {
-		log.Error("invalid subscriber: expected *subscriber")
+		log.SourcedLogrus().Error("invalid subscriber: expected *subscriber")
 		return errors.New("invalid subscriber: expected *subscriber")
 	}
 	if len(sub.handlers) == 0 {
-		log.Error("invalid subscriber: no handler functions")
+		log.SourcedLogrus().Error("invalid subscriber: no handler functions")
 		return errors.New("invalid subscriber: no handler functions")
 	}
 
 	if err := validateSubscriber(sb); err != nil {
-		log.Errorf("Subscribe error:%f", err.Error())
+		log.SourcedLogrus().Errorf("Subscribe error:%f", err.Error())
 		return err
 	}
 
 	s.Lock()
 	_, ok = s.subscribers[sub]
 	if ok {
-		log.Errorf("subscriber %v already exists", s)
+		log.SourcedLogrus().Errorf("subscriber %v already exists", s)
 		return errors.New(fmt.Sprintf("subscriber %v already exists", s))
 	}
 	s.subscribers[sub] = nil
@@ -83,7 +83,7 @@ func (s *Server) Register() error {
 func (s *Server) Deregister() error {
 	for sb, subs := range s.subscribers {
 		for _, sub := range subs {
-			log.Infof("Unsubscribing from topic: %s", sub.Topic())
+			log.SourcedLogrus().Infof("Unsubscribing from topic: %s", sub.Topic())
 			sub.Unsubscribe()
 		}
 		s.subscribers[sb] = nil
@@ -112,7 +112,7 @@ func (s *Server) Run() error {
 
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL)
-	log.Printf("Received signal %s", <-ch)
+	log.SourcedLogrus().Printf("Received signal %s, stop pubsub", <-ch)
 
 	if err := s.Deregister(); err != nil {
 		return err
