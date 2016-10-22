@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"baymax/pubsub/broker"
-	"github.com/satori/go.uuid"
 )
 
 var (
@@ -36,7 +35,7 @@ func sub() {
 	_, err := broker.Subscribe(topic, func(p broker.Publication) error {
 		fmt.Println("[sub] received message:", string(p.Message().Body), "header", p.Message().Header)
 		return nil
-	}, broker.Queue(uuid.NewV4().String()))
+	}, broker.Queue("testing"))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -56,5 +55,5 @@ func main() {
 	go sub()
 	go sub()
 
-	<-time.After(time.Second * 10)
+	<-time.After(time.Second * 30)
 }
