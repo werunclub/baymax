@@ -32,6 +32,8 @@ type Server struct {
 	registered bool
 
 	ticker *time.Ticker
+
+	Exit chan bool
 }
 
 func NewServer(opts ...Option) *Server {
@@ -42,6 +44,8 @@ func NewServer(opts ...Option) *Server {
 		rpcServer: rpc.NewServer(),
 		Registry:  registry.NewConsulRegistry(),
 		Handlers:  make(map[string]*interface{}),
+
+		Exit: make(chan bool, 1),
 	}
 
 	server.Registry.ConsulAddress = options.ConsulAddress
@@ -237,9 +241,14 @@ func (s *Server) RegisterAndRun() error {
 
 	// 取消注册
 	if err := s.Deregister(); err != nil {
-		return err
+		log.Errorf("rpc server deregister fail")
 	}
 
 	s.Registry.Close()
-	return s.Stop()
+	s.Stop()
+
+	log.Printf("Rpc server exit.")
+
+	s.Exit <- true
+	return nil
 }

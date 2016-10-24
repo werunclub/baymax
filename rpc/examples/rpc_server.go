@@ -5,6 +5,9 @@ import (
 	"baymax/log"
 
 	"baymax/rpc/server"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 type Args struct {
@@ -61,11 +64,16 @@ func (t *Arith3) Add(args *Args, reply *Reply) error {
 func main() {
 	rpcServer := server.NewServer(
 		server.ConsulAddress("127.0.0.1:8500"),
-		//server.Protocol("http"),
+		server.Protocol("http"),
 	)
 
 	rpcServer.Handle("Arith", new(Arith))
 	rpcServer.Handle("Arith2", new(Arith))
 	rpcServer.Handle("Arith3", new(Arith))
-	rpcServer.RegisterAndRun()
+
+	go rpcServer.RegisterAndRun()
+
+	select {
+	case <-rpcServer.Exit:
+	}
 }

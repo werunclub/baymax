@@ -14,7 +14,8 @@ import (
 
 type Server struct {
 	broker broker.Broker
-	exit   chan chan error
+
+	Exit chan bool
 
 	sync.RWMutex
 	subscribers map[*subscriber][]broker.Subscriber
@@ -26,7 +27,8 @@ func NewServer(addrs ...string) *Server {
 	return &Server{
 		broker:      broker.NewBroker(opt),
 		subscribers: make(map[*subscriber][]broker.Subscriber),
-		exit:        make(chan chan error),
+
+		Exit: make(chan bool, 1),
 	}
 }
 
@@ -103,20 +105,31 @@ func (s *Server) Stop() error {
 // signal before exiting. Also registers/deregisters the server
 func (s *Server) Run() error {
 	if err := s.Start(); err != nil {
+		log.SourcedLogrus().WithError(err).Errorf("pubsub start fail")
+		panic("pubsub start fail")
 		return err
 	}
 
 	if err := s.Register(); err != nil {
+		log.SourcedLogrus().WithError(err).Errorf("pubsub register fail")
+		panic("pubsub register fail")
 		return err
 	}
 
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL)
-	log.SourcedLogrus().Printf("Received signal %s, stop pubsub", <-ch)
+	log.SourcedLogrus().Printf("Received signal %s", <-ch)
 
 	if err := s.Deregister(); err != nil {
-		return err
+		log.SourcedLogrus().Errorf("Deregister fail")
 	}
 
-	return s.Stop()
+	s.Stop()
+
+	log.SourcedLogrus().Printf("exit.")
+
+	//　退出信号
+	s.Exit <- true
+
+	return nil
 }
