@@ -7,11 +7,7 @@ import (
 	"golang.org/x/net/context"
 
 	"baymax/pubsub"
-	"fmt"
 	"github.com/satori/go.uuid"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 type Message struct {
@@ -38,7 +34,7 @@ func (SubHandler) Bad2Handler(ctx context.Context, msg *Message) error {
 	return nil
 }
 
-func Subscribe() {
+func main() {
 
 	server := pubsub.NewServer("127.0.0.1:4150")
 
@@ -65,15 +61,14 @@ func Subscribe() {
 		log.Fatal("fail")
 	}
 
-	server.Run()
-}
+	go server.Run()
 
-func main() {
+	//ch := make(chan os.Signal, 1)
+	//signal.Notify(ch, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL)
+	//fmt.Printf("Received signal %s", <-ch)
 
-	go Subscribe()
-
-	ch := make(chan os.Signal, 1)
-	signal.Notify(ch, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL)
-	fmt.Printf("Received signal %s, stop pubsub", <-ch)
+	select {
+	case <-server.Exit:
+	}
 
 }
