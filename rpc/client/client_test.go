@@ -1,32 +1,30 @@
-package rpc
+package client
 
 import (
-	"testing"
-	"time"
-
 	"sync"
+	"testing"
+	//"time"
+
+	"baymax/rpc/server"
 )
 
 var (
-	server *Server
-	once   sync.Once
+	rpcServer *server.Server
+	once      sync.Once
 
-	serviceName   = "Arith"
-	consulAddress = "127.0.0.1:8500"
+	serviceName = "Arith"
 )
 
 func startAndRegistServer() {
-	server = NewServer(
-		ConsulAddress(consulAddress),
-	)
-	server.RegisterName(serviceName, new(Arith))
-	go server.RegisterAndRun()
+	rpcServer = server.NewServer(server.Protocol("http"))
+	rpcServer.RegisterName(serviceName, new(Arith))
+	go rpcServer.RegisterAndRun()
 }
 
 func TestClient(t *testing.T) {
 	once.Do(startAndRegistServer)
 
-	client := NewClient(serviceName, consulAddress, time.Second*5)
+	client := NewClient(serviceName)
 
 	args := &Args{7, 8}
 	reply := new(Reply)
@@ -57,15 +55,15 @@ func TestClient(t *testing.T) {
 	}
 }
 
-func TestNoneServer(t *testing.T) {
-
-	client := NewDirectClient("tcp", "127.0.0.1:11212", time.Second*5)
-
-	args := &Args{7, 8}
-	reply := new(Reply)
-
-	err := client.Call("Arith.Add", args, reply)
-	if err == nil {
-		t.Error("Add: expected an error but got nil")
-	}
-}
+//func TestNoneServer(t *testing.T) {
+//
+//	client := NewDirectClient("tcp", "127.0.0.1:11212", time.Second*5)
+//
+//	args := &Args{7, 8}
+//	reply := new(Reply)
+//
+//	err := client.Call("Arith.Add", args, reply)
+//	if err == nil {
+//		t.Error("Add: expected an error but got nil")
+//	}
+//}

@@ -1,4 +1,4 @@
-package rpc
+package registry
 
 // Watcher is an interface that returns updates
 // about services within the registry.

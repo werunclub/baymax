@@ -1,13 +1,14 @@
-package rpc
+package client
 
 import (
+	"io"
 	"net/rpc"
 	"sync"
 	"time"
 
 	"baymax/errors"
 	"baymax/log"
-	"io"
+	"baymax/rpc/registry"
 )
 
 // Client represents a RPC client.
@@ -56,7 +57,7 @@ func (c *DirectClient) Call(method string, args interface{}, reply interface{}) 
 		}
 
 		// Fixme: 无法连接到服务器时此处有空指针错误
-		conn, e := c.pool.GetConn(c.Addr, c.timeout)
+		conn, e := c.pool.GetConn(c.net, c.Addr, c.timeout)
 		if e != nil {
 			log.SourcedLogrus().WithField("method", method).Errorf("rpc connect error:", e)
 			return e
@@ -66,7 +67,7 @@ func (c *DirectClient) Call(method string, args interface{}, reply interface{}) 
 
 		defer func() {
 			// 使用后释放
-			c.pool.release(c.Addr, conn, err)
+			c.pool.release(c.net, c.Addr, conn, err)
 		}()
 
 		err = conn.Call(method, args, reply)
@@ -88,8 +89,8 @@ func (c *DirectClient) Call(method string, args interface{}, reply interface{}) 
 			if err == nil {
 				return nil
 			} else if err != rpc.ErrShutdown &&
-				err != ErrNotFound &&
-				err != ErrNoneAvailable &&
+				err != registry.ErrNotFound &&
+				err != registry.ErrNoneAvailable &&
 				err != io.EOF {
 
 				// ErrShutdown ErrNotFound ErrNoneAvailable 需要重试的错误

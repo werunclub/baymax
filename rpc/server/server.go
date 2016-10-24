@@ -1,4 +1,4 @@
-package rpc
+package server
 
 import (
 	"net"
@@ -8,35 +8,27 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/pborman/uuid"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
 	log "github.com/Sirupsen/logrus"
-)
 
-var (
-	DefaultAddress       = ":0"
-	DefaultName          = "go-server"
-	DefaultVersion       = "1.0.0"
-	DefaultId            = uuid.NewUUID().String()
-	DefaultConsulAddress = "127.0.0.1:8500"
+	"baymax/rpc/helpers"
+	"baymax/rpc/registry"
 )
-
-type Option func(*Options)
 
 type Server struct {
 	opts Options
 
 	sync.RWMutex
 	rpcServer *rpc.Server
-	Registry  *ConsulRegistry
+	Registry  *registry.ConsulRegistry
 	listener  net.Listener
 
 	Handlers   map[string]*interface{}
-	nodes      []*Node
+	nodes      []*registry.Node
 	registered bool
 
 	ticker *time.Ticker
@@ -48,7 +40,7 @@ func NewServer(opts ...Option) *Server {
 	server := &Server{
 		opts:      options,
 		rpcServer: rpc.NewServer(),
-		Registry:  NewConsulRegistry(),
+		Registry:  registry.NewConsulRegistry(),
 		Handlers:  make(map[string]*interface{}),
 	}
 
@@ -86,6 +78,11 @@ func (s *Server) Serve() {
 
 // 使用协程启动服务
 func (s *Server) Start() error {
+
+	// via http
+	if s.opts.RpcProtocol == "http" {
+		rpc.HandleHTTP()
+	}
 
 	ln, err := net.Listen("tcp", s.opts.Address)
 	if err != nil {
@@ -131,7 +128,7 @@ func (s *Server) Register() error {
 		host = parts[0]
 	}
 
-	addr, err := extractAddress(host)
+	addr, err := helpers.ExtractAddress(host)
 	if err != nil {
 		return err
 	}
@@ -139,10 +136,10 @@ func (s *Server) Register() error {
 	s.RLock()
 
 	for name, _ := range s.Handlers {
-		node := &Node{
-			Id:       name + "@" + addr + ":" + strconv.Itoa(port),
-			Name:     name,
-			Address:  addr + ":" + strconv.Itoa(port),
+		node := &registry.Node{
+			Id:       s.opts.Namespace + name + "@" + addr + ":" + strconv.Itoa(port),
+			Name:     s.opts.Namespace + name,
+			Address:  s.opts.RpcProtocol + "@" + addr + ":" + strconv.Itoa(port),
 			Metadata: config.Metadata,
 		}
 

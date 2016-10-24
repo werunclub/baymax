@@ -1,8 +1,21 @@
-package rpc
+package server
 
 import (
 	"time"
+
+	"github.com/pborman/uuid"
 )
+
+var (
+	DefaultAddress       = ":0"
+	DefaultName          = "go-server"
+	DefaultNamespace     = "go.srv."
+	DefaultProtocol      = "tcp"
+	DefaultVersion       = "1.0.0"
+	DefaultConsulAddress = "127.0.0.1:8500"
+)
+
+type Option func(*Options)
 
 type Options struct {
 	Metadata map[string]string
@@ -10,8 +23,14 @@ type Options struct {
 	// 服务名称,一个RPC服务指定一个唯一名称,最好写到协议里
 	Name string
 
+	// 名称空间
+	Namespace string
+
 	// 监听地址, 默认端口 :0 即随机端口(推荐)
 	Address string
+
+	// 协议:　tcp or http
+	RpcProtocol string
 
 	// Consul地址用于注册服务默认
 	ConsulAddress string
@@ -23,12 +42,6 @@ type Options struct {
 
 	RegisterTTL      time.Duration
 	RegisterInterval time.Duration
-	timeout          time.Duration
-
-	ServiceNames []string
-
-	// 连接池大小
-	PoolSize int
 }
 
 func newOptions(opt ...Option) Options {
@@ -48,8 +61,17 @@ func newOptions(opt ...Option) Options {
 		opts.Name = DefaultName
 	}
 
+	if len(opts.Namespace) == 0 {
+		opts.Namespace = DefaultNamespace
+	}
+
+	if opts.RpcProtocol != "tcp" && opts.RpcProtocol != "http" {
+		opts.RpcProtocol = DefaultProtocol
+	}
+
 	if len(opts.Id) == 0 {
-		opts.Id = DefaultId
+		opts.Id = uuid.NewUUID().String()
+
 	}
 
 	if len(opts.Version) == 0 {
@@ -68,10 +90,6 @@ func newOptions(opt ...Option) Options {
 		opts.RegisterInterval = time.Second * 10
 	}
 
-	if opts.PoolSize == 0 {
-		opts.PoolSize = DefaultPoolSize
-	}
-
 	return opts
 }
 
@@ -79,6 +97,13 @@ func newOptions(opt ...Option) Options {
 func Name(n string) Option {
 	return func(o *Options) {
 		o.Name = n
+	}
+}
+
+// 名称空间
+func Namespace(n string) Option {
+	return func(o *Options) {
+		o.Namespace = n + "."
 	}
 }
 
@@ -100,6 +125,13 @@ func Version(v string) Option {
 func Address(a string) Option {
 	return func(o *Options) {
 		o.Address = a
+	}
+}
+
+// 使用协议
+func Protocol(a string) Option {
+	return func(o *Options) {
+		o.RpcProtocol = a
 	}
 }
 
@@ -128,19 +160,5 @@ func RegisterTTL(t time.Duration) Option {
 func RegisterInterval(t time.Duration) Option {
 	return func(o *Options) {
 		o.RegisterInterval = t
-	}
-}
-
-// 登记服务名称列表
-func ServiceNames(ns []string) Option {
-	return func(o *Options) {
-		o.ServiceNames = ns
-	}
-}
-
-// 连接池大小
-func PoolSize(size int) Option {
-	return func(o *Options) {
-		o.PoolSize = size
 	}
 }

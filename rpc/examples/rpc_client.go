@@ -1,13 +1,11 @@
 package main
 
 import (
-	"baymax/errors"
-	"baymax/rpc"
-	//"time"
-	//"time"
-	"github.com/smallnest/rpcx"
 	"log"
 	"time"
+
+	"baymax/errors"
+	rpcClient "baymax/rpc/client"
 )
 
 type Args struct {
@@ -46,7 +44,10 @@ func (t *Arith) Div(args *Args, reply *Reply) error {
 
 func main() {
 
-	client := rpc.NewClient("Arith", "127.0.0.1:8500", time.Second*5)
+	client := rpcClient.NewClient("Arith",
+		rpcClient.ConsulAddress("127.0.0.1:8500"),
+		rpcClient.ConnTimeout(time.Second*5),
+	)
 
 	args := &Args{7, 8}
 	reply := new(Reply)

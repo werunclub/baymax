@@ -1,4 +1,4 @@
-package rpc
+package client
 
 import (
 	"fmt"
@@ -10,6 +10,8 @@ import (
 
 	"baymax/errors"
 	"baymax/log"
+	"baymax/rpc/registry"
+	"strings"
 )
 
 var (
@@ -22,34 +24,44 @@ func init() {
 
 // Client represents a RPC client.
 type Client struct {
-	pool    *pool
-	timeout time.Duration
-	once    sync.Once
+	opts Options
+	pool *pool
+
+	once sync.Once
 
 	ServiceName string
-	Selector    *Selector
+	Selector    *registry.Selector
 
 	//重试次数
 	Retries int
 }
 
-func NewClient(serviceName, consulAddress string, timeout time.Duration) *Client {
-	key := fmt.Sprintf("%s@%s", serviceName, consulAddress)
+func NewClient(serviceName string, opts ...Option) *Client {
+
+	options := newOptions(opts...)
+
+	key := fmt.Sprintf("%s@%s", options.Namespace+serviceName, options.ConsulAddress)
+
 	if client, ok := rpcClients[key]; ok {
 		return client
 	}
 
 	client := &Client{
-		timeout: timeout,
-		pool:    newPool(100, time.Minute*10),
+		opts: options,
+		pool: newPool(options.PoolSize, options.PoolTTL),
 
 		ServiceName: serviceName,
-		Selector:    NewSelector(ConsulAddress(consulAddress)),
+		Selector:    registry.NewSelector(registry.ConsulAddress(options.ConsulAddress)),
 		Retries:     3,
 	}
 
 	rpcClients[key] = client
 	return client
+}
+
+//　完整名称:　名称空间+名称
+func (c *Client) getServiceName() string {
+	return c.opts.Namespace + c.ServiceName
 }
 
 func (c *Client) SetPoolSize(size int) {
@@ -62,10 +74,10 @@ func (c *Client) Close() error {
 }
 
 // 调用方法
-func (c *Client) call(address, method string, args interface{}, reply interface{}) error {
+func (c *Client) call(network, address, method string, args interface{}, reply interface{}) error {
 
 	// Fixme: 无法连接到服务器时此处有空指针错误
-	conn, e := c.pool.GetConn(address, c.timeout)
+	conn, e := c.pool.GetConn(network, address, c.opts.ConnTimeout)
 	if e != nil {
 		log.SourcedLogrus().WithError(e).Errorf("rpc connect error")
 		return e
@@ -79,7 +91,7 @@ func (c *Client) call(address, method string, args interface{}, reply interface{
 			WithField("args", args).
 			Errorf("Call rpc method error")
 	}
-	c.pool.release(address, conn, err)
+	c.pool.release(network, address, conn, err)
 
 	return err
 }
@@ -96,8 +108,9 @@ func backoff(method string, attempts int) (time.Duration, error) {
 func (c *Client) Call(method string, args interface{}, reply interface{}) *errors.Error {
 
 	// 获取一个服务地址选择器
-	next, err := c.Selector.SelectNodes(c.ServiceName)
-	if err != nil && err == ErrNotFound {
+	next, err := c.Selector.Select(c.getServiceName())
+
+	if err != nil && err == registry.ErrNotFound {
 		log.SourcedLogrus().WithField("method", method).WithError(err).Debugf("rpc service not found")
 		return errors.Parse(errors.NotFound(err.Error()).Error())
 	} else if err != nil {
@@ -124,9 +137,18 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 			address = fmt.Sprintf("%s:%d", address, node.Port)
 		}
 
+		var network string
+		if strings.Contains(address, "@") {
+			parts := strings.Split(address, "@")
+			network = parts[0]
+			address = parts[1]
+		} else {
+			network = "tcp"
+		}
+
 		// 调用rpc
-		if err := c.call(address, method, args, reply); err != nil {
-			//c.Selector.Mark(c.ServiceName, address, err)
+		if err := c.call(network, address, method, args, reply); err != nil {
+			//c.Selector.Mark(c.ServiceName, network, address, err)
 			return err
 		}
 		return nil
@@ -147,8 +169,8 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 				return nil
 
 			} else if err != rpc.ErrShutdown &&
-				err != ErrNotFound &&
-				err != ErrNoneAvailable &&
+				err != registry.ErrNotFound &&
+				err != registry.ErrNoneAvailable &&
 				err != io.EOF &&
 				err != io.ErrUnexpectedEOF {
 
@@ -161,7 +183,7 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 		}
 	}
 
-	if gerr != nil && err.Error() != "" {
+	if gerr != nil && gerr.Error() != "" {
 		log.SourcedLogrus().WithField("method", method).WithError(gerr).Debugf("rpc call got system error")
 		return errors.Parse(gerr.Error())
 	}

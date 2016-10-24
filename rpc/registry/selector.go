@@ -1,9 +1,10 @@
-package rpc
+package registry
 
 import (
-	"github.com/go-errors/errors"
 	"net/rpc"
 	"time"
+
+	"github.com/go-errors/errors"
 )
 
 var (
@@ -19,8 +20,7 @@ type Next func() (*Node, error)
 type Strategy func([]*Node) Next
 
 type Selector struct {
-	opts          Options
-	ConsulAddress string
+	opts Options
 
 	sessionTimeout time.Duration
 	SelectMode     SelectMode
@@ -28,16 +28,15 @@ type Selector struct {
 	connTimeout    time.Duration
 
 	selectors map[string]*ConsulClientSelector
-	clients   map[string]*DirectClient
 }
 
 // 新建选择器
 func NewSelector(opts ...Option) *Selector {
+
 	options := newOptions(opts...)
 
 	selector := &Selector{
 		opts:           options,
-		ConsulAddress:  options.ConsulAddress,
 		sessionTimeout: time.Second * 20,
 		timeout:        time.Second * 20,
 		connTimeout:    time.Second * 5,
@@ -47,9 +46,6 @@ func NewSelector(opts ...Option) *Selector {
 
 		// 为每个服务建一个选择器
 		selectors: make(map[string]*ConsulClientSelector),
-
-		// 缓存客户端
-		clients: make(map[string]*DirectClient),
 	}
 	selector.AddServices(options.ServiceNames...)
 
@@ -67,7 +63,7 @@ func (s *Selector) AddServices(serviceNames ...string) {
 func (s *Selector) addService(serviceName string) {
 	_, ok := s.selectors[serviceName]
 	if !ok {
-		s.selectors[serviceName] = NewConsulClientSelector(s.ConsulAddress,
+		s.selectors[serviceName] = NewConsulClientSelector(s.opts.ConsulAddress,
 			serviceName,
 			s.sessionTimeout,
 			s.SelectMode,
@@ -79,7 +75,6 @@ func (s *Selector) addService(serviceName string) {
 func (s *Selector) getSelector(serviceName string) (*ConsulClientSelector, error) {
 
 	selector, ok := s.selectors[serviceName]
-
 	if !ok {
 		s.addService(serviceName)
 		selector, ok = s.selectors[serviceName]
@@ -92,52 +87,8 @@ func (s *Selector) getSelector(serviceName string) (*ConsulClientSelector, error
 	return selector, nil
 }
 
-// 获取或新建一个客户端
-func (s *Selector) getClient(net, address string) (*DirectClient, error) {
-
-	client, ok := s.clients[address]
-
-	if !ok || client == nil {
-
-		client = NewDirectClient(net, address, s.connTimeout)
-		client.SetPoolSize(s.opts.PoolSize)
-
-		s.clients[address] = client
-	}
-
-	return client, nil
-}
-
 // 选择一个服务器,并创建客户端
-func (s *Selector) Select(serviceName string) (*DirectClient, error) {
-
-	var (
-		err      error
-		next     Next
-		node     *Node
-		selector *ConsulClientSelector
-	)
-
-	selector, err = s.getSelector(serviceName)
-	if err != nil {
-		return nil, err
-	}
-
-	next, err = selector.Select()
-	if err != nil {
-		return nil, err
-	}
-
-	node, err = next()
-	if err != nil {
-		return nil, err
-	}
-
-	return s.getClient("tcp", node.Address)
-}
-
-// 选择一个服务器,并创建客户端
-func (s *Selector) SelectNodes(serviceName string) (Next, error) {
+func (s *Selector) Select(serviceName string) (Next, error) {
 
 	selector, err := s.getSelector(serviceName)
 	if err != nil {
@@ -150,6 +101,5 @@ func (s *Selector) SelectNodes(serviceName string) (Next, error) {
 // TODO: 标记服务器不可用
 func (s *Selector) Mark(serviceName string, address string, err error) {
 	if err == rpc.ErrShutdown {
-		delete(s.clients, address)
 	}
 }

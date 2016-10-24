@@ -1,10 +1,12 @@
-package rpc
+package registry
 
 import (
 	"math/rand"
 	"time"
 
 	"github.com/hashicorp/consul/api"
+
+	"baymax/rpc/helpers"
 )
 
 // SelectMode defines the algorithm of selecting a services from cluster
@@ -42,12 +44,14 @@ type ConsulClientSelector struct {
 	rnd                *rand.Rand
 	currentServer      int
 	len                int
-	HashServiceAndArgs HashServiceAndArgs
+	HashServiceAndArgs helpers.HashServiceAndArgs
 	serviceName        string
 }
 
 // NewConsulClientSelector creates a ConsulClientSelector
-func NewConsulClientSelector(consulAddress string, serviceName string, sessionTimeout time.Duration, sm SelectMode, timeout time.Duration) *ConsulClientSelector {
+func NewConsulClientSelector(consulAddress string, serviceName string, sessionTimeout time.Duration,
+	sm SelectMode, timeout time.Duration) *ConsulClientSelector {
+
 	selector := &ConsulClientSelector{
 		ConsulAddress:  consulAddress,
 		Servers:        make([]*Node, 1),
@@ -63,19 +67,6 @@ func NewConsulClientSelector(consulAddress string, serviceName string, sessionTi
 
 func (s *ConsulClientSelector) SetSelectMode(sm SelectMode) {
 	s.SelectMode = sm
-}
-
-func (s *ConsulClientSelector) AllClients() []*DirectClient {
-	var clients []*DirectClient
-
-	for _, sv := range s.Servers {
-		c := NewDirectClient("tcp", sv.Address, s.timeout)
-		if c != nil {
-			clients = append(clients, c)
-		}
-	}
-
-	return clients
 }
 
 func (s *ConsulClientSelector) init() {
