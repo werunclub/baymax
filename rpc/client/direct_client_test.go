@@ -1,10 +1,11 @@
-package rpc
+package client
 
 import (
 	"testing"
 	"time"
 
 	"baymax/errors"
+	"baymax/rpc/server"
 )
 
 type Args struct {
@@ -46,15 +47,15 @@ func (t *Arith) Error(args *Args, reply *Reply) error {
 }
 
 func startServer() {
-	server = NewServer()
-	server.RegisterName("Arith", new(Arith))
-	server.Start()
+	rpcServer = server.NewServer()
+	rpcServer.RegisterName("Arith", new(Arith))
+	rpcServer.Start()
 }
 
 func TestDirectClient(t *testing.T) {
 	once.Do(startServer)
 
-	client := NewDirectClient("tcp", server.Address(), time.Second*5)
+	client := NewDirectClient("tcp", rpcServer.Address(), time.Second*5)
 
 	args := &Args{7, 8}
 	reply := new(Reply)

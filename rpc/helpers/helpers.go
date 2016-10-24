@@ -1,4 +1,4 @@
-package rpc
+package helpers
 
 import (
 	"fmt"
@@ -18,7 +18,7 @@ func init() {
 	}
 }
 
-func extractAddress(addr string) (string, error) {
+func ExtractAddress(addr string) (string, error) {
 	if len(addr) > 0 && (addr != "0.0.0.0" && addr != "[::]") {
 		return addr, nil
 	}
@@ -45,7 +45,7 @@ func extractAddress(addr string) (string, error) {
 			continue
 		}
 
-		if !isPrivateIP(ip.String()) {
+		if !IsPrivateIP(ip.String()) {
 			continue
 		}
 
@@ -60,7 +60,7 @@ func extractAddress(addr string) (string, error) {
 	return net.IP(ipAddr).String(), nil
 }
 
-func isPrivateIP(ipAddr string) bool {
+func IsPrivateIP(ipAddr string) bool {
 	ip := net.ParseIP(ipAddr)
 	for _, priv := range privateBlocks {
 		if priv.Contains(ip) {
@@ -101,12 +101,12 @@ type HashServiceAndArgs func(len int, options ...interface{}) int
 func JumpConsistentHash(len int, options ...interface{}) int {
 	keyString := ""
 	for _, opt := range options {
-		keyString = keyString + "/" + toString(opt)
+		keyString = keyString + "/" + ToString(opt)
 	}
 	key := HashString(keyString)
 	return int(Hash(key, int32(len)))
 }
 
-func toString(obj interface{}) string {
+func ToString(obj interface{}) string {
 	return fmt.Sprintf("%v", obj)
 }

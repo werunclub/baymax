@@ -3,7 +3,8 @@ package main
 import (
 	"baymax/errors"
 	"baymax/log"
-	"baymax/rpc"
+
+	"baymax/rpc/server"
 )
 
 type Args struct {
@@ -58,11 +59,13 @@ func (t *Arith3) Add(args *Args, reply *Reply) error {
 }
 
 func main() {
-	server := rpc.NewServer(
-		rpc.ConsulAddress("127.0.0.1:8500"))
+	rpcServer := server.NewServer(
+		server.ConsulAddress("127.0.0.1:8500"),
+		//server.Protocol("http"),
+	)
 
-	server.Handle("Arith", new(Arith))
-	server.Handle("Arith2", new(Arith))
-	server.Handle("Arith3", new(Arith))
-	server.RegisterAndRun()
+	rpcServer.Handle("Arith", new(Arith))
+	rpcServer.Handle("Arith2", new(Arith))
+	rpcServer.Handle("Arith3", new(Arith))
+	rpcServer.RegisterAndRun()
 }

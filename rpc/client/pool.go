@@ -1,4 +1,4 @@
-package rpc
+package client
 
 import (
 	"io"
@@ -7,10 +7,6 @@ import (
 	"net/rpc/jsonrpc"
 	"sync"
 	"time"
-)
-
-var (
-	DefaultPoolSize = 100
 )
 
 type pool struct {
@@ -35,14 +31,14 @@ func newPool(size int, ttl time.Duration) *pool {
 }
 
 // 建立连接
-func (p *pool) DialTimeout(network, addr string, timeout time.Duration) (*rpc.Client, error) {
+func (p *pool) dialTimeout(addr string, timeout time.Duration) (*rpc.Client, error) {
 
 	var (
 		conn net.Conn
 		err  error
 	)
 
-	conn, err = net.DialTimeout(network, addr, timeout)
+	conn, err = net.DialTimeout("tcp", addr, timeout)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +46,13 @@ func (p *pool) DialTimeout(network, addr string, timeout time.Duration) (*rpc.Cl
 	return jsonrpc.NewClient(conn), nil
 }
 
-func (p *pool) GetConn(addr string, timeout time.Duration) (*poolConn, error) {
+//　建立　http　连接
+func (p *pool) dialHTTP(addr string) (*rpc.Client, error) {
+	return rpc.DialHTTP("tcp", addr)
+}
+
+//　获取一个连接
+func (p *pool) GetConn(network, addr string, connTimeout time.Duration) (*poolConn, error) {
 	p.Lock()
 	conns := p.conns[addr]
 	now := time.Now().Unix()
@@ -73,18 +75,28 @@ func (p *pool) GetConn(addr string, timeout time.Duration) (*poolConn, error) {
 	}
 	p.Unlock()
 
-	// 新连接
-	c, err := p.DialTimeout("tcp", addr, timeout)
-	if err != nil {
-		return nil, err
+	var c *rpc.Client
+	if network == "http" {
+		if client, err := p.dialHTTP(addr); err != nil {
+			return nil, err
+		} else {
+			c = client
+		}
+
+	} else {
+		if client, err := p.dialTimeout(addr, connTimeout); err != nil {
+			return nil, err
+		} else {
+			c = client
+		}
 	}
+
 	return &poolConn{c, time.Now().Unix()}, nil
 }
 
-func (p *pool) release(addr string, conn *poolConn, err error) {
+func (p *pool) release(net, addr string, conn *poolConn, err error) {
 
 	// 关闭出错的连接
-	//fin
 	if err == rpc.ErrShutdown ||
 		err == io.ErrUnexpectedEOF ||
 		err == io.EOF {
