@@ -45,6 +45,7 @@ func (t *Arith) Div(args *Args, reply *Reply) error {
 func main() {
 
 	client := rpcClient.NewClient("Arith",
+		rpcClient.Namespace("go.srv"),
 		rpcClient.ConsulAddress("127.0.0.1:8500"),
 		rpcClient.ConnTimeout(time.Second*5),
 	)

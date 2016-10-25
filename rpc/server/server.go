@@ -2,14 +2,14 @@ package server
 
 import (
 	"net"
+	"net/http"
 	"net/rpc"
 	"net/rpc/jsonrpc"
+	"os"
+	"os/signal"
 	"strconv"
 	"strings"
 	"sync"
-
-	"os"
-	"os/signal"
 	"syscall"
 	"time"
 
@@ -60,33 +60,17 @@ func (s *Server) Options() Options {
 	return opts
 }
 
-// 启动服务
-func (s *Server) Serve() {
-
-	ln, err := net.Listen("tcp", s.opts.Address)
-	if err != nil {
-		return
-	}
-
-	s.listener = ln
-	s.opts.Address = s.Address()
-
-	for {
-		c, err := ln.Accept()
-		if err != nil {
-			continue
-		}
-		go s.rpcServer.ServeCodec(jsonrpc.NewServerCodec(c))
+// 使用协程启动服务
+func (s *Server) Start() error {
+	if s.opts.RpcProtocol == "http" {
+		return s.serveHttp()
+	} else {
+		return s.serveTcp()
 	}
 }
 
-// 使用协程启动服务
-func (s *Server) Start() error {
-
-	// via http
-	if s.opts.RpcProtocol == "http" {
-		rpc.HandleHTTP()
-	}
+// via tcp
+func (s *Server) serveTcp() error {
 
 	ln, err := net.Listen("tcp", s.opts.Address)
 	if err != nil {
@@ -105,6 +89,24 @@ func (s *Server) Start() error {
 			go s.rpcServer.ServeCodec(jsonrpc.NewServerCodec(c))
 		}
 	}()
+
+	return nil
+}
+
+// via http
+func (s *Server) serveHttp() error {
+
+	s.rpcServer.HandleHTTP(rpc.DefaultRPCPath, rpc.DefaultDebugPath)
+
+	ln, err := net.Listen("tcp", s.opts.Address)
+	if err != nil {
+		log.Fatal("listen error:", err)
+	}
+
+	s.listener = ln
+	s.opts.Address = s.Address()
+
+	go http.Serve(ln, nil)
 
 	return nil
 }
@@ -252,6 +254,5 @@ func (s *Server) RegisterAndRun() error {
 
 	log.Printf("Rpc server exit.")
 
-	//s.Exit <- true
 	return nil
 }
