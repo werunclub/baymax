@@ -62,6 +62,7 @@ func main() {
 	rpcServer := server.NewServer(
 		server.ConsulAddress("127.0.0.1:8500"),
 		server.Protocol("http"),
+		server.Namespace("go.srv"),
 	)
 
 	rpcServer.Handle("Arith", new(Arith))

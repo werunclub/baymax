@@ -14,14 +14,6 @@ import (
 	"strings"
 )
 
-var (
-	rpcClients map[string]*Client
-)
-
-func init() {
-	rpcClients = make(map[string]*Client)
-}
-
 // Client represents a RPC client.
 type Client struct {
 	opts Options
@@ -40,13 +32,7 @@ func NewClient(serviceName string, opts ...Option) *Client {
 
 	options := newOptions(opts...)
 
-	key := fmt.Sprintf("%s@%s", options.Namespace+serviceName, options.ConsulAddress)
-
-	if client, ok := rpcClients[key]; ok {
-		return client
-	}
-
-	client := &Client{
+	return &Client{
 		opts: options,
 		pool: newPool(options.PoolSize, options.PoolTTL),
 
@@ -54,9 +40,6 @@ func NewClient(serviceName string, opts ...Option) *Client {
 		Selector:    registry.NewSelector(registry.ConsulAddress(options.ConsulAddress)),
 		Retries:     3,
 	}
-
-	rpcClients[key] = client
-	return client
 }
 
 //　完整名称:　名称空间+名称
