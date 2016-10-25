@@ -5,9 +5,6 @@ import (
 	"baymax/log"
 
 	"baymax/rpc/server"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 type Args struct {
@@ -73,7 +70,5 @@ func main() {
 
 	go rpcServer.RegisterAndRun()
 
-	select {
-	case <-rpcServer.Exit:
-	}
+	<-rpcServer.Exit
 }

@@ -104,6 +104,10 @@ func (s *Server) Stop() error {
 // Run starts the default server and waits for a kill
 // signal before exiting. Also registers/deregisters the server
 func (s *Server) Run() error {
+	defer func() {
+		s.Exit <- true
+	}()
+
 	if err := s.Start(); err != nil {
 		log.SourcedLogrus().WithError(err).Errorf("pubsub start fail")
 		panic("pubsub start fail")
@@ -127,9 +131,6 @@ func (s *Server) Run() error {
 	s.Stop()
 
 	log.SourcedLogrus().Printf("exit.")
-
-	//　退出信号
-	s.Exit <- true
 
 	return nil
 }

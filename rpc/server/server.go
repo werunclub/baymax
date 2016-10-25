@@ -215,6 +215,9 @@ func (s *Server) Address() string {
 
 // 注册服务并运行
 func (s *Server) RegisterAndRun() error {
+	defer func() {
+		s.Exit <- true
+	}()
 
 	// 启动注册服务
 	if err := s.Registry.Init(); err != nil {
@@ -249,6 +252,6 @@ func (s *Server) RegisterAndRun() error {
 
 	log.Printf("Rpc server exit.")
 
-	s.Exit <- true
+	//s.Exit <- true
 	return nil
 }
