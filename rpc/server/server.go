@@ -88,16 +88,17 @@ func (s *Server) serveTcp() error {
 				continue
 			}
 
-			//go s.rpcServer.ServeCodec(jsonrpc.NewServerCodec(c))
-			go func(conn net.Conn) {
-				srv := jsonrpc.NewServerCodec(conn)
+			go s.rpcServer.ServeCodec(jsonrpc.NewServerCodec(conn))
 
-				if err := s.rpcServer.ServeRequest(srv); err != nil {
-					log.WithError(err).Errorf("Error: server rpc request")
-				}
-
-				srv.Close()
-			}(conn)
+			//go func(conn net.Conn) {
+			//	srv := jsonrpc.NewServerCodec(conn)
+			//
+			//	if err := s.rpcServer.ServeRequest(srv); err != nil {
+			//		log.WithError(err).Errorf("Error: server rpc request")
+			//	}
+			//
+			//	srv.Close()
+			//}(conn)
 		}
 	}()
 
