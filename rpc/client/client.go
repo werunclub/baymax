@@ -60,7 +60,7 @@ func (c *Client) Close() error {
 func (c *Client) call(network, address, method string, args interface{}, reply interface{}) error {
 
 	// Fixme: 无法连接到服务器时此处有空指针错误
-	conn, e := c.pool.GetConn(network, address, c.opts.ConnTimeout)
+	conn, e := c.pool.GetClient(network, address, c.opts.ConnTimeout)
 	if e != nil {
 		log.SourcedLogrus().WithError(e).Errorf("rpc connect error")
 		return e
@@ -75,7 +75,8 @@ func (c *Client) call(network, address, method string, args interface{}, reply i
 			Errorf("Call rpc method error")
 	}
 
-	c.pool.release(network, address, conn, err)
+	conn.Close()
+	//c.pool.release(network, address, conn, err)
 
 	return err
 }
