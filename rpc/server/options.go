@@ -42,6 +42,9 @@ type Options struct {
 
 	RegisterTTL      time.Duration
 	RegisterInterval time.Duration
+
+	// 健康检查开启
+	CheckEnable bool
 }
 
 func newOptions(opt ...Option) Options {
@@ -161,4 +164,12 @@ func RegisterInterval(t time.Duration) Option {
 	return func(o *Options) {
 		o.RegisterInterval = t
 	}
+}
+
+// 开启健检查
+func CheckEnable(enable bool) Option {
+	return func(o *Options) {
+		o.CheckEnable = enable
+	}
+
 }
