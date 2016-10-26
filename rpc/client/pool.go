@@ -51,25 +51,12 @@ func (p *pool) dialHTTP(addr string) (*rpc.Client, error) {
 }
 
 //
-func (p *pool) GetClient(network, addr string, connTimeout time.Duration) (*rpc.Client, error) {
-	var c *rpc.Client
-
+func (p *pool) Dial(network, addr string, connTimeout time.Duration) (*rpc.Client, error) {
 	if network == "http" {
-		if client, err := p.dialHTTP(addr); err != nil {
-			return nil, err
-		} else {
-			c = client
-		}
-
+		return p.dialHTTP(addr)
 	} else {
-		if client, err := p.dialTcp(addr); err != nil {
-			return nil, err
-		} else {
-			c = client
-		}
+		return p.dialTcp(addr)
 	}
-
-	return c, nil
 }
 
 //　获取一个连接
@@ -96,7 +83,7 @@ func (p *pool) GetConn(network, addr string, connTimeout time.Duration) (*poolCo
 	}
 	p.Unlock()
 
-	c, err := p.GetClient(network, addr, connTimeout)
+	c, err := p.Dial(network, addr, connTimeout)
 	if err != nil {
 		return nil, err
 	}
