@@ -31,14 +31,13 @@ func newPool(size int, ttl time.Duration) *pool {
 }
 
 // 建立连接
-func (p *pool) dialTimeout(addr string, timeout time.Duration) (*rpc.Client, error) {
-
+func (p *pool) dialTcp(addr string) (*rpc.Client, error) {
 	var (
 		conn net.Conn
 		err  error
 	)
 
-	conn, err = net.DialTimeout("tcp", addr, timeout)
+	conn, err = net.Dial("tcp", addr)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +50,8 @@ func (p *pool) dialHTTP(addr string) (*rpc.Client, error) {
 	return rpc.DialHTTP("tcp", addr)
 }
 
-func (p *pool) GetFreshConn(network, addr string, connTimeout time.Duration) (*rpc.Client, error) {
+//
+func (p *pool) GetClient(network, addr string, connTimeout time.Duration) (*rpc.Client, error) {
 	var c *rpc.Client
 
 	if network == "http" {
@@ -62,7 +62,7 @@ func (p *pool) GetFreshConn(network, addr string, connTimeout time.Duration) (*r
 		}
 
 	} else {
-		if client, err := p.dialTimeout(addr, connTimeout); err != nil {
+		if client, err := p.dialTcp(addr); err != nil {
 			return nil, err
 		} else {
 			c = client
@@ -96,7 +96,7 @@ func (p *pool) GetConn(network, addr string, connTimeout time.Duration) (*poolCo
 	}
 	p.Unlock()
 
-	c, err := p.GetFreshConn(network, addr, connTimeout)
+	c, err := p.GetClient(network, addr, connTimeout)
 	if err != nil {
 		return nil, err
 	}
