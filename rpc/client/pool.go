@@ -51,6 +51,27 @@ func (p *pool) dialHTTP(addr string) (*rpc.Client, error) {
 	return rpc.DialHTTP("tcp", addr)
 }
 
+func (p *pool) GetFreshConn(network, addr string, connTimeout time.Duration) (*rpc.Client, error) {
+	var c *rpc.Client
+
+	if network == "http" {
+		if client, err := p.dialHTTP(addr); err != nil {
+			return nil, err
+		} else {
+			c = client
+		}
+
+	} else {
+		if client, err := p.dialTimeout(addr, connTimeout); err != nil {
+			return nil, err
+		} else {
+			c = client
+		}
+	}
+
+	return c, nil
+}
+
 //　获取一个连接
 func (p *pool) GetConn(network, addr string, connTimeout time.Duration) (*poolConn, error) {
 	p.Lock()
@@ -75,20 +96,9 @@ func (p *pool) GetConn(network, addr string, connTimeout time.Duration) (*poolCo
 	}
 	p.Unlock()
 
-	var c *rpc.Client
-	if network == "http" {
-		if client, err := p.dialHTTP(addr); err != nil {
-			return nil, err
-		} else {
-			c = client
-		}
-
-	} else {
-		if client, err := p.dialTimeout(addr, connTimeout); err != nil {
-			return nil, err
-		} else {
-			c = client
-		}
+	c, err := p.GetFreshConn(network, addr, connTimeout)
+	if err != nil {
+		return nil, err
 	}
 
 	return &poolConn{c, time.Now().Unix()}, nil
