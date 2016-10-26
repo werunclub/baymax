@@ -1,16 +1,20 @@
-package server
+package client
 
 import (
 	"testing"
+
+	"baymax/rpc/registry"
+	"baymax/rpc/server"
+	"time"
 )
 
 func TestSelector(t *testing.T) {
 
-	server = NewServer(
-		Name("RpcTest"),
-		ConsulAddress("127.0.0.1:8500"))
+	server := server.NewServer(
+		server.ConsulAddress("127.0.0.1:8500"),
+	)
 
-	server.Handle("Arith", new(Arith))
+	server.Handle("Arith2", new(Arith))
 	server.Registry.Init()
 	server.Start()
 	server.Register()
@@ -19,12 +23,19 @@ func TestSelector(t *testing.T) {
 		server.Deregister()
 	}()
 
-	selector := NewSelector(ConsulAddress("127.0.0.1:8500"))
+	selector := registry.NewSelector(registry.ConsulAddress("127.0.0.1:8500"))
 
-	client, err := selector.Select("Arith")
+	next, err := selector.Select("Arith2")
 	if err != nil {
 		t.Errorf("Select: expected no error but got string %q", err.Error())
 	}
+
+	node, err := next()
+	if err != nil {
+		t.Errorf("Select: expected no error but got string %q", err.Error())
+	}
+
+	client := NewDirectClient("tcp", node.Address, time.Second*5)
 
 	args := &Args{7, 8}
 	reply := new(Reply)

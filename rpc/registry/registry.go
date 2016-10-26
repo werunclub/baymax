@@ -1,11 +1,11 @@
 package registry
 
 import (
-	"strconv"
 	"time"
 
 	"github.com/hashicorp/consul/api"
 	"github.com/pborman/uuid"
+	"strconv"
 )
 
 type Node struct {
@@ -34,6 +34,8 @@ type ConsulRegistry struct {
 	client         *api.Client
 	Services       []string
 	UpdateInterval time.Duration
+
+	CheckEnable bool
 }
 
 func NewConsulRegistry() *ConsulRegistry {
@@ -60,16 +62,24 @@ func (c *ConsulRegistry) Close() {
 
 // Register handles registering event.
 func (c *ConsulRegistry) Register(node *Node) (err error) {
+
+	check := api.AgentServiceCheck{}
+
+	if c.CheckEnable {
+		check = api.AgentServiceCheck{
+			TTL:    strconv.Itoa(int(c.UpdateInterval.Seconds())) + "s",
+			Status: api.HealthPassing,
+			TCP:    node.Address,
+		}
+	}
+
 	service := &api.AgentServiceRegistration{
 		ID:      node.Id,
 		Name:    node.Name,
 		Address: node.Address,
-		//Tags:    [1]string{node.Version},
-		Check: &api.AgentServiceCheck{
-			TTL:    strconv.Itoa(int(c.UpdateInterval.Seconds())) + "s",
-			Status: api.HealthPassing,
-			TCP:    node.Address,
-		},
+		Port:    node.Port,
+		Tags:    []string{node.Version},
+		Check:   &check,
 	}
 	agent := c.client.Agent()
 	err = agent.ServiceRegister(service)
@@ -115,10 +125,12 @@ func (c *ConsulRegistry) GetService(name string) ([]*Node, error) {
 
 		// address is service address
 		address := s.Service.Address
+
 		node := &Node{
 			Id:      id,
 			Name:    name,
 			Address: address,
+			Port:    s.Service.Port,
 		}
 		nodes = append(nodes, node)
 	}

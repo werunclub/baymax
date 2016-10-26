@@ -158,7 +158,9 @@ func (s *Server) Register() error {
 			Id:       s.opts.Namespace + name + "@" + addr + ":" + strconv.Itoa(port),
 			Name:     s.opts.Namespace + name,
 			Address:  s.opts.RpcProtocol + "@" + addr + ":" + strconv.Itoa(port),
+			Port:     port,
 			Metadata: config.Metadata,
+			Version:  "1.0",
 		}
 
 		// 注册服务
