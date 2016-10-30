@@ -144,12 +144,15 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 
 		// 调用rpc
 		if err := c.call(network, address, method, args, reply); err != nil {
+
+			nodes, _ := c.Selector.GetNodes(c.getServiceName())
+
 			log.SourcedLogrus().WithField("retry", i).
 				WithField("network", network).
 				WithField("address", address).
 				WithField("method", method).
 				WithField("args", args).
-				WithField("servers", c.Selector.GetNodes(c.getServiceName())).
+				WithField("servers", nodes).
 				WithError(err).Errorf("call err %d times", i)
 
 			if err == registry.ErrConnectIsLost {
