@@ -143,7 +143,7 @@ func (s *ConsulClientSelector) Select(options ...interface{}) (Next, error) {
 		return nil, ErrNoneAvailable
 	}
 
-	return RoundRobin(s.Servers), nil
+	return Random(s.Servers), nil
 }
 
 // fixme: 是否可靠
