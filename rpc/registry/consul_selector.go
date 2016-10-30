@@ -48,6 +48,8 @@ type ConsulClientSelector struct {
 	HashServiceAndArgs helpers.HashServiceAndArgs
 	serviceName        string
 
+	registry ConsulRegistry
+
 	sync.RWMutex
 }
 
@@ -62,7 +64,8 @@ func NewConsulClientSelector(consulAddress string, serviceName string, sessionTi
 		SelectMode:     sm,
 		timeout:        timeout,
 		rnd:            rand.New(rand.NewSource(time.Now().UnixNano())),
-		serviceName:    serviceName}
+		serviceName:    serviceName,
+	}
 
 	selector.init()
 	return selector
@@ -123,6 +126,13 @@ func (s *ConsulClientSelector) pullServers() {
 	s.RUnlock()
 }
 
+// CheckFail sets check fail
+func (c *ConsulClientSelector) CheckFail(nodeId string) error {
+	agent := c.client.Agent()
+	id := nodeId
+	return agent.UpdateTTL("service:"+id, "", api.HealthCritical)
+}
+
 // 从已有服务器列表中选择服务器
 func (s *ConsulClientSelector) Select(options ...interface{}) (Next, error) {
 
@@ -146,6 +156,9 @@ func (s *ConsulClientSelector) Mark(nodeId string, err error) {
 			index = i
 		}
 	}
+
+	// 标记不可用
+	s.CheckFail(nodeId)
 
 	if index >= 0 {
 		s.RLock()
