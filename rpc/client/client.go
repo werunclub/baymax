@@ -149,6 +149,7 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 				WithField("address", address).
 				WithField("method", method).
 				WithField("args", args).
+				WithField("servers", c.Selector.GetNodes(c.getServiceName())).
 				WithError(err).Errorf("call err %d times", i)
 
 			if err == registry.ErrConnectIsLost {
