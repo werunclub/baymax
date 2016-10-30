@@ -59,7 +59,6 @@ func (s *Selector) AddServices(serviceNames ...string) {
 }
 
 func (s *Selector) GetNodes(serviceName string) ([]*Node, error) {
-
 	selector, err := s.getSelector(serviceName)
 	if err != nil {
 		return nil, err
@@ -99,7 +98,6 @@ func (s *Selector) getSelector(serviceName string) (*ConsulClientSelector, error
 
 // 选择一个服务器,并创建客户端
 func (s *Selector) Select(serviceName string) (Next, error) {
-
 	selector, err := s.getSelector(serviceName)
 	if err != nil {
 		return nil, err

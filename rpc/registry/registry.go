@@ -137,7 +137,6 @@ func (c *ConsulRegistry) GetService(name string) ([]*Node, error) {
 			Id:      id,
 			Name:    name,
 			Address: address,
-			Port:    s.Service.Port,
 		}
 		nodes = append(nodes, node)
 	}
