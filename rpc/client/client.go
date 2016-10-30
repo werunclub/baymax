@@ -103,12 +103,13 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 	if err != nil && err == registry.ErrNotFound {
 		log.SourcedLogrus().WithField("method", method).
 			WithField("service", c.getServiceName()).
-			WithError(err).Debugf("rpc service not found")
+			WithError(err).Errorf("rpc service not found")
+
 		return errors.Parse(errors.NotFound(err.Error()).Error())
 	} else if err != nil {
 		log.SourcedLogrus().WithField("method", method).
 			WithField("service", c.getServiceName()).
-			WithError(err).Debugf("rpc call fail")
+			WithError(err).Errorf("rpc call fail")
 
 		return errors.Parse(errors.InternalServerError(err.Error()).Error())
 	}
@@ -148,7 +149,7 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 				WithField("address", address).
 				WithField("method", method).
 				WithField("args", args).
-				WithError(err).Debugf("call err %d times", i)
+				WithError(err).Errorf("call err %d times", i)
 
 			if err == registry.ErrConnectIsLost {
 				c.Selector.Mark(c.ServiceName, node.Id, err)
@@ -181,7 +182,8 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 
 				// ErrShutdown ErrNotFound ErrNoneAvailable 需要重试的错误
 				// 其它错误直接返回
-				log.SourcedLogrus().WithField("method", method).WithError(err).Debugf("rpc call got error")
+				log.SourcedLogrus().WithField("method", method).
+					WithError(err).Errorf("rpc call got error")
 				return errors.Parse(err.Error())
 			}
 
@@ -190,7 +192,8 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 	}
 
 	if gerr != nil && gerr.Error() != "" {
-		log.SourcedLogrus().WithField("method", method).WithError(gerr).Debugf("rpc call got system error")
+		log.SourcedLogrus().WithField("method", method).
+			WithError(gerr).Errorf("rpc call got system error")
 		return errors.Parse(gerr.Error())
 	}
 	return nil
