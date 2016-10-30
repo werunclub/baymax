@@ -1,7 +1,6 @@
 package registry
 
 import (
-	"net/rpc"
 	"time"
 
 	"github.com/go-errors/errors"
@@ -10,6 +9,7 @@ import (
 var (
 	ErrNotFound      = errors.New("not found")
 	ErrNoneAvailable = errors.New("none available")
+	ErrConnectIsLost = errors.New("connect is lost")
 )
 
 // Next is a function that returns the next node
@@ -98,13 +98,13 @@ func (s *Selector) Select(serviceName string) (Next, error) {
 	return selector.Select()
 }
 
-// TODO: 标记服务器不可用
-func (s *Selector) Mark(serviceName string, nodeId string, err error) {
-
-	selector, err := s.getSelector(serviceName)
-	if err != nil {
-		return nil, err
+// fixme: 是否可靠
+func (s *Selector) Mark(serviceName string, nodeId string, err error) error {
+	selector, gerr := s.getSelector(serviceName)
+	if gerr != nil {
+		return gerr
 	}
 
 	selector.Mark(nodeId, err)
+	return nil
 }
