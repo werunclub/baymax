@@ -15,6 +15,7 @@ type Node struct {
 	Port     int
 	Version  string
 	Metadata map[string]string `json:"metadata"`
+	Passing  bool
 }
 
 func NewNode(name, address, version string) *Node {

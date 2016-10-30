@@ -14,6 +14,10 @@ import (
 	"strings"
 )
 
+var (
+	ErrRpcConnectIsLost = fmt.Errorf("rpc server is lost")
+)
+
 // Client represents a RPC client.
 type Client struct {
 	opts Options
@@ -32,7 +36,7 @@ func NewClient(serviceName string, opts ...Option) *Client {
 
 	options := newOptions(opts...)
 
-	return &Client{
+	client := Client{
 		opts: options,
 		pool: newPool(options.PoolSize, options.PoolTTL),
 
@@ -40,6 +44,11 @@ func NewClient(serviceName string, opts ...Option) *Client {
 		Selector:    registry.NewSelector(registry.ConsulAddress(options.ConsulAddress)),
 		Retries:     3,
 	}
+
+	// 初始化选择器
+	client.Selector.AddServices(client.getServiceName())
+
+	return &client
 }
 
 //　完整名称:　名称空间+名称
@@ -63,7 +72,7 @@ func (c *Client) call(network, address, method string, args interface{}, reply i
 	conn, e := c.pool.Dial(network, address, c.opts.ConnTimeout)
 	if e != nil {
 		log.SourcedLogrus().WithError(e).Errorf("rpc connect error")
-		return e
+		return ErrRpcConnectIsLost
 	}
 
 	err := conn.Call(method, args, reply)
@@ -138,7 +147,9 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 
 		// 调用rpc
 		if err := c.call(network, address, method, args, reply); err != nil {
-			//c.Selector.Mark(c.ServiceName, network, address, err)
+			if err == ErrRpcConnectIsLost {
+				c.Selector.Mark(c.ServiceName, network, node.Id, err)
+			}
 			return err
 		}
 		return nil
@@ -162,13 +173,15 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 				err != registry.ErrNotFound &&
 				err != registry.ErrNoneAvailable &&
 				err != io.EOF &&
-				err != io.ErrUnexpectedEOF {
+				err != io.ErrUnexpectedEOF &&
+				err != ErrRpcConnectIsLost {
 
 				// ErrShutdown ErrNotFound ErrNoneAvailable 需要重试的错误
 				// 其它错误直接返回
 				log.SourcedLogrus().WithField("method", method).WithError(err).Debugf("rpc call got error")
 				return errors.Parse(err.Error())
 			}
+
 			gerr = err
 		}
 	}
