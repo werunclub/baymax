@@ -144,7 +144,7 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 		// 调用rpc
 		if err := c.call(network, address, method, args, reply); err != nil {
 			if err == registry.ErrConnectIsLost {
-				c.Selector.Mark(c.ServiceName, network, node.Id, err)
+				c.Selector.Mark(c.ServiceName, node.Id, err)
 			}
 			return err
 		}

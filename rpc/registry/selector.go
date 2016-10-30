@@ -61,13 +61,14 @@ func (s *Selector) AddServices(serviceNames ...string) {
 // 添加一个服务
 // 选择器会定时自动从注册服务器获取可用服务器列表
 func (s *Selector) addService(serviceName string) {
-	_, ok := s.selectors[serviceName]
-	if !ok {
-		s.selectors[serviceName] = NewConsulClientSelector(s.opts.ConsulAddress,
+	if _, ok := s.selectors[serviceName]; !ok {
+		s.selectors[serviceName] = NewConsulClientSelector(
+			s.opts.ConsulAddress,
 			serviceName,
 			s.sessionTimeout,
 			s.SelectMode,
-			s.timeout)
+			s.timeout,
+		)
 	}
 }
 
