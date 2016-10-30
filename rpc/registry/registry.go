@@ -71,11 +71,13 @@ func (c *ConsulRegistry) Register(node *Node) (err error) {
 			TTL:    strconv.Itoa(int(c.UpdateInterval.Seconds())) + "s",
 			Status: api.HealthPassing,
 			TCP:    node.Address,
+			DeregisterCriticalServiceAfter: "1m",
 		}
 	} else {
 		check = api.AgentServiceCheck{
 			TTL:    strconv.Itoa(int(c.UpdateInterval.Seconds())) + "s",
 			Status: api.HealthPassing,
+			DeregisterCriticalServiceAfter: "1m",
 		}
 	}
 
