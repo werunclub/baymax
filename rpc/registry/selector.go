@@ -84,7 +84,6 @@ func (s *Selector) addService(serviceName string) {
 
 // 获取或新建一个选择器
 func (s *Selector) getSelector(serviceName string) (*ConsulClientSelector, error) {
-
 	selector, ok := s.selectors[serviceName]
 	if !ok {
 		s.addService(serviceName)
