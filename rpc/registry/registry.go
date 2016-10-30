@@ -72,6 +72,11 @@ func (c *ConsulRegistry) Register(node *Node) (err error) {
 			Status: api.HealthPassing,
 			TCP:    node.Address,
 		}
+	} else {
+		check = api.AgentServiceCheck{
+			TTL:    strconv.Itoa(int(c.UpdateInterval.Seconds())) + "s",
+			Status: api.HealthPassing,
+		}
 	}
 
 	service := &api.AgentServiceRegistration{
