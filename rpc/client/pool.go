@@ -37,7 +37,7 @@ func (p *pool) dialTcp(addr string) (*rpc.Client, error) {
 		err  error
 	)
 
-	conn, err = net.Dial("tcp", addr)
+	conn, err = net.DialTimeout("tcp", addr, time.Second*5)
 	if err != nil {
 		return nil, err
 	}
