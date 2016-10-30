@@ -15,9 +15,9 @@ type SelectMode int
 
 const (
 	RandomSelect SelectMode = iota
-	RoundRobin
-	LeastActive
-	ConsistentHash
+	RoundRobinSelect
+	LeastActiveSelect
+	ConsistentHashSeelct
 )
 
 var selectModeStrs = [...]string{
@@ -47,8 +47,6 @@ type ConsulClientSelector struct {
 	len                int
 	HashServiceAndArgs helpers.HashServiceAndArgs
 	serviceName        string
-
-	registry ConsulRegistry
 
 	sync.RWMutex
 }
@@ -116,6 +114,7 @@ func (s *ConsulClientSelector) pullServers() {
 			Id:      id,
 			Name:    s.serviceName,
 			Address: address,
+			Port:    r.Service.Port,
 		}
 		nodes = append(nodes, node)
 	}
@@ -144,10 +143,10 @@ func (s *ConsulClientSelector) Select(options ...interface{}) (Next, error) {
 		return nil, ErrNoneAvailable
 	}
 
-	return Random(s.Servers), nil
+	return RoundRobin(s.Servers), nil
 }
 
-// TODO: 标记出错服务器
+// fixme: 是否可靠
 func (s *ConsulClientSelector) Mark(nodeId string, err error) {
 
 	index := -1
