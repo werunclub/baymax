@@ -129,7 +129,7 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 		}
 
 		address := node.Address
-		if node.Port > 0 {
+		if !strings.Contains(address, ":") && node.Port > 0 {
 			address = fmt.Sprintf("%s:%d", address, node.Port)
 		}
 
