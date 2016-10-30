@@ -99,7 +99,12 @@ func (s *Selector) Select(serviceName string) (Next, error) {
 }
 
 // TODO: 标记服务器不可用
-func (s *Selector) Mark(serviceName string, address string, err error) {
-	if err == rpc.ErrShutdown {
+func (s *Selector) Mark(serviceName string, nodeId string, err error) {
+
+	selector, err := s.getSelector(serviceName)
+	if err != nil {
+		return nil, err
 	}
+
+	selector.Mark(nodeId, err)
 }

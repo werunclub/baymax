@@ -2,6 +2,7 @@ package registry
 
 import (
 	"math/rand"
+	"sync"
 	"time"
 
 	"github.com/hashicorp/consul/api"
@@ -46,6 +47,8 @@ type ConsulClientSelector struct {
 	len                int
 	HashServiceAndArgs helpers.HashServiceAndArgs
 	serviceName        string
+
+	sync.RWMutex
 }
 
 // NewConsulClientSelector creates a ConsulClientSelector
@@ -94,6 +97,7 @@ func (s *ConsulClientSelector) pullServers() {
 
 	var nodes []*Node
 
+	s.RLock()
 	for _, r := range rsp {
 		if r.Service.Service != s.serviceName {
 			continue
@@ -115,6 +119,8 @@ func (s *ConsulClientSelector) pullServers() {
 
 	s.Servers = nodes
 	s.len = len(s.Servers)
+
+	s.RUnlock()
 }
 
 // 从已有服务器列表中选择服务器
@@ -133,4 +139,17 @@ func (s *ConsulClientSelector) Select(options ...interface{}) (Next, error) {
 
 // TODO: 标记出错服务器
 func (s *ConsulClientSelector) Mark(nodeId string, err error) {
+
+	index := -1
+	for i, server := range s.Servers {
+		if server.Id == nodeId {
+			index = i
+		}
+	}
+
+	if index >= 0 {
+		s.RLock()
+		s.Servers = append(s.Servers[:index], s.Servers[index+1:]...)
+		s.RUnlock()
+	}
 }
