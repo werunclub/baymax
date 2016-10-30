@@ -58,6 +58,16 @@ func (s *Selector) AddServices(serviceNames ...string) {
 	}
 }
 
+func (s *Selector) GetNodes(serviceName string) ([]*Node, error) {
+
+	selector, err := s.getSelector(serviceName)
+	if err != nil {
+		return nil, err
+	}
+
+	return selector.Servers, nil
+}
+
 // 添加一个服务
 // 选择器会定时自动从注册服务器获取可用服务器列表
 func (s *Selector) addService(serviceName string) {
