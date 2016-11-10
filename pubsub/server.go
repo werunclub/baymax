@@ -69,6 +69,8 @@ func (s *Server) Register() error {
 	for sb, _ := range s.subscribers {
 		handler := s.createSubHandler(sb)
 		var opts []broker.SubscribeOption
+
+		opts = append(opts, broker.DisableAutoAck())
 		if queue := sb.Options().Queue; len(queue) > 0 {
 			opts = append(opts, broker.Queue(queue))
 		}

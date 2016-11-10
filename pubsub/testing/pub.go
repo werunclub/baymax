@@ -7,7 +7,6 @@ import (
 	"golang.org/x/net/context"
 
 	"baymax/pubsub"
-	"time"
 )
 
 type Message struct {
@@ -17,9 +16,9 @@ type Message struct {
 // publishes a message
 func pub(i int) {
 
-	client := pubsub.NewClient("127.0.0.1:4150")
+	client := pubsub.NewClient("127.0.0.1:4161")
 
-	msg := client.NewPublication("go.testing.topic.bad", Message{
+	msg := client.NewPublication("go.testing.topic.good", Message{
 		Say: fmt.Sprintf("%d", i),
 	})
 
@@ -41,6 +40,6 @@ func pub(i int) {
 func main() {
 	fmt.Println("\n--- Publisher example ---\n")
 	for i := 0; i < 1; i++ {
-		pub(time.Now().Second())
+		pub(i)
 	}
 }

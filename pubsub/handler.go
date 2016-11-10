@@ -11,12 +11,19 @@ type Subscriber interface {
 }
 
 type SubscriberOptions struct {
-	Queue string
+	Queue   string
+	AutoAck bool
 }
 
 // Shared queue name distributed messages across subscribers
 func SubscriberQueue(n string) SubscriberOption {
 	return func(o *SubscriberOptions) {
 		o.Queue = n
+	}
+}
+
+func DisableAutoAck() SubscriberOption {
+	return func(o *SubscriberOptions) {
+		o.AutoAck = false
 	}
 }

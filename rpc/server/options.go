@@ -9,7 +9,7 @@ import (
 var (
 	DefaultAddress       = ":0"
 	DefaultName          = "go-server"
-	DefaultNamespace     = "go.srv."
+	DefaultNamespace     = "go-srv-"
 	DefaultProtocol      = "tcp"
 	DefaultVersion       = "1.0.0"
 	DefaultConsulAddress = "127.0.0.1:8500"
@@ -106,7 +106,7 @@ func Name(n string) Option {
 // 名称空间
 func Namespace(n string) Option {
 	return func(o *Options) {
-		o.Namespace = n + "."
+		o.Namespace = n + "-"
 	}
 }
 
