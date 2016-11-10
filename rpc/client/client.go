@@ -109,7 +109,7 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 	} else if err != nil {
 		log.SourcedLogrus().WithField("method", method).
 			WithField("service", c.getServiceName()).
-			WithError(err).Errorf("rpc call fail")
+			WithError(err).Errorf("get service nodes fail")
 
 		return errors.Parse(errors.InternalServerError(err.Error()).Error())
 	}

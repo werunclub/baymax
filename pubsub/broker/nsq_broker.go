@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/Sirupsen/logrus"
-	"github.com/nsqio/go-nsq"
+	"github.com/club-codoon/go-nsq"
 	"github.com/pborman/uuid"
 	"golang.org/x/net/context"
 )
@@ -23,6 +23,7 @@ type nsqBroker struct {
 
 	sync.Mutex
 	running bool
+	d       *nsq.Driver
 	p       []*nsq.Producer
 	c       []*nsqSubscriber
 }
@@ -77,17 +78,9 @@ func (n *nsqBroker) Connect() error {
 		return nil
 	}
 
-	var producers []*nsq.Producer
-
 	// create producers
-	for _, addr := range n.addrs {
-		p, err := nsq.NewProducer(addr, n.config)
-		if err != nil {
-			return err
-		}
-
-		producers = append(producers, p)
-	}
+	n.d = nsq.NewProducerDriver(n.config)
+	n.d.ConnectToNSQLookupds(n.addrs)
 
 	// create consumers
 	for _, c := range n.c {
@@ -105,14 +98,13 @@ func (n *nsqBroker) Connect() error {
 
 		c.c = cm
 
-		//err = c.c.ConnectToNSQLookupds(n.addrs)
-		err = c.c.ConnectToNSQDs(n.addrs)
+		err = c.c.ConnectToNSQLookupds(n.addrs)
+		//err = c.c.ConnectToNSQDs(n.addrs)
 		if err != nil {
 			return err
 		}
 	}
 
-	n.p = producers
 	n.running = true
 	return nil
 }
@@ -126,9 +118,7 @@ func (n *nsqBroker) Disconnect() error {
 	}
 
 	// stop the producers
-	for _, p := range n.p {
-		p.Stop()
-	}
+	n.d.Stop()
 
 	// stop the consumers
 	for _, c := range n.c {
@@ -136,8 +126,8 @@ func (n *nsqBroker) Disconnect() error {
 
 		// disconnect from all nsq brokers
 		for _, addr := range n.addrs {
-			c.c.DisconnectFromNSQD(addr)
-			//c.c.DisconnectFromNSQLookupd(addr)
+			//c.c.DisconnectFromNSQD(addr)
+			c.c.DisconnectFromNSQLookupd(addr)
 		}
 	}
 
@@ -147,13 +137,11 @@ func (n *nsqBroker) Disconnect() error {
 }
 
 func (n *nsqBroker) Publish(topic string, message *Message, opts ...PublishOption) error {
-	p := n.p[rand.Int()%len(n.p)]
-
 	b, err := json.Marshal(message)
 	if err != nil {
 		return err
 	}
-	return p.Publish(topic, b)
+	return n.d.Publish(topic, b)
 }
 
 func (n *nsqBroker) Subscribe(topic string, handler Handler, opts ...SubscribeOption) (Subscriber, error) {
@@ -204,13 +192,12 @@ func (n *nsqBroker) Subscribe(topic string, handler Handler, opts ...SubscribeOp
 			m:     m,
 			nm:    nm,
 		})
-
 	})
 
 	c.AddConcurrentHandlers(h, concurrency)
 
-	err = c.ConnectToNSQDs(n.addrs)
-	//err = c.ConnectToNSQLookupds(n.addrs)
+	//err = c.ConnectToNSQDs(n.addrs)
+	err = c.ConnectToNSQLookupds(n.addrs)
 	if err != nil {
 		return nil, err
 	}
@@ -268,7 +255,7 @@ func NewNsqBroker(opts ...Option) Broker {
 	}
 
 	if len(cAddrs) == 0 {
-		cAddrs = []string{"127.0.0.1:4150"}
+		cAddrs = []string{"127.0.0.1:4161"}
 	}
 
 	return &nsqBroker{

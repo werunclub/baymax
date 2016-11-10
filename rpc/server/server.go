@@ -160,7 +160,7 @@ func (s *Server) Register() error {
 			Address:  s.opts.RpcProtocol + "@" + addr + ":" + strconv.Itoa(port),
 			Port:     port,
 			Metadata: config.Metadata,
-			Version:  "1.0",
+			Version:  "1",
 		}
 
 		// 注册服务

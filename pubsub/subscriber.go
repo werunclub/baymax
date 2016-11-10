@@ -34,7 +34,10 @@ type subscriber struct {
 }
 
 func newSubscriber(topic string, sub interface{}, opts ...SubscriberOption) Subscriber {
-	var options SubscriberOptions
+	options := SubscriberOptions{
+		AutoAck: true,
+	}
+
 	for _, o := range opts {
 		o(&options)
 	}
@@ -149,6 +152,8 @@ func (s *Server) createSubHandler(sb *subscriber) broker.Handler {
 		}
 		ctx := metadata.NewContext(context.Background(), hdr)
 
+		done := make(chan bool, len(sb.handlers))
+
 		for i := 0; i < len(sb.handlers); i++ {
 			handler := sb.handlers[i]
 
@@ -177,7 +182,7 @@ func (s *Server) createSubHandler(sb *subscriber) broker.Handler {
 				return err
 			}
 
-			fn := func(ctx context.Context, msg *publication) error {
+			fn := func(ctx context.Context, msg *publication, done chan bool) error {
 				var vals []reflect.Value
 				if sb.typ.Kind() != reflect.Func {
 					vals = append(vals, sb.rcvr)
@@ -185,7 +190,6 @@ func (s *Server) createSubHandler(sb *subscriber) broker.Handler {
 				if handler.ctxType != nil {
 					vals = append(vals, reflect.ValueOf(ctx))
 				}
-
 				vals = append(vals, reflect.ValueOf(msg.Message()))
 
 				returnValues := handler.method.Call(vals)
@@ -194,17 +198,40 @@ func (s *Server) createSubHandler(sb *subscriber) broker.Handler {
 						WithField("msg", msg).
 						WithError(err.(error)).
 						Errorf("call msg handler fail")
-
+					done <- false
 					return err.(error)
 				}
+				done <- true
 				return nil
 			}
 
 			go fn(ctx, &publication{
 				topic:   sb.topic,
 				message: req.Interface(),
-			})
+			}, done)
 		}
+
+		var (
+			finished int
+			failures int
+		)
+
+		for {
+			success := <-done
+			finished++
+			if !success {
+				failures++
+			}
+
+			if finished == len(sb.handlers) {
+				break
+			}
+		}
+
+		if failures == 0 && sb.opts.AutoAck {
+			return p.Ack()
+		}
+
 		return nil
 	}
 }

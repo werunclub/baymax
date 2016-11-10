@@ -5,7 +5,7 @@ import (
 )
 
 var (
-	DefaultNamespace     = "go.srv."
+	DefaultNamespace     = "go-srv-"
 	DefaultConsulAddress = "127.0.0.1:8500"
 	DefaultPoolSize      = 100
 )
@@ -19,6 +19,9 @@ type Options struct {
 
 	// Consul地址用于注册服务默认
 	ConsulAddress string
+
+	// 会话时长
+	SessionTimeout time.Duration
 
 	// 连接超时时长
 	ConnTimeout time.Duration
@@ -46,6 +49,10 @@ func newOptions(opt ...Option) Options {
 		opts.ConsulAddress = DefaultConsulAddress
 	}
 
+	if opts.SessionTimeout == 0 {
+		opts.SessionTimeout = time.Second * 30
+	}
+
 	if opts.ConnTimeout == 0 {
 		opts.ConnTimeout = time.Second * 5
 	}
@@ -64,7 +71,7 @@ func newOptions(opt ...Option) Options {
 // 名称空间
 func Namespace(n string) Option {
 	return func(o *Options) {
-		o.Namespace = n + "."
+		o.Namespace = n + "-"
 	}
 }
 

@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"time"
 
 	"golang.org/x/net/context"
 
@@ -15,8 +14,6 @@ type Message struct {
 }
 
 func Handler(ctx context.Context, msg *Message) error {
-	//log.Print("rev:", msg.Say)
-	time.Sleep(time.Second * 10)
 	log.Print("done:", msg.Say)
 	return nil
 }
@@ -36,7 +33,7 @@ func (SubHandler) Bad2Handler(ctx context.Context, msg *Message) error {
 
 func main() {
 
-	server := pubsub.NewServer("127.0.0.1:4150")
+	server := pubsub.NewServer("127.0.0.1:4161")
 
 	queueName := uuid.NewV4().String()
 	var err error
@@ -67,8 +64,5 @@ func main() {
 	//signal.Notify(ch, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL)
 	//fmt.Printf("Received signal %s", <-ch)
 
-	select {
-	case <-server.Exit:
-	}
-
+	<-server.Exit
 }
