@@ -6,20 +6,20 @@ import (
 	"strings"
 )
 
-var MysqlAdvancedFunc mysqlAdvancedFunc
+var MysqlUtil mysqlUtil
 
-func NewMysqlAdvancedFunc() mysqlAdvancedFunc {
-	return mysqlAdvancedFunc{}
+func NewMysqlUtil() mysqlUtil {
+	return mysqlUtil{}
 }
 
 func init() {
-	MysqlAdvancedFunc = NewMysqlAdvancedFunc()
+	MysqlUtil = NewMysqlUtil()
 }
 
-type mysqlAdvancedFunc struct{}
+type mysqlUtil struct{}
 
 // insert into ... on duplicate key update ...
-func (mysqlAdvancedFunc) InsertOnDuplicateKeyUpdate(db *gorm.DB, tableName string, insertMap map[string]interface{}, updateMap map[string]interface{}) error {
+func (mysqlUtil) InsertOnDuplicateKeyUpdate(db *gorm.DB, tableName string, insertMap map[string]interface{}, updateMap map[string]interface{}) error {
 	insertColumn := make([]string, 0, len(insertMap))
 	insertPlaceholders := make([]string, 0, len(insertMap))
 	updateExpr := make([]string, 0, len(updateMap))
@@ -60,7 +60,7 @@ MySQL uses the following algorithm for REPLACE (and LOAD DATA ... REPLACE):
 
 	b.Try again to insert the new row into the table
 */
-func (mysqlAdvancedFunc) Replace(db *gorm.DB, tableName string, replaceMap map[string]interface{}) error {
+func (mysqlUtil) Replace(db *gorm.DB, tableName string, replaceMap map[string]interface{}) error {
 	columns := make([]string, 0, len(replaceMap))
 	replacePlaceholders := make([]string, 0, len(replaceMap))
 	args := make([]interface{}, 0, len(replaceMap))
@@ -86,7 +86,7 @@ func (mysqlAdvancedFunc) Replace(db *gorm.DB, tableName string, replaceMap map[s
 insert ignore into ...
 the row won't actually be inserted if it results in a duplicate key
 */
-func (mysqlAdvancedFunc) InsertIgnore(db *gorm.DB, tableName string, insertMap map[string]interface{}) error {
+func (mysqlUtil) InsertIgnore(db *gorm.DB, tableName string, insertMap map[string]interface{}) error {
 	columns := make([]string, 0, len(insertMap))
 	insertPlaceholders := make([]string, 0, len(insertMap))
 	args := make([]interface{}, 0, len(insertMap))
@@ -108,8 +108,8 @@ func (mysqlAdvancedFunc) InsertIgnore(db *gorm.DB, tableName string, insertMap m
 	return nil
 }
 
-// check rows exists by given conditions
-func (mysqlAdvancedFunc) CheckIfRowsExists(db *gorm.DB, tableName string, query string, args ...interface{}) (error, bool) {
+// check rows exists by given conditions (gorm.db.Count)
+func (mysqlUtil) CheckIfRowsExists(db *gorm.DB, tableName string, query string, args ...interface{}) (error, bool) {
 	sqlExpr := fmt.Sprintf(
 		"SELECT EXISTS(SELECT * FROM %v WHERE %v)",
 		tableName,
@@ -122,7 +122,7 @@ func (mysqlAdvancedFunc) CheckIfRowsExists(db *gorm.DB, tableName string, query 
 	return nil, exist
 }
 
-func (mysqlAdvancedFunc) CountRows(db *gorm.DB, tableName string, query string, args ...interface{}) (error, int) {
+func (mysqlUtil) CountRows(db *gorm.DB, tableName string, query string, args ...interface{}) (error, int) {
 	sqlExpr := fmt.Sprintf(
 		"SELECT COUNT(*) FROM %v WHERE %v",
 		tableName,
