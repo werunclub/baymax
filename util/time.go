@@ -61,5 +61,5 @@ func GetWeek(t time.Time) int {
 	wday := int(t.Weekday() + 6) % 7
 	week := (yday - wday + 6) / 7
 
-	return week + 1
+	return week
 }
