@@ -53,3 +53,13 @@ func GetMonthEndDateFromTime(t time.Time) time.Time {
 	}
 	return nextMonthStartDate.AddDate(0, 0, -1)
 }
+
+// Week number of the year (Monday as the first day of the week) as a decimal number [00,53].
+// All days in a new year preceding the first Monday are considered to be in week 0.
+func GetWeek(t time.Time) int {
+	yday := t.YearDay()
+	wday := int(t.Weekday() + 6) % 7
+	week := (yday - wday + 6) / 7
+
+	return week
+}
