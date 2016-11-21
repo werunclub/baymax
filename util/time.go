@@ -58,8 +58,19 @@ func GetMonthEndDateFromTime(t time.Time) time.Time {
 // All days in a new year preceding the first Monday are considered to be in week 0.
 func GetWeek(t time.Time) int {
 	yday := t.YearDay()
-	wday := int(t.Weekday() + 6) % 7
+	wday := int(t.Weekday()+6) % 7
 	week := (yday - wday + 6) / 7
 
 	return week
+}
+
+// return 0-6
+func MergeToPythonWeekDay(weekDay time.Weekday) int {
+	day := 0
+	if weekDay == time.Sunday {
+		day = 7
+	} else {
+		day = int(weekDay)
+	}
+	return day - 1
 }
