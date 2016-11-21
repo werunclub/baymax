@@ -12,12 +12,16 @@ func TimeAccurateToSecond(t time.Time) time.Time {
 	return time.Date(t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second(), 0, t.Location())
 }
 
+func Today() time.Time {
+	return TimeAccurateToDay(time.Now())
+}
+
 func Yesterday() time.Time {
-	return TimeAccurateToDay(time.Now()).AddDate(0, 0, -1)
+	return Today().AddDate(0, 0, -1)
 }
 
 func Tomorrow() time.Time {
-	return TimeAccurateToDay(time.Now()).AddDate(0, 0, 1)
+	return Today().AddDate(0, 0, 1)
 }
 
 func GetWeekStartDateFromTime(t time.Time) time.Time {

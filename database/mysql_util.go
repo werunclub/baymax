@@ -134,3 +134,30 @@ func (mysqlUtil) CountRows(db *gorm.DB, tableName string, query string, args ...
 	}
 	return nil, num
 }
+
+func (mysqlUtil) BatchInsertInto(db *gorm.DB, tableName string, insertColumn []string, insertList []map[string]interface{}) error {
+	insertPlaceholders := make([]string, 0, len(insertList))
+	insertValues := make([]interface{}, 0, len(insertList)*len(insertColumn))
+
+	for _, insertMap := range insertList {
+		insertPlaceholder := make([]string, 0, len(insertColumn))
+		for _, column := range insertColumn {
+			insertPlaceholder = append(insertPlaceholder, "?")
+			insertValues = append(insertValues, insertMap[column])
+		}
+		insertStr := "(" + strings.Join(insertPlaceholder, ",") + ")"
+		insertPlaceholders = append(insertPlaceholders, insertStr)
+	}
+
+	sqlExpr := fmt.Sprintf(
+		"INSERT INTO %v (%v) VALUES %v",
+		tableName,
+		strings.Join(insertColumn, ","),
+		strings.Join(insertPlaceholders, ","),
+	)
+
+	if err := db.Exec(sqlExpr, insertValues...).Error; err != nil {
+		return err
+	}
+	return nil
+}
