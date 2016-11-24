@@ -72,14 +72,6 @@ func (c *Client) call(network, address, method string, args interface{}, reply i
 	}
 
 	err := conn.Call(method, args, reply)
-	if err != nil {
-		log.SourcedLogrus().WithError(err).
-			WithField("server", address).
-			WithField("method", method).
-			WithField("args", args).
-			Errorf("Call rpc method error")
-	}
-
 	conn.Close()
 	//c.pool.release(network, address, conn, err)
 
@@ -186,8 +178,6 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 
 				// ErrShutdown ErrNotFound ErrNoneAvailable 需要重试的错误
 				// 其它错误直接返回
-				log.SourcedLogrus().WithField("method", method).
-					WithError(err).Errorf("rpc call got error")
 				return errors.Parse(err.Error())
 			}
 
