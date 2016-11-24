@@ -186,8 +186,6 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 
 				// ErrShutdown ErrNotFound ErrNoneAvailable 需要重试的错误
 				// 其它错误直接返回
-				log.SourcedLogrus().WithField("method", method).
-					WithError(err).Errorf("rpc call got error")
 				return errors.Parse(err.Error())
 			}
 
