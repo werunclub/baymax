@@ -72,14 +72,6 @@ func (c *Client) call(network, address, method string, args interface{}, reply i
 	}
 
 	err := conn.Call(method, args, reply)
-	if err != nil {
-		log.SourcedLogrus().WithError(err).
-			WithField("server", address).
-			WithField("method", method).
-			WithField("args", args).
-			Errorf("Call rpc method error")
-	}
-
 	conn.Close()
 	//c.pool.release(network, address, conn, err)
 
