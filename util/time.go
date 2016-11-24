@@ -71,7 +71,7 @@ func GetWeek(t time.Time) int {
 	return week
 }
 
-// return 0-6
+// return 0-6 (Monday is 0 and Sunday is 6)
 func MergeToPythonWeekDay(weekDay time.Weekday) int {
 	day := 0
 	if weekDay == time.Sunday {
@@ -80,6 +80,17 @@ func MergeToPythonWeekDay(weekDay time.Weekday) int {
 		day = int(weekDay)
 	}
 	return day - 1
+}
+
+// return 1-7 (Monday is 1 and Sunday is 7)
+func MergeToPythonISOWeekDay(weekDay time.Weekday) int {
+	day := 0
+	if weekDay == time.Sunday {
+		day = 7
+	} else {
+		day = int(weekDay)
+	}
+	return day
 }
 
 // TimeSlice attaches the methods of Interface to []time.Time, sorting in increasing order.
