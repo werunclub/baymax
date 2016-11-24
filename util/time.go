@@ -1,6 +1,9 @@
 package util
 
-import "time"
+import (
+	"sort"
+	"time"
+)
 
 // 精确time.Time到天
 func TimeAccurateToDay(t time.Time) time.Time {
@@ -77,4 +80,34 @@ func MergeToPythonWeekDay(weekDay time.Weekday) int {
 		day = int(weekDay)
 	}
 	return day - 1
+}
+
+// TimeSlice attaches the methods of Interface to []time.Time, sorting in increasing order.
+type TimeSlice []time.Time
+
+func (t TimeSlice) Len() int {
+	return len(t)
+}
+func (t TimeSlice) Less(i, j int) bool {
+	return t[i].Before(t[j])
+}
+func (t TimeSlice) Swap(i, j int) {
+	t[i], t[j] = t[j], t[i]
+}
+
+func (t TimeSlice) Sort() {
+	sort.Sort(t)
+}
+
+func MaxTime(times ...time.Time) time.Time {
+	t := TimeSlice(times)
+	re := sort.Reverse(t)
+	sort.Sort(re)
+	return t[0]
+}
+
+func MinTime(times ...time.Time) time.Time {
+	t := TimeSlice(times)
+	t.Sort()
+	return t[0]
 }
