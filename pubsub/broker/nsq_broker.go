@@ -80,7 +80,9 @@ func (n *nsqBroker) Connect() error {
 
 	// create producers
 	n.d = nsq.NewProducerDriver(n.config)
-	n.d.ConnectToNSQLookupds(n.addrs)
+	if err := n.d.ConnectToNSQLookupds(n.addrs); err != nil {
+		return err
+	}
 
 	// create consumers
 	for _, c := range n.c {
