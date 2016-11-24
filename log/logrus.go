@@ -15,6 +15,11 @@ import (
 func SetLogrus(logLevel, logFormat, logOut string, fluentdEnable bool,
 	fluentdHost string, fluentdPort int, fluentdTag string) error {
 
+	level, err := logrus.ParseLevel(logLevel)
+	if err != nil {
+		level = logrus.InfoLevel
+	}
+
 	if fluentdEnable {
 		hook, err := logrus_fluent.New(fluentdHost, fluentdPort)
 		if err != nil {
@@ -22,17 +27,26 @@ func SetLogrus(logLevel, logFormat, logOut string, fluentdEnable bool,
 		}
 
 		// set custom fire level
-		hook.SetLevels([]logrus.Level{
-			logrus.PanicLevel,
-			logrus.ErrorLevel,
-			logrus.DebugLevel,
-			logrus.WarnLevel,
-			logrus.InfoLevel,
-			logrus.FatalLevel,
-		})
+		if level == logrus.DebugLevel {
+			hook.SetLevels([]logrus.Level{
+				logrus.PanicLevel,
+				logrus.ErrorLevel,
+				logrus.DebugLevel,
+				logrus.WarnLevel,
+				logrus.InfoLevel,
+				logrus.FatalLevel,
+			})
+		} else {
+			hook.SetLevels([]logrus.Level{
+				logrus.PanicLevel,
+				logrus.ErrorLevel,
+				logrus.WarnLevel,
+				logrus.FatalLevel,
+			})
+		}
 
 		// set static tag
-		hook.SetTag(fluentdTag + ".fluentd")
+		hook.SetTag("go." + fluentdTag)
 
 		// ignore field
 		hook.AddIgnore("context")
@@ -43,10 +57,6 @@ func SetLogrus(logLevel, logFormat, logOut string, fluentdEnable bool,
 		logrus.AddHook(hook)
 	}
 
-	level, err := logrus.ParseLevel(logLevel)
-	if err != nil {
-		level = logrus.InfoLevel
-	}
 	logrus.SetLevel(level)
 
 	if err := SetLogOut(logOut); err != nil {

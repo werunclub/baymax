@@ -263,6 +263,9 @@ func (s *Server) RegisterAndRun() error {
 		log.Errorf("rpc server deregister fail")
 	}
 
+	// 暂停5s
+	time.Sleep(time.Second * 5)
+
 	s.Registry.Close()
 	s.Stop()
 
