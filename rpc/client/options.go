@@ -50,7 +50,7 @@ func newOptions(opt ...Option) Options {
 	}
 
 	if opts.SessionTimeout == 0 {
-		opts.SessionTimeout = time.Second * 30
+		opts.SessionTimeout = time.Second * 10
 	}
 
 	if opts.ConnTimeout == 0 {
@@ -62,7 +62,7 @@ func newOptions(opt ...Option) Options {
 	}
 
 	if opts.PoolTTL == 0 {
-		opts.PoolTTL = time.Minute * 30
+		opts.PoolTTL = time.Minute * 20
 	}
 
 	return opts

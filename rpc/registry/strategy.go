@@ -12,7 +12,6 @@ func init() {
 
 // 随机选择器
 func Random(nodes []*Node) Next {
-
 	return func() (*Node, error) {
 		if len(nodes) == 0 {
 			return nil, ErrNoneAvailable

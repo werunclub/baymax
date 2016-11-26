@@ -197,7 +197,6 @@ func (s *Server) Register() error {
 
 // 注销服务
 func (s *Server) Deregister() error {
-
 	if s.ticker != nil {
 		s.ticker.Stop()
 	}
@@ -263,10 +262,10 @@ func (s *Server) RegisterAndRun() error {
 		log.Errorf("rpc server deregister fail")
 	}
 
-	// 暂停5s
-	time.Sleep(time.Second * 5)
-
+	// 暂停10s
 	s.Registry.Close()
+	time.Sleep(time.Second * 20)
+
 	s.Stop()
 
 	log.Printf("Rpc server exit.")
