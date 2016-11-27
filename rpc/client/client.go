@@ -98,6 +98,7 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 			WithError(err).Errorf("rpc service not found")
 
 		return errors.Parse(errors.NotFound(err.Error()).Error())
+
 	} else if err != nil {
 		log.SourcedLogrus().WithField("method", method).
 			WithField("service", c.getServiceName()).
