@@ -1,6 +1,8 @@
 package server
 
 import (
+	"os"
+	"strconv"
 	"time"
 
 	"github.com/pborman/uuid"
@@ -45,6 +47,8 @@ type Options struct {
 
 	// 健康检查开启
 	CheckEnable bool
+
+	StopWait int
 }
 
 func newOptions(opt ...Option) Options {
@@ -91,6 +95,11 @@ func newOptions(opt ...Option) Options {
 
 	if opts.RegisterInterval == 0 {
 		opts.RegisterInterval = time.Second * 10
+	}
+
+	if opts.StopWait <= 0 {
+		wait := os.Getenv("RPC_STOP_WAIT")
+		opts.StopWait, _ = strconv.Atoi(wait)
 	}
 
 	return opts
@@ -170,6 +179,13 @@ func RegisterInterval(t time.Duration) Option {
 func CheckEnable(enable bool) Option {
 	return func(o *Options) {
 		o.CheckEnable = enable
+	}
+}
+
+// 关闭服务前等待时间
+func StopWait(wait int) Option {
+	return func(o *Options) {
+		o.StopWait = wait
 	}
 
 }
