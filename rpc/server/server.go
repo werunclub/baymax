@@ -264,7 +264,10 @@ func (s *Server) RegisterAndRun() error {
 
 	// 暂停10s
 	s.Registry.Close()
-	time.Sleep(time.Second * 20)
+
+	if s.opts.StopWait > 0 {
+		time.Sleep(time.Second * s.opts.StopWait)
+	}
 
 	s.Stop()
 
