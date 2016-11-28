@@ -151,7 +151,7 @@ func (s *ConsulClientSelector) Mark(nodeId string, err error) {
 
 	index := -1
 	for i, server := range s.Servers {
-		if server.Id == nodeId {
+		if server != nil && server.Id == nodeId {
 			index = i
 		}
 	}
