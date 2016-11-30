@@ -71,6 +71,11 @@ func GetWeek(t time.Time) int {
 	return week
 }
 
+// 和主版本的周计算方法匹配
+func GetMainVersionWeek(t time.Time) int {
+	return GetWeek(t) + 1
+}
+
 // return 0-6 (Monday is 0 and Sunday is 6)
 func MergeToPythonWeekDay(weekDay time.Weekday) int {
 	day := 0
