@@ -260,10 +260,13 @@ func NewNsqBroker(opts ...Option) Broker {
 		cAddrs = []string{"127.0.0.1:4161"}
 	}
 
+	config := nsq.NewConfig()
+	config.MaxInFlight = 12
+
 	return &nsqBroker{
 		addrs:  cAddrs,
 		opts:   options,
-		config: nsq.NewConfig(),
+		config: config,
 	}
 }
 
