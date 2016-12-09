@@ -38,6 +38,7 @@ func SetLogrus(logLevel, logFormat, logOut string, fluentdEnable bool,
 			})
 		} else {
 			hook.SetLevels([]logrus.Level{
+				logrus.InfoLevel,
 				logrus.PanicLevel,
 				logrus.ErrorLevel,
 				logrus.WarnLevel,
