@@ -263,12 +263,11 @@ func (s *Server) RegisterAndRun() error {
 	}
 
 	// 暂停10s
-	s.Registry.Close()
-
 	if s.opts.StopWait > 0 {
 		time.Sleep(time.Second * time.Duration(s.opts.StopWait))
 	}
 
+	s.Registry.Close()
 	s.Stop()
 
 	log.Printf("Rpc server exit.")
