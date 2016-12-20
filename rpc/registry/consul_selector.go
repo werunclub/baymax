@@ -2,10 +2,12 @@ package registry
 
 import (
 	"math/rand"
+	"net/http"
 	"sync"
 	"time"
 
 	"github.com/hashicorp/consul/api"
+	"github.com/hashicorp/go-cleanhttp"
 
 	"baymax/rpc/helpers"
 )
@@ -77,6 +79,10 @@ func (s *ConsulClientSelector) init() {
 	if s.consulConfig == nil {
 		s.consulConfig = api.DefaultConfig()
 		s.consulConfig.Address = s.ConsulAddress
+		s.consulConfig.HttpClient = &http.Client{
+			Timeout:   5 * time.Second,
+			Transport: cleanhttp.DefaultPooledTransport(),
+		}
 	}
 	s.client, _ = api.NewClient(s.consulConfig)
 
