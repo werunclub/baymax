@@ -24,7 +24,7 @@ func (e *FieldError) AppendError(err string) {
 }
 
 func (e *FieldError) Error() string {
-	return fmt.Sprintf("invalid agrument `%s`, with errors `%s`", e.Field, strings.Join(e.Errors, ";"))
+	return fmt.Sprintf("invalid agrument `%s`, with errors `%s`", e.JSONField, strings.Join(e.Errors, ";"))
 }
 
 // Validate 校验表单参数; 不支持嵌套的 struct, array, slice
@@ -96,6 +96,17 @@ func ValidateJSONStruct(form interface{}, in map[string]interface{}, out *map[st
 			}
 			//formValue.Elem().Field(i).Set(reflect.ValueOf(value))
 			(*out)[field.Name] = value
+		} else if isRequired(field) {
+			e := &FieldError{Field: field.Name, JSONField: jsonName}
+			e.AppendError("该字段为必填项")
+			return e
+		}
+	}
+
+	if method := formValue.MethodByName("Validate"); method != (reflect.Value{}) {
+		rtnValues := method.Call([]reflect.Value{})
+		if rtn := rtnValues[0].Interface(); rtn != nil {
+			return rtn.(error)
 		}
 	}
 	return nil
@@ -121,6 +132,18 @@ func findValidators(formTyp reflect.Value, field reflect.StructField) *[]reflect
 	}
 
 	return &validators
+}
+
+func isRequired(field reflect.StructField) bool {
+	if tagValidators, ok := field.Tag.Lookup("validator"); ok {
+		_validators := strings.Split(tagValidators, ",")
+		for _, _validator := range _validators {
+			if _validator == "required" {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 /* ========== JSON Form Validator End ============ */
