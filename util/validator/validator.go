@@ -55,6 +55,11 @@ func ValidateJSONStruct(form interface{}, in map[string]interface{}, out *map[st
 		if exist {
 			e := &FieldError{Field: field.Name, JSONField: jsonName}
 
+			if value == nil {
+				e.AppendError("不能为 NoneType")
+				return e
+			}
+
 			//// 1. 先校验数据的原始类型是否相同; 如果类型错误, 立即终止当前字段的校验
 			//lTyp := field.Type
 			//if lTyp.Kind() == reflect.Ptr {
