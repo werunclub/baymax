@@ -185,6 +185,8 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 			gerr = err
 		case <-time.After(c.opts.ConnTimeout):
 			gerr = fmt.Errorf("RPC请求超时(%v)", c.opts.ConnTimeout)
+			log.SourcedLogrus().WithField("method", method).
+				WithError(gerr).Errorf("RPC请求超时")
 		}
 	}
 
