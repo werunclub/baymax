@@ -25,6 +25,7 @@ type ArithAddResp struct {
 
 func (t *Arith) Add(args *Args, reply *Reply) error {
 	log.Info("add")
+	// time.Sleep(11 * time.Second)
 	reply.C = args.A + args.B
 	return nil
 }

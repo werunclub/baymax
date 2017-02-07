@@ -31,13 +31,13 @@ func newPool(size int, ttl time.Duration) *pool {
 }
 
 // 建立连接
-func (p *pool) dialTcp(addr string) (*rpc.Client, error) {
+func (p *pool) dialTcp(addr string, timeout time.Duration) (*rpc.Client, error) {
 	var (
 		conn net.Conn
 		err  error
 	)
 
-	conn, err = net.DialTimeout("tcp", addr, time.Second*5)
+	conn, err = net.DialTimeout("tcp", addr, timeout)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +55,7 @@ func (p *pool) Dial(network, addr string, connTimeout time.Duration) (*rpc.Clien
 	if network == "http" {
 		return p.dialHTTP(addr)
 	} else {
-		return p.dialTcp(addr)
+		return p.dialTcp(addr, connTimeout)
 	}
 }
 

@@ -29,7 +29,6 @@ type Client struct {
 }
 
 func NewClient(serviceName string, opts ...Option) *Client {
-
 	options := newOptions(opts...)
 
 	client := Client{
@@ -156,10 +155,11 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 		return nil
 	}
 
-	ch := make(chan error, c.Retries)
 	var gerr error
 
 	for i := 0; i < c.Retries; i++ {
+
+		ch := make(chan error, 1)
 		go func() {
 			ch <- call(i)
 		}()
@@ -183,6 +183,8 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 			}
 
 			gerr = err
+		case <-time.After(c.opts.ConnTimeout):
+			gerr = fmt.Errorf("RPC请求超时(%v)", c.opts.ConnTimeout)
 		}
 	}
 
