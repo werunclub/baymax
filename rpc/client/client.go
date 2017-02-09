@@ -5,6 +5,7 @@ import (
 	"io"
 	"math"
 	"net/rpc"
+	"os"
 	"sync"
 	"time"
 
@@ -108,11 +109,11 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 
 	call := func(i int) error {
 		// 根据执行序号延迟执行
-		if t, err := backoff(method, i); err != nil {
-			return err
-		} else if t.Seconds() > 0 {
-			time.Sleep(t)
-		}
+		// if t, err := backoff(method, i); err != nil {
+		// 	return err
+		// } else if t.Seconds() > 0 {
+		// 	time.Sleep(t)
+		// }
 
 		// 获取服务地址
 		node, err := next()
@@ -157,6 +158,7 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 
 	var gerr error
 
+	hostname, _ := os.Hostname()
 	for i := 0; i < c.Retries; i++ {
 
 		ch := make(chan error, 1)
@@ -183,13 +185,17 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 			}
 
 			gerr = err
-		case <-time.After(c.opts.ConnTimeout):
-			gerr = fmt.Errorf("RPC请求超时(%v)", c.opts.ConnTimeout)
+		case <-time.After(c.opts.ConnTimeout + time.Second):
+			gerr = fmt.Errorf("RPC请求超时(%v)", c.opts.ConnTimeout+time.Second)
+			log.SourcedLogrus().WithField("method", method).
+				WithField("hostname", hostname).
+				WithError(gerr).Errorf("RPC请求超时")
 		}
 	}
 
 	if gerr != nil && gerr.Error() != "" {
 		log.SourcedLogrus().WithField("method", method).
+			WithField("hostname", hostname).
 			WithError(gerr).Errorf("rpc call got system error")
 		return errors.Parse(gerr.Error())
 	}
