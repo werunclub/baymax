@@ -108,11 +108,11 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 
 	call := func(i int) error {
 		// 根据执行序号延迟执行
-		if t, err := backoff(method, i); err != nil {
-			return err
-		} else if t.Seconds() > 0 {
-			time.Sleep(t)
-		}
+		// if t, err := backoff(method, i); err != nil {
+		// 	return err
+		// } else if t.Seconds() > 0 {
+		// 	time.Sleep(t)
+		// }
 
 		// 获取服务地址
 		node, err := next()
@@ -183,8 +183,8 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 			}
 
 			gerr = err
-		case <-time.After(c.opts.ConnTimeout):
-			gerr = fmt.Errorf("RPC请求超时(%v)", c.opts.ConnTimeout)
+		case <-time.After(c.opts.ConnTimeout + time.Second):
+			gerr = fmt.Errorf("RPC请求超时(%v)", c.opts.ConnTimeout+time.Second)
 			log.SourcedLogrus().WithField("method", method).
 				WithError(gerr).Errorf("RPC请求超时")
 		}
