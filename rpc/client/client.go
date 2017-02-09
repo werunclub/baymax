@@ -5,6 +5,7 @@ import (
 	"io"
 	"math"
 	"net/rpc"
+	"os"
 	"sync"
 	"time"
 
@@ -157,6 +158,7 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 
 	var gerr error
 
+	hostname, _ := os.Hostname()
 	for i := 0; i < c.Retries; i++ {
 
 		ch := make(chan error, 1)
@@ -186,12 +188,14 @@ func (c *Client) Call(method string, args interface{}, reply interface{}) *error
 		case <-time.After(c.opts.ConnTimeout + time.Second):
 			gerr = fmt.Errorf("RPC请求超时(%v)", c.opts.ConnTimeout+time.Second)
 			log.SourcedLogrus().WithField("method", method).
+				WithField("hostname", hostname).
 				WithError(gerr).Errorf("RPC请求超时")
 		}
 	}
 
 	if gerr != nil && gerr.Error() != "" {
 		log.SourcedLogrus().WithField("method", method).
+			WithField("hostname", hostname).
 			WithError(gerr).Errorf("rpc call got system error")
 		return errors.Parse(gerr.Error())
 	}
