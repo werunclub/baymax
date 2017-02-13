@@ -88,6 +88,14 @@ func (s *Server) serveTcp() error {
 				continue
 			}
 
+			// 设置超时时间
+			if s.opts.ReadTimeout > 0 {
+				conn.SetReadDeadline(time.Now().Add(s.opts.ReadTimeout))
+			}
+			if s.opts.WriteTimeout > 0 {
+				conn.SetWriteDeadline(time.Now().Add(s.opts.WriteTimeout))
+			}
+
 			go s.rpcServer.ServeCodec(jsonrpc.NewServerCodec(conn))
 
 			//go func(conn net.Conn) {
