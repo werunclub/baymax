@@ -49,6 +49,9 @@ type Options struct {
 	CheckEnable bool
 
 	StopWait int
+
+	WriteTimeout time.Duration
+	ReadTimeout  time.Duration
 }
 
 func newOptions(opt ...Option) Options {
@@ -100,6 +103,14 @@ func newOptions(opt ...Option) Options {
 	if opts.StopWait <= 0 {
 		wait := os.Getenv("RPC_STOP_WAIT")
 		opts.StopWait, _ = strconv.Atoi(wait)
+	}
+
+	if opts.WriteTimeout <= 0 {
+		opts.WriteTimeout = 5 * time.Second
+	}
+
+	if opts.ReadTimeout <= 0 {
+		opts.ReadTimeout = 5 * time.Second
 	}
 
 	return opts
@@ -187,5 +198,16 @@ func StopWait(wait int) Option {
 	return func(o *Options) {
 		o.StopWait = wait
 	}
+}
 
+func WriteTimeout(timeout time.Duration) Option {
+	return func(o *Options) {
+		o.WriteTimeout = timeout
+	}
+}
+
+func ReadTimeout(timeout time.Duration) Option {
+	return func(o *Options) {
+		o.ReadTimeout = timeout
+	}
 }
