@@ -244,18 +244,18 @@ func (s *Server) RegisterAndRun() error {
 
 	// 启动注册服务
 	if err := s.Registry.Init(); err != nil {
-		log.Fatalf("registry init error: %v", err)
+		log.Panicf("registry init error: %v", err)
 		return err
 	}
 
 	if err := s.Start(); err != nil {
-		log.Fatalf("start error: %v", err)
+		log.Panicf("start error: %v", err)
 		return err
 	}
 
 	// 注册服务
 	if err := s.Register(); err != nil {
-		log.Fatalf("registr error: %v", err)
+		log.Panicf("registr error: %v", err)
 		return err
 	}
 
