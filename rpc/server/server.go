@@ -88,6 +88,14 @@ func (s *Server) serveTcp() error {
 				continue
 			}
 
+			// 设置超时时间
+			if s.opts.ReadTimeout > 0 {
+				conn.SetReadDeadline(time.Now().Add(s.opts.ReadTimeout))
+			}
+			if s.opts.WriteTimeout > 0 {
+				conn.SetWriteDeadline(time.Now().Add(s.opts.WriteTimeout))
+			}
+
 			go s.rpcServer.ServeCodec(jsonrpc.NewServerCodec(conn))
 
 			//go func(conn net.Conn) {
@@ -236,18 +244,18 @@ func (s *Server) RegisterAndRun() error {
 
 	// 启动注册服务
 	if err := s.Registry.Init(); err != nil {
-		log.Fatalf("registry init error: %v", err)
+		log.Panicf("registry init error: %v", err)
 		return err
 	}
 
 	if err := s.Start(); err != nil {
-		log.Fatalf("start error: %v", err)
+		log.Panicf("start error: %v", err)
 		return err
 	}
 
 	// 注册服务
 	if err := s.Register(); err != nil {
-		log.Fatalf("registr error: %v", err)
+		log.Panicf("registr error: %v", err)
 		return err
 	}
 

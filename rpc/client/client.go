@@ -71,8 +71,8 @@ func (c *Client) call(network, address, method string, args interface{}, reply i
 		return registry.ErrConnectIsLost
 	}
 
+	defer conn.Close()
 	err := conn.Call(method, args, reply)
-	conn.Close()
 	//c.pool.release(network, address, conn, err)
 
 	return err
