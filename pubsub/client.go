@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"baymax/pubsub/broker"
+
 	"github.com/micro/go-micro/codec"
 	mj "github.com/micro/go-micro/codec/jsonrpc"
 	"github.com/micro/go-micro/metadata"
@@ -55,4 +56,8 @@ func (c *Client) Publish(ctx context.Context, p publication) error {
 		Header: md,
 		Body:   b.Bytes(),
 	})
+}
+
+func (c *Client) Close() error {
+	return c.broker.Disconnect()
 }
