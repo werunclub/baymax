@@ -1,38 +1,42 @@
-hash: 334b14d0987fe8d4361c0831b6d9a3543003963dedf115c69be63cd36a305b40
-updated: 2016-12-08T15:04:16.046263839+08:00
+hash: 3f6cc5dcefecc35d87796b4918863bd8c0a1f46e8f2286dcf5fb6cd77b3938ab
+updated: 2017-05-24T11:12:24.168001891+08:00
 imports:
 - name: github.com/appleboy/gin-jwt
-  version: 89be89cdc6ee002b5c9b95fb57963ad7e746a82c
+  version: f7347d7c16fc8297bf5b7215b9e4847a5ca05d90
 - name: github.com/club-codoon/go-nsq
   version: 8113779eb9536c03af8bed4b9098e7230edab89f
 - name: github.com/evalphobia/logrus_fluent
   version: 86bb83d119886b935a52194cad48fd01815b0125
 - name: github.com/fluent/fluent-logger-golang
-  version: 28bdb662295c1b7aca09c1a4edbf9430010775a9
+  version: d1deca7ddb1b2d3fdbfaaf15d8a7b4f5feadc461
   subpackages:
   - fluent
 - name: github.com/go-errors/errors
   version: 8fa88b06e5974e97fbf9899a7f86a344bfd1f105
 - name: github.com/hashicorp/consul
-  version: a9455cd4fc2809570ff1855c37d6ffc2449bd42f
+  version: ea2a82b221c3e0a466a4f38ab4e8718ad8c60621
   subpackages:
   - api
 - name: github.com/hashicorp/go-cleanhttp
-  version: ad28ea4487f05916463e2423a55166280e8254b5
+  version: 3573b8b52aa7b37b9358d966a898feb387f62437
+- name: github.com/hashicorp/go-rootcerts
+  version: 6bb64b370b90e7ef1fa532be9e591a81c3493e00
 - name: github.com/hashicorp/serf
-  version: d3a67ab21bc8a4643fa53a3633f2d951dd50c6ca
+  version: 0f963c62b0b008a5342bf18db64a7da04d83ca30
   subpackages:
   - coordinate
 - name: github.com/jinzhu/gorm
   version: 5174cc5c242a728b435ea2be8a2f7f998e15429b
 - name: github.com/jinzhu/inflection
-  version: 74387dc39a75e970e7a3ae6a3386b5bd2e5c5cff
+  version: 1c35d901db3da928c72a72d8458480cc9ade058f
 - name: github.com/micro/go-micro
-  version: 3a1d33f5537c2d4bf62ce7e63c962c5ab087bea9
+  version: a7312f5c7e2c93a1476317ec853fa5b04b00496e
   subpackages:
   - codec
   - codec/jsonrpc
   - metadata
+- name: github.com/mitchellh/go-homedir
+  version: b8bc1bf767474819792c23f32d8286a45736f1c6
 - name: github.com/mreiferson/go-snappystream
   version: 028eae7ab5c4c9e2d1cb4c4ca1e53259bbe7e504
   subpackages:
@@ -42,26 +46,30 @@ imports:
 - name: github.com/philhofer/fwd
   version: 98c11a7a6ec829d672b03833c3d69a7fae1ca972
 - name: github.com/satori/go.uuid
-  version: 879c5887cd475cd7864858769793b2ceb0d44feb
+  version: 5bf94b69c6b68ee1b541973bb8e1144db23a194b
 - name: github.com/Sirupsen/logrus
-  version: 4b6ea7319e214d98c938f12692336f7ca9348d6b
+  version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
 - name: github.com/tinylib/msgp
-  version: ad0ff2e232ad2e37faf67087fb24bf8d04a8ce20
+  version: 1cce05a45012c07001dbfb1679c2f25ac0c189e6
   subpackages:
   - msgp
-- name: go4.org
-  version: 09d86de304dc27e636298361bbfee4ac6ab04f21
-  subpackages:
-  - reflectutil
 - name: golang.org/x/net
   version: f315505cf3349909cdf013ea56690da34e96a451
   subpackages:
   - context
   - http2
 - name: golang.org/x/sys
-  version: 478fcf54317e52ab69f40bb4c7a1520288d7f7ea
+  version: dbc2be9168a660ef302e04b6ff6406de6f967473
   subpackages:
   - unix
+- name: gopkg.in/redis.v5
+  version: a16aeec10ff407b1e7be6dd35797ccf5426ef0f0
+  subpackages:
+  - internal
+  - internal/consistenthash
+  - internal/hashtag
+  - internal/pool
+  - internal/proto
 testImports:
 - name: github.com/davecgh/go-spew
   version: 6d212800a42e8ab5c146b8ace3490ee17e5225f9
