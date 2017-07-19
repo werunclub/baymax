@@ -116,19 +116,26 @@ func AssignLock(key string, duration time.Duration) (bool, error) {
 
 // 通知处理时序
 type Sequence struct {
-	Key   string
-	Value int64
-	Error error
+	Key      string
+	Value    int64
+	Error    error
+	LifeTime time.Duration
 }
 
 func NewSequence(key string) *Sequence {
-	return &Sequence{Key: key}
+	return &Sequence{Key: key, LifeTime: 48 * time.Hour}
 }
 
 func (s *Sequence) Get() int64 {
 	val, err := client.Get(s.Key).Int64()
 	s.Value = val
 	s.Error = err
+
+	if val == 0 && err == nil {
+		s.Set(0)
+		client.Expire(s.Key, s.LifeTime)
+	}
+
 	return val
 }
 
@@ -136,4 +143,3 @@ func (s *Sequence) Set(val int64) {
 	err := client.Set(s.Key, val, 0).Err()
 	s.Error = err
 }
-

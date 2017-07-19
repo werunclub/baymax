@@ -1,5 +1,5 @@
 hash: 3f6cc5dcefecc35d87796b4918863bd8c0a1f46e8f2286dcf5fb6cd77b3938ab
-updated: 2017-05-24T11:12:24.168001891+08:00
+updated: 2017-07-19T15:25:16.126963232+08:00
 imports:
 - name: github.com/appleboy/gin-jwt
   version: f7347d7c16fc8297bf5b7215b9e4847a5ca05d90
@@ -14,7 +14,7 @@ imports:
 - name: github.com/go-errors/errors
   version: 8fa88b06e5974e97fbf9899a7f86a344bfd1f105
 - name: github.com/hashicorp/consul
-  version: ea2a82b221c3e0a466a4f38ab4e8718ad8c60621
+  version: 2c7715154d8d4568524b76d2d4deb7ca6fd1b285
   subpackages:
   - api
 - name: github.com/hashicorp/go-cleanhttp
@@ -22,7 +22,7 @@ imports:
 - name: github.com/hashicorp/go-rootcerts
   version: 6bb64b370b90e7ef1fa532be9e591a81c3493e00
 - name: github.com/hashicorp/serf
-  version: 0f963c62b0b008a5342bf18db64a7da04d83ca30
+  version: bbeddf0b3ab3072a60525afbd6b6f47d33839eee
   subpackages:
   - coordinate
 - name: github.com/jinzhu/gorm
@@ -30,7 +30,7 @@ imports:
 - name: github.com/jinzhu/inflection
   version: 1c35d901db3da928c72a72d8458480cc9ade058f
 - name: github.com/micro/go-micro
-  version: a7312f5c7e2c93a1476317ec853fa5b04b00496e
+  version: 8264e90bce1a035666c12f3cf136ce30757843ff
   subpackages:
   - codec
   - codec/jsonrpc
@@ -44,22 +44,22 @@ imports:
 - name: github.com/pborman/uuid
   version: a97ce2ca70fa5a848076093f05e639a89ca34d06
 - name: github.com/philhofer/fwd
-  version: 98c11a7a6ec829d672b03833c3d69a7fae1ca972
+  version: 1612a298117663d7bc9a760ae20d383413859798
 - name: github.com/satori/go.uuid
   version: 5bf94b69c6b68ee1b541973bb8e1144db23a194b
 - name: github.com/Sirupsen/logrus
-  version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
+  version: e49c59d69b89746796d48156991108c80faf1d7d
 - name: github.com/tinylib/msgp
-  version: 1cce05a45012c07001dbfb1679c2f25ac0c189e6
+  version: b2b6a672cf1e5b90748f79b8b81fc8c5cf0571a1
   subpackages:
   - msgp
 - name: golang.org/x/net
-  version: f315505cf3349909cdf013ea56690da34e96a451
+  version: 5d0d7096b5f2ef7ba83f319c07ef63989a1c6f91
   subpackages:
   - context
   - http2
 - name: golang.org/x/sys
-  version: dbc2be9168a660ef302e04b6ff6406de6f967473
+  version: cd2c276457edda6df7fb04895d3fd6a6add42926
   subpackages:
   - unix
 - name: gopkg.in/redis.v5
@@ -72,15 +72,15 @@ imports:
   - internal/proto
 testImports:
 - name: github.com/davecgh/go-spew
-  version: 6d212800a42e8ab5c146b8ace3490ee17e5225f9
+  version: adab96458c51a58dc1783b3335dcce5461522e75
   subpackages:
   - spew
 - name: github.com/pmezard/go-difflib
-  version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
+  version: 792786c7400a136282c1664665ae0a8db921c6c2
   subpackages:
   - difflib
 - name: github.com/stretchr/testify
-  version: 69483b4bd14f5845b5a1e55bca19e954e827f1d0
+  version: 05e8a0eda380579888eb53c394909df027f06991
   subpackages:
   - assert
   - require
