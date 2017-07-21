@@ -13,3 +13,5 @@ import:
   version: ~v0.1.0
 - package: gopkg.in/redis.v5
   version: ~5.2.9
+- package: github.com/Sirupsen/logrus
+  repo: https://github.com/sirupsen/logrus.git
