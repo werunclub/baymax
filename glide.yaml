@@ -17,8 +17,8 @@ import:
   repo: https://github.com/sirupsen/logrus.git
 - package: golang.org/x/crypto
   repo: https://github.com/golang/crypto.git
-- package: github.com/rpcx-ecosystem/colfer
-  repo: https://github.com/pascaldekloe/colfer.git
+# - package: github.com/rpcx-ecosystem/colfer
+  # repo: https://github.com/pascaldekloe/colfer.git
 - package: github.com/smallnest/rpcx
   version: v2.0
   repo: git@git.in.codoon.com:ClubCodoon/rpcx.git
