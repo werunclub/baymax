@@ -15,3 +15,5 @@ import:
   version: ~5.2.9
 - package: github.com/Sirupsen/logrus
   repo: https://github.com/sirupsen/logrus.git
+- package: golang.org/x/crypto
+  repo: https://github.com/golang/crypto.git
