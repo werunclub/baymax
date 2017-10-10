@@ -28,3 +28,5 @@ import:
   version: v3.2.7
 - package: github.com/ugorji/go
   version: 8c0409fcbb70099c748d71f714529204975f6c3f
+- package: github.com/hashicorp/consul
+  vesion: v0.9.3
