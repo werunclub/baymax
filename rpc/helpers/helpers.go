@@ -6,6 +6,10 @@ import (
 	"net"
 )
 
+const (
+	RPCRath = "/_rpcx__"
+)
+
 var (
 	privateBlocks []*net.IPNet
 )

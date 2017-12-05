@@ -10,26 +10,27 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/rcrowley/go-metrics"
-	"github.com/smallnest/rpcx"
-	"github.com/smallnest/rpcx/codec"
-	"github.com/smallnest/rpcx/plugin"
+	rpcxServer "github.com/smallnest/rpcx/server"
+	plugin "github.com/smallnest/rpcx/serverplugin"
 
 	"baymax/log"
 	"baymax/rpc/helpers"
 )
 
+const (
+	BasePath = "/rpcx"
+)
+
 type Server struct {
 	opts      Options
-	rpcServer *rpcx.Server
+	rpcServer *rpcxServer.Server
 
 	registryConsul *plugin.ConsulRegisterPlugin
-	registryEtcd   *plugin.EtcdV3RegisterPlugin
+	registryEtcd   *plugin.EtcdRegisterPlugin
 
 	Handlers map[string]interface{}
 
-	listener net.Listener
-	Exit     chan bool
+	Exit chan bool
 
 	sync.RWMutex
 	registered bool
@@ -42,42 +43,38 @@ func NewServer(opts ...Option) *Server {
 
 	server := &Server{
 		opts:      options,
-		rpcServer: rpcx.NewServer(),
+		rpcServer: rpcxServer.NewServer(),
 		Handlers:  make(map[string]interface{}),
 
 		Exit: make(chan bool, 1),
 	}
 
-	// 使用 JSON 编码
-	server.rpcServer.ServerCodecFunc = codec.NewJSONRPCServerCodec
-
 	if options.Registry == "etcd" {
-		server.registryEtcd = &plugin.EtcdV3RegisterPlugin{
-			EtcdServers:         options.EtcdAddress,
-			BasePath:            "/rpcx",
-			Metrics:             metrics.NewRegistry(),
-			Services:            make([]string, 0),
-			UpdateIntervalInSec: int64(server.opts.RegisterInterval.Seconds()),
-		}
-
-		server.rpcServer.PluginContainer.Add(server.registryEtcd)
-
-	} else {
-		server.registryConsul = &plugin.ConsulRegisterPlugin{
-			ConsulAddress:  options.ConsulAddress,
+		server.registryEtcd = &plugin.EtcdRegisterPlugin{
+			EtcdServers:    []string{options.EtcdAddress},
+			BasePath:       helpers.RPCRath,
 			UpdateInterval: server.opts.RegisterTTL,
 		}
 
-		server.rpcServer.PluginContainer.Add(server.registryConsul)
+		server.rpcServer.Plugins.Add(server.registryEtcd)
+
+	} else {
+		server.registryConsul = &plugin.ConsulRegisterPlugin{
+			ConsulServers:  []string{options.ConsulAddress},
+			BasePath:       helpers.RPCRath,
+			UpdateInterval: server.opts.RegisterTTL,
+		}
+
+		server.rpcServer.Plugins.Add(server.registryConsul)
 	}
 
-	if options.InfluxDBHost != "" {
-		metrics := plugin.NewMetricsPlugin()
-		metrics.InfluxDB(10e9, options.InfluxDBHost, options.InfluxDBDB,
-			options.InfluxDBUser, options.InfluxDBPass)
+	// if options.InfluxDBHost != "" {
+	// 	metrics := plugin.NewMetricsPlugin()
+	// 	metrics.InfluxDB(10e9, options.InfluxDBHost, options.InfluxDBDB,
+	// 		options.InfluxDBUser, options.InfluxDBPass)
 
-		server.rpcServer.PluginContainer.Add(metrics)
-	}
+	// 	server.rpcServer.Plugins.Add(metrics)
+	// }
 
 	return server
 }
@@ -91,7 +88,7 @@ func (s *Server) setServiceAddress(addr string) {
 }
 
 // Address 服务地址
-func (s *Server) Address() string {
+func (s *Server) Address() net.Addr {
 	return s.rpcServer.Address()
 }
 
@@ -108,7 +105,7 @@ func (s *Server) RegisterName(serviceName string, service interface{}) {
 // Register 将服务注册到服务注册发现服务器
 func (s *Server) Register() error {
 
-	s.opts.Address = s.Address()
+	s.opts.Address = s.Address().String()
 
 	var advt, host string
 	var port int
@@ -140,39 +137,40 @@ func (s *Server) Register() error {
 	s.setServiceAddress(s.opts.Protocol + "@" + addr + ":" + strconv.Itoa(port))
 
 	for name, service := range s.Handlers {
-		s.rpcServer.RegisterName(name, service)
+		s.rpcServer.RegisterName(name, service, "")
 	}
 
 	s.registered = true
 	s.RUnlock()
 
-	if s.opts.Registry == "consul" {
-		// 按指定时间上报状态
-		// fixme: 上报状态失败考虑重新注册
-		s.ticker = time.NewTicker(s.opts.RegisterInterval)
-		go func() {
-			for range s.ticker.C {
-				for name := range s.Handlers {
-					s.registryConsul.CheckPass(name)
-				}
-			}
-		}()
-	}
+	// if s.opts.Registry == "consul" {
+	// 	// 按指定时间上报状态
+	// 	// fixme: 上报状态失败考虑重新注册
+	// 	s.ticker = time.NewTicker(s.opts.RegisterInterval)
+	// 	go func() {
+	// 		for range s.ticker.C {
+	// 			for name := range s.Handlers {
+	// 				s.registryConsul.CheckPass(name)
+	// 			}
+	// 		}
+	// 	}()
+	// }
 
 	return nil
 }
 
 // Deregister 注销服务
 func (s *Server) Deregister() {
-	if s.opts.Registry == "etcd" {
-		for name := range s.Handlers {
-			s.registryEtcd.Unregister(name)
-		}
-	} else {
-		for name := range s.Handlers {
-			s.registryConsul.Unregister(name)
-		}
-	}
+	return
+	// if s.opts.Registry == "etcd" {
+	// 	for name := range s.Handlers {
+	// 		s.registryEtcd.Unregister(name)
+	// 	}
+	// } else {
+	// 	for name := range s.Handlers {
+	// 		s.registryConsul.Unregister(name)
+	// 	}
+	// }
 }
 
 //　开始服务
@@ -188,16 +186,7 @@ func (s *Server) start() error {
 		}
 	}
 
-	if s.opts.Protocol == "http" {
-		ln, err := net.Listen("tcp", s.opts.Address)
-		if err != nil {
-			return err
-		}
-		s.listener = ln
-		go s.rpcServer.ServeByHTTP(s.listener, rpcx.DefaultRPCPath)
-	} else {
-		s.rpcServer.Start("tcp", s.opts.Address)
-	}
+	s.rpcServer.Serve(s.opts.Protocol, s.opts.Address)
 
 	return nil
 }

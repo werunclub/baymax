@@ -18,12 +18,8 @@ import:
 - package: golang.org/x/crypto
   repo: https://github.com/golang/crypto.git
 - package: github.com/smallnest/rpcx
-  version: v2.0
-  repo: git@git.in.codoon.com:ClubCodoon/rpcx.git
 - package: github.com/Sirupsen/logrus
   repo: https://github.com/sirupsen/logrus.git
-- package: github.com/rpcx-ecosystem/colfer
-  version: a6ea9bf58d58588c25495eeaf968d7eb67025f13
 - package: github.com/coreos/etcd
   version: v3.2.7
 - package: github.com/ugorji/go

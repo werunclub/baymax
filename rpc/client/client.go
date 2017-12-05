@@ -6,10 +6,12 @@ import (
 	"baymax/errors"
 
 	"github.com/Sirupsen/logrus"
-	"github.com/smallnest/rpcx"
-	"github.com/smallnest/rpcx/clientselector"
-	"github.com/smallnest/rpcx/codec"
-	"github.com/smallnest/rpcx/core"
+	rpcxClient "github.com/smallnest/rpcx/client"
+	"github.com/smallnest/rpcx/protocol"
+)
+
+const (
+	BasePath = "/rpcx"
 )
 
 // Client represents a RPC client.
@@ -18,8 +20,8 @@ type Client struct {
 
 	ServiceName string
 
-	rpcClient *rpcx.Client
-	Selector  *rpcx.ClientSelector
+	rpcClient *rpcxClient.XClient
+	discovery *rpcxClient.ServiceDiscovery
 
 	//重试次数
 	Retries int
@@ -36,30 +38,24 @@ func NewClient(serviceName string, opts ...Option) *Client {
 		Retries:     options.Retries,
 	}
 
+	rpcxOption := rpcxClient.DefaultOption
+	rpcxOption.ConnTimeout = options.ConnTimeout
+	rpcxOption.SerializeType = protocol.JSON
+
 	if options.Registry == "etcd" {
-		selector := clientselector.NewEtcdV3ClientSelector(
-			options.EtcdAddress,
-			"/rpcx/"+serviceName,
-			options.SessionTimeout,
-			rpcx.RandomSelect,
-			options.ConnTimeout,
-		)
+		client.discovery = rpcxClient.NewEtcdDiscovery(BasePath, serviceName, []string{options.EtcdAddress}, rpcxOption)
 
-		client.rpcClient = rpcx.NewClient(selector)
 	} else {
-		selector := clientselector.NewConsulClientSelector(
-			options.ConsulAddress,
-			serviceName,
-			options.SessionTimeout,
-			rpcx.RandomSelect,
-			options.ConnTimeout,
-		)
-
-		client.rpcClient = rpcx.NewClient(selector)
+		client.discovery = rpcxClient.NewConsulDiscovery(BasePath, serviceName, []string{options.ConsulAddress}, rpcxOption)
 	}
 
-	// 使用 JSON 编码
-	client.rpcClient.ClientCodecFunc = codec.NewJSONRPCClientCodec
+	client.rpcClient = rpcxClient.NewXClient(
+		serviceName,
+		rpcxClient.Failtry,
+		rpcxClient.RandomSelect,
+		client.discovery,
+		rpcxOption,
+	)
 
 	return &client
 }
@@ -74,7 +70,7 @@ func (c *Client) Call(serviceMethod string, args interface{}, reply interface{})
 }
 
 // Go 异步执行
-func (c *Client) Go(serviceMethod string, args interface{}, reply interface{}, done chan *core.Call) *core.Call {
+func (c *Client) Go(serviceMethod string, args interface{}, reply interface{}, done chan *rpcxClient.Call) *rpcxClient.Call {
 	return c.GoContext(context.Background(), serviceMethod, args, reply, done)
 }
 
@@ -90,6 +86,6 @@ func (c *Client) CallContext(ctx context.Context, serviceMethod string, args int
 
 // GoContext 使用上下文异步执行
 func (c *Client) GoContext(ctx context.Context, serviceMethod string, args interface{},
-	reply interface{}, done chan *core.Call) *core.Call {
+	reply interface{}, done chan *rpcxClient.Call) *rpcxClient.Call {
 	return c.rpcClient.Go(ctx, serviceMethod, args, reply, done)
 }
