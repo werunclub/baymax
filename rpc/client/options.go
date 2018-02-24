@@ -1,6 +1,8 @@
 package client
 
 import (
+	"os"
+	"strings"
 	"time"
 )
 
@@ -64,6 +66,12 @@ func newOptions(opt ...Option) Options {
 		opts.Retries = 3
 	}
 
+	envEtcdAddress := os.Getenv("REGISTRY_ETCD_ADDRESS")
+	if envEtcdAddress != "" {
+		addrs := strings.Split(envEtcdAddress, ",")
+		opts.EtcdAddress = addrs
+	}
+
 	return opts
 }
 
@@ -72,7 +80,7 @@ func Namespace(n string) Option {
 	return func(o *Options) {}
 }
 
-// 注册服务类型
+// Registry 注册服务类型
 func Registry(a string) Option {
 	return func(o *Options) {
 		o.Registry = a

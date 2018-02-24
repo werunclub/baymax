@@ -3,6 +3,7 @@ package server
 import (
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/pborman/uuid"
@@ -128,6 +129,12 @@ func newOptions(opt ...Option) Options {
 
 	if opts.InfluxDBPass == "" {
 		opts.InfluxDBPass = os.Getenv("INFLUX_DB_PASS")
+	}
+
+	envEtcdAddress := os.Getenv("REGISTRY_ETCD_ADDRESS")
+	if envEtcdAddress != "" {
+		addrs := strings.Split(envEtcdAddress, ",")
+		opts.EtcdAddress = addrs
 	}
 
 	return opts
