@@ -131,7 +131,7 @@ func newOptions(opt ...Option) Options {
 		opts.InfluxDBPass = os.Getenv("INFLUX_DB_PASS")
 	}
 
-	envEtcdAddress := os.Getenv("REGISTRY_ETCD_ADDRESS")
+	envEtcdAddress := os.Getenv("REGISTRY_ADDRESS")
 	if envEtcdAddress != "" {
 		addrs := strings.Split(envEtcdAddress, ",")
 		opts.EtcdAddress = addrs

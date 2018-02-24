@@ -66,7 +66,7 @@ func newOptions(opt ...Option) Options {
 		opts.Retries = 3
 	}
 
-	envEtcdAddress := os.Getenv("REGISTRY_ETCD_ADDRESS")
+	envEtcdAddress := os.Getenv("REGISTRY_ADDRESS")
 	if envEtcdAddress != "" {
 		addrs := strings.Split(envEtcdAddress, ",")
 		opts.EtcdAddress = addrs
