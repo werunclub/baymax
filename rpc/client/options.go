@@ -106,3 +106,10 @@ func Retries(times int) Option {
 		o.Retries = times
 	}
 }
+
+// ConsulAddress consulAddress
+// deprecated
+func ConsulAddress(addr string) Option {
+	return func(o *Options) {
+	}
+}

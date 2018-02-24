@@ -133,14 +133,14 @@ func newOptions(opt ...Option) Options {
 	return opts
 }
 
-// 服务名称
+// Name 服务名称
 func Name(n string) Option {
 	return func(o *Options) {
 		o.Name = n
 	}
 }
 
-// 服务器唯一ID, 默认使用 uuid
+// ID 服务器唯一ID, 默认使用 uuid
 func ID(id string) Option {
 	return func(o *Options) {
 		o.ID = id
@@ -152,31 +152,39 @@ func Namespace(n string) Option {
 	return func(o *Options) {}
 }
 
-// 服务版本
+// Version 服务版本
 func Version(v string) Option {
 	return func(o *Options) {
 		o.Version = v
 	}
 }
 
-// 监听地址
+// Address 监听地址
 func Address(a string) Option {
 	return func(o *Options) {
 		o.Address = a
 	}
 }
 
-// 使用协议
+// Protocol 使用协议 http or tcp
 func Protocol(a string) Option {
 	return func(o *Options) {
 		o.Protocol = a
 	}
 }
 
-// 注册服务类型
+// Registry 注册服务类型
+// deprecated
 func Registry(a string) Option {
 	return func(o *Options) {
 		o.Registry = a
+	}
+}
+
+// ConsulAddress consulAddress
+// deprecated
+func ConsulAddress(addr string) Option {
+	return func(o *Options) {
 	}
 }
 
@@ -187,27 +195,28 @@ func EtcdAddress(a []string) Option {
 	}
 }
 
-// 公开地址,用于注册服务
+// Advertise 公开地址,用于注册服务
 func Advertise(a string) Option {
 	return func(o *Options) {
 		o.Advertise = a
 	}
 }
 
-// 服务有效时间
+// RegisterTTL 服务有效时间
 func RegisterTTL(t time.Duration) Option {
 	return func(o *Options) {
 		o.RegisterTTL = t
 	}
 }
 
-// 上报间隔
+// RegisterInterval 上报间隔
 func RegisterInterval(t time.Duration) Option {
 	return func(o *Options) {
 		o.RegisterInterval = t
 	}
 }
 
+// WriteTimeout 写入超时
 func WriteTimeout(timeout time.Duration) Option {
 	return func(o *Options) {
 		o.WriteTimeout = timeout
@@ -220,14 +229,14 @@ func ReadTimeout(timeout time.Duration) Option {
 	}
 }
 
-// 开启健检查
+// CheckEnable 开启健检查
 func CheckEnable(enable bool) Option {
 	return func(o *Options) {
 		o.CheckEnable = enable
 	}
 }
 
-// 关闭服务前等待时间
+// StopWait 关闭服务前等待时间
 func StopWait(wait int) Option {
 	return func(o *Options) {
 		o.StopWait = wait
