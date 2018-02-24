@@ -7,8 +7,10 @@ import (
 
 	"baymax/errors"
 	rpcClient "baymax/rpc/client"
+	"baymax/rpc/helpers"
 
 	"github.com/Sirupsen/logrus"
+	"github.com/smallnest/rpcx/share"
 )
 
 type Args struct {
@@ -52,8 +54,7 @@ func main() {
 	start := time.Now()
 
 	client := rpcClient.NewClient("Arith",
-		rpcClient.Registry("consol"),
-		// rpcClient.EtcdAddress([]string{"http://127.0.0.1:2379"}),
+		rpcClient.EtcdAddress([]string{"127.0.0.1:2379"}),
 		rpcClient.ConnTimeout(time.Second*5),
 	)
 
@@ -62,21 +63,45 @@ func main() {
 		args := &Args{7, 8}
 		reply := new(Reply)
 
-		err1 := client.Call("Arith.Add", args, reply)
+		err1 := client.Call("Add", args, reply)
 		if err1 != nil {
 			log.Printf("error: %v", err1.Error())
 		}
 
 		log.Printf("res: %v", reply)
 
-		args = &Args{7, 8}
-		reply = new(Reply)
+		{
+			args = &Args{7, 8}
+			reply = new(Reply)
 
-		err1 = client.Call("Arith.Mul", args, reply)
+			ctx := helpers.NewMetaDataContext(map[string]string{
+				"lang": "cn",
+			})
+
+			err1 := client.CallContext(ctx, "Arith.Mul", args, reply)
+			if err1 != nil {
+				log.Printf("error: %v", err1.Error())
+			}
+			log.Printf("res: %v", reply)
+			log.Printf("received meta: %+v", ctx.Value(share.ResMetaDataKey))
+		}
+	}
+
+	{
+		client := rpcClient.NewClient("Arith2",
+			rpcClient.EtcdAddress([]string{"127.0.0.1:2379"}),
+			rpcClient.ConnTimeout(time.Second*5),
+		)
+
+		args := &Args{7, 8}
+		reply := new(Reply)
+
+		err1 := client.Call("Add", args, reply)
 		if err1 != nil {
 			log.Printf("error: %v", err1.Error())
 		}
-		log.Printf("res: %v", reply)
+
+		log.Printf("Arith2.Add: %v", reply)
 	}
 
 	fmt.Printf("du: %d", time.Now().Nanosecond()-start.Nanosecond())

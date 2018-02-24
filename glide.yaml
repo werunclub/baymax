@@ -17,7 +17,15 @@ import:
   repo: https://github.com/sirupsen/logrus.git
 - package: golang.org/x/crypto
   repo: https://github.com/golang/crypto.git
+- package: github.com/docker/libkv
+  version: ^0.2.1
+  subpackages:
+  - store
+  - store/consul
+  - store/etcd
 - package: github.com/smallnest/rpcx
+  repo: git@git.in.codoon.com:ClubCodoon/rpcx.git
+  version: v3.0
 - package: github.com/Sirupsen/logrus
   repo: https://github.com/sirupsen/logrus.git
 - package: github.com/coreos/etcd

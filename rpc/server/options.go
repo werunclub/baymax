@@ -9,13 +9,11 @@ import (
 )
 
 var (
-	DefaultAddress       = ":0"
-	DefaultName          = "go-server"
-	DefaultProtocol      = "tcp"
-	DefaultVersion       = "1.0.0"
-	DefaultRegistry      = "consul" // consul or etcd
-	DefaultConsulAddress = "127.0.0.1:8500"
-	DefaultEtcdAddress   = "http://127.0.0.1:2379"
+	DefaultAddress     = ":0"
+	DefaultName        = "go-server"
+	DefaultProtocol    = "tcp"
+	DefaultVersion     = "1.0.0"
+	DefaultEtcdAddress = []string{"127.0.0.1:2379"}
 )
 
 type Option func(*Options)
@@ -36,9 +34,6 @@ type Options struct {
 
 	// Etcd 地址用于注册服务
 	EtcdAddress []string
-
-	// Consul地址用于注册服务
-	ConsulAddress string
 
 	// 公开地址
 	Advertise string
@@ -85,24 +80,14 @@ func newOptions(opt ...Option) Options {
 
 	if len(opts.ID) == 0 {
 		opts.ID = uuid.NewUUID().String()
-
 	}
 
 	if len(opts.Version) == 0 {
 		opts.Version = DefaultVersion
 	}
 
-	opts.Registry = os.Getenv("RPC_REGISTRY")
-	if opts.Registry == "" {
-		opts.Registry = DefaultRegistry
-	}
-
 	if len(opts.EtcdAddress) == 0 {
-		opts.EtcdAddress = []string{DefaultEtcdAddress}
-	}
-
-	if len(opts.ConsulAddress) == 0 {
-		opts.ConsulAddress = DefaultConsulAddress
+		opts.EtcdAddress = DefaultEtcdAddress
 	}
 
 	if opts.RegisterTTL == 0 {
@@ -199,13 +184,6 @@ func Registry(a string) Option {
 func EtcdAddress(a []string) Option {
 	return func(o *Options) {
 		o.EtcdAddress = a
-	}
-}
-
-// Consul 地址
-func ConsulAddress(a string) Option {
-	return func(o *Options) {
-		o.ConsulAddress = a
 	}
 }
 

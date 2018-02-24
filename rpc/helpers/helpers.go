@@ -1,13 +1,16 @@
 package helpers
 
 import (
+	"context"
 	"fmt"
 	"hash/fnv"
 	"net"
+
+	"github.com/smallnest/rpcx/share"
 )
 
 const (
-	RPCRath = "/_rpcx__"
+	RPCRath = "/rpc"
 )
 
 var (
@@ -22,6 +25,7 @@ func init() {
 	}
 }
 
+// ExtractAddress 解析网络地址
 func ExtractAddress(addr string) (string, error) {
 	if len(addr) > 0 && (addr != "0.0.0.0" && addr != "[::]") {
 		return addr, nil
@@ -64,6 +68,7 @@ func ExtractAddress(addr string) (string, error) {
 	return net.IP(ipAddr).String(), nil
 }
 
+// IsPrivateIP 是否为私有IP
 func IsPrivateIP(ipAddr string) bool {
 	ip := net.ParseIP(ipAddr)
 	for _, priv := range privateBlocks {
@@ -111,6 +116,35 @@ func JumpConsistentHash(len int, options ...interface{}) int {
 	return int(Hash(key, int32(len)))
 }
 
+// ToString toString
 func ToString(obj interface{}) string {
 	return fmt.Sprintf("%v", obj)
+}
+
+// NewMetaDataContext gen context for metadata
+func NewMetaDataContext(req map[string]string) context.Context {
+	ctx := context.WithValue(context.Background(), share.ReqMetaDataKey, req)
+	return context.WithValue(ctx, share.ResMetaDataKey, make(map[string]string))
+}
+
+// MetaData 元数据
+type MetaData struct {
+	ctx context.Context
+}
+
+// NewMetaDataFormContext 上下文生成元数据
+func NewMetaDataFormContext(ctx context.Context) MetaData {
+	return MetaData{
+		ctx: ctx,
+	}
+}
+
+// Request 请求元数据
+func (m MetaData) Request() map[string]string {
+	return m.ctx.Value(share.ReqMetaDataKey).(map[string]string)
+}
+
+// Response 响应元数据
+func (m MetaData) Response() map[string]string {
+	return m.ctx.Value(share.ResMetaDataKey).(map[string]string)
 }

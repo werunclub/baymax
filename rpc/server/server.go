@@ -11,22 +11,17 @@ import (
 	"time"
 
 	rpcxServer "github.com/smallnest/rpcx/server"
-	plugin "github.com/smallnest/rpcx/serverplugin"
+	"github.com/smallnest/rpcx/serverplugin"
 
 	"baymax/log"
 	"baymax/rpc/helpers"
-)
-
-const (
-	BasePath = "/rpcx"
 )
 
 type Server struct {
 	opts      Options
 	rpcServer *rpcxServer.Server
 
-	registryConsul *plugin.ConsulRegisterPlugin
-	registryEtcd   *plugin.EtcdRegisterPlugin
+	registry *serverplugin.EtcdRegisterPlugin
 
 	Handlers map[string]interface{}
 
@@ -49,42 +44,19 @@ func NewServer(opts ...Option) *Server {
 		Exit: make(chan bool, 1),
 	}
 
-	if options.Registry == "etcd" {
-		server.registryEtcd = &plugin.EtcdRegisterPlugin{
-			EtcdServers:    []string{options.EtcdAddress},
-			BasePath:       helpers.RPCRath,
-			UpdateInterval: server.opts.RegisterTTL,
-		}
-
-		server.rpcServer.Plugins.Add(server.registryEtcd)
-
-	} else {
-		server.registryConsul = &plugin.ConsulRegisterPlugin{
-			ConsulServers:  []string{options.ConsulAddress},
-			BasePath:       helpers.RPCRath,
-			UpdateInterval: server.opts.RegisterTTL,
-		}
-
-		server.rpcServer.Plugins.Add(server.registryConsul)
+	server.registry = &serverplugin.EtcdRegisterPlugin{
+		EtcdServers:    options.EtcdAddress,
+		BasePath:       helpers.RPCRath,
+		UpdateInterval: server.opts.RegisterTTL,
 	}
 
-	// if options.InfluxDBHost != "" {
-	// 	metrics := plugin.NewMetricsPlugin()
-	// 	metrics.InfluxDB(10e9, options.InfluxDBHost, options.InfluxDBDB,
-	// 		options.InfluxDBUser, options.InfluxDBPass)
-
-	// 	server.rpcServer.Plugins.Add(metrics)
-	// }
+	server.rpcServer.Plugins.Add(server.registry)
 
 	return server
 }
 
 func (s *Server) setServiceAddress(addr string) {
-	if s.opts.Registry == "etcd" {
-		s.registryEtcd.ServiceAddress = addr
-	} else {
-		s.registryConsul.ServiceAddress = addr
-	}
+	s.registry.ServiceAddress = addr
 }
 
 // Address 服务地址
@@ -137,57 +109,31 @@ func (s *Server) Register() error {
 	s.setServiceAddress(s.opts.Protocol + "@" + addr + ":" + strconv.Itoa(port))
 
 	for name, service := range s.Handlers {
-		s.rpcServer.RegisterName(name, service, "")
+		if err := s.rpcServer.RegisterName(name, service, ""); err != nil {
+			return err
+		}
 	}
 
 	s.registered = true
 	s.RUnlock()
-
-	// if s.opts.Registry == "consul" {
-	// 	// 按指定时间上报状态
-	// 	// fixme: 上报状态失败考虑重新注册
-	// 	s.ticker = time.NewTicker(s.opts.RegisterInterval)
-	// 	go func() {
-	// 		for range s.ticker.C {
-	// 			for name := range s.Handlers {
-	// 				s.registryConsul.CheckPass(name)
-	// 			}
-	// 		}
-	// 	}()
-	// }
-
 	return nil
 }
 
 // Deregister 注销服务
 func (s *Server) Deregister() {
-	return
-	// if s.opts.Registry == "etcd" {
-	// 	for name := range s.Handlers {
-	// 		s.registryEtcd.Unregister(name)
-	// 	}
-	// } else {
-	// 	for name := range s.Handlers {
-	// 		s.registryConsul.Unregister(name)
-	// 	}
-	// }
+	for name := range s.Handlers {
+		s.registry.Deregister(name)
+	}
 }
 
 //　开始服务
 func (s *Server) start() error {
-
-	if s.opts.Registry == "etcd" {
-		if err := s.registryEtcd.Start(); err != nil {
-			return err
-		}
-	} else {
-		if err := s.registryConsul.Start(); err != nil {
-			return err
-		}
+	if err := s.registry.Start(); err != nil {
+		return err
 	}
-
-	s.rpcServer.Serve(s.opts.Protocol, s.opts.Address)
-
+	go s.rpcServer.Serve(s.opts.Protocol, s.opts.Address)
+	time.Sleep(time.Millisecond * 500)
+	log.SourcedLogrus().Printf("already")
 	return nil
 }
 
@@ -203,10 +149,15 @@ func (s *Server) RegisterAndRun() error {
 		s.Exit <- true
 	}()
 
+	log.SourcedLogrus().Printf("start")
+
 	if err := s.start(); err != nil {
 		return err
 	}
-	s.Register()
+
+	if err := s.Register(); err != nil {
+		return err
+	}
 
 	log.SourcedLogrus().Printf("Running on %s", s.Address())
 

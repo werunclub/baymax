@@ -2,16 +2,14 @@ package client
 
 import (
 	"context"
+	"strings"
 
 	"baymax/errors"
+	"baymax/rpc/helpers"
 
 	"github.com/Sirupsen/logrus"
 	rpcxClient "github.com/smallnest/rpcx/client"
 	"github.com/smallnest/rpcx/protocol"
-)
-
-const (
-	BasePath = "/rpcx"
 )
 
 // Client represents a RPC client.
@@ -20,8 +18,8 @@ type Client struct {
 
 	ServiceName string
 
-	rpcClient *rpcxClient.XClient
-	discovery *rpcxClient.ServiceDiscovery
+	rpcClient rpcxClient.XClient
+	discovery rpcxClient.ServiceDiscovery
 
 	//重试次数
 	Retries int
@@ -39,15 +37,11 @@ func NewClient(serviceName string, opts ...Option) *Client {
 	}
 
 	rpcxOption := rpcxClient.DefaultOption
-	rpcxOption.ConnTimeout = options.ConnTimeout
-	rpcxOption.SerializeType = protocol.JSON
+	rpcxOption.ConnectTimeout = options.ConnTimeout
+	rpcxOption.SerializeType = protocol.MsgPack
 
-	if options.Registry == "etcd" {
-		client.discovery = rpcxClient.NewEtcdDiscovery(BasePath, serviceName, []string{options.EtcdAddress}, rpcxOption)
-
-	} else {
-		client.discovery = rpcxClient.NewConsulDiscovery(BasePath, serviceName, []string{options.ConsulAddress}, rpcxOption)
-	}
+	client.discovery = rpcxClient.NewEtcdDiscovery(helpers.RPCRath, serviceName,
+		options.EtcdAddress, nil)
 
 	client.rpcClient = rpcxClient.NewXClient(
 		serviceName,
@@ -64,19 +58,28 @@ func (c *Client) getServiceName() string {
 	return c.ServiceName
 }
 
+func (c *Client) cleanServiceMethod(serviceMethod string) string {
+	parts := strings.Split(serviceMethod, ".")
+
+	if len(parts) >= 2 {
+		return parts[len(parts)-1]
+	}
+	return serviceMethod
+}
+
 // Call 同步执行
 func (c *Client) Call(serviceMethod string, args interface{}, reply interface{}) *errors.Error {
 	return c.CallContext(context.Background(), serviceMethod, args, reply)
 }
 
 // Go 异步执行
-func (c *Client) Go(serviceMethod string, args interface{}, reply interface{}, done chan *rpcxClient.Call) *rpcxClient.Call {
+func (c *Client) Go(serviceMethod string, args interface{}, reply interface{}, done chan *rpcxClient.Call) (*rpcxClient.Call, error) {
 	return c.GoContext(context.Background(), serviceMethod, args, reply, done)
 }
 
 // CallContext 使用上下文同步执行
 func (c *Client) CallContext(ctx context.Context, serviceMethod string, args interface{}, reply interface{}) *errors.Error {
-	err := c.rpcClient.Call(ctx, serviceMethod, args, reply)
+	err := c.rpcClient.Call(ctx, c.cleanServiceMethod(serviceMethod), args, reply)
 	if err != nil {
 		logrus.WithField("serviceMethod", serviceMethod).WithError(err).Errorf("rpc call fail")
 		return errors.Parse(err.Error())
@@ -86,6 +89,6 @@ func (c *Client) CallContext(ctx context.Context, serviceMethod string, args int
 
 // GoContext 使用上下文异步执行
 func (c *Client) GoContext(ctx context.Context, serviceMethod string, args interface{},
-	reply interface{}, done chan *rpcxClient.Call) *rpcxClient.Call {
-	return c.rpcClient.Go(ctx, serviceMethod, args, reply, done)
+	reply interface{}, done chan *rpcxClient.Call) (*rpcxClient.Call, error) {
+	return c.rpcClient.Go(ctx, c.cleanServiceMethod(serviceMethod), args, reply, done)
 }

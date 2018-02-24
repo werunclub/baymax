@@ -1,20 +1,26 @@
-hash: a8b120137f77b808e3e3935f14d51271c0e030c091f411b1d903eeb24b178303
-updated: 2017-11-30T08:09:53.582131+08:00
+hash: c5b6bc1a70fa8c7b3308759b8f64126f8e2470c038bf8e3d716ea44989a9bd8f
+updated: 2018-02-24T18:25:25.94324+08:00
 imports:
 - name: github.com/aead/chacha20
-  version: 8d6ce0550041f9d97e7f15ec27ed489f8bbbb0fb
+  version: c8d29375923a8e1d2a0f0dc0fc1d8a0aba5b97ba
   subpackages:
   - chacha
 - name: github.com/appleboy/gin-jwt
   version: f7347d7c16fc8297bf5b7215b9e4847a5ca05d90
+- name: github.com/armon/go-metrics
+  version: 783273d703149aaeb9897cf58613d5af48861c25
 - name: github.com/bifurcation/mint
-  version: 64af8ab8ccb81bd5d4eab356f79ba0939117d9f6
+  version: 340be3ae8c0ff8edce24cf59e7acdb1432bd5ce5
   subpackages:
   - syntax
 - name: github.com/cenk/backoff
-  version: 309aa717adbf351e92864cbedf9cca0b769a4b5a
+  version: 2ea60e5f094469f9e65adb9cd103795b73ae743e
 - name: github.com/cenkalti/backoff
-  version: 309aa717adbf351e92864cbedf9cca0b769a4b5a
+  version: 2ea60e5f094469f9e65adb9cd103795b73ae743e
+- name: github.com/cheekybits/genny
+  version: 9127e812e1e9e501ce899a18121d316ecb52e4ba
+  subpackages:
+  - generic
 - name: github.com/club-codoon/go-nsq
   version: 8113779eb9536c03af8bed4b9098e7230edab89f
 - name: github.com/coreos/etcd
@@ -41,9 +47,9 @@ imports:
 - name: github.com/facebookgo/clock
   version: 600d898af40aa09a7a93ecb9265d87b0504b6f03
 - name: github.com/fatih/color
-  version: 570b54cabe6b8eb0bc2dfce68d964677d63b5260
+  version: 507f6050b8568533fb3f5504de8e5205fa62a114
 - name: github.com/fluent/fluent-logger-golang
-  version: 40b03fe3da81939966d25b5e8a6283d08ab2dafa
+  version: 8bbc2356beaf021b04c9bd5cdc76ea5a7ccb40ec
   subpackages:
   - fluent
 - name: github.com/go-errors/errors
@@ -55,7 +61,6 @@ imports:
 - name: github.com/golang/protobuf
   version: 4bd1920723d7b7c925de087aa32e2187708897f7
   subpackages:
-  - jsonpb
   - proto
 - name: github.com/grandcat/zeroconf
   version: 8219919fca892353a082b184bca66db55c55b583
@@ -64,19 +69,21 @@ imports:
   subpackages:
   - api
 - name: github.com/hashicorp/go-cleanhttp
-  version: 3573b8b52aa7b37b9358d966a898feb387f62437
+  version: d5fe4b57a186c716b0e00b8c301cbd9b4182694d
+- name: github.com/hashicorp/go-immutable-radix
+  version: 7f3cd4390caab3250a57f30efdb2a65dd7649ecf
 - name: github.com/hashicorp/go-rootcerts
   version: 6bb64b370b90e7ef1fa532be9e591a81c3493e00
 - name: github.com/hashicorp/golang-lru
-  version: 0a025b7e63adc15a622f29b0b2c4c3848243bbf6
+  version: 0fb14efe8c47ae851c0034ed7a448854d3d34cf3
   subpackages:
   - simplelru
 - name: github.com/hashicorp/serf
-  version: c20a0b1b1ea9eb8168bcdec0116688fa9254e449
+  version: d4f33d5b6a0b7b252b122dc80d559e9e5280d2d4
   subpackages:
   - coordinate
 - name: github.com/influxdata/influxdb
-  version: c2f7f0f430207eb3a9aa51f55b46fd3319775be7
+  version: 89a88d218e3a79bdaa35e45a53b0a5fe6a5f3bd0
   subpackages:
   - client
   - models
@@ -87,21 +94,23 @@ imports:
   version: 1c35d901db3da928c72a72d8458480cc9ade058f
 - name: github.com/juju/ratelimit
   version: 59fac5042749a5afb9af70e813da1dd5474f0167
+- name: github.com/julienschmidt/httprouter
+  version: d1898390779332322e6b5ca5011da4bf249bb056
 - name: github.com/kavu/go_reuseport
   version: 3d6c1e425f717ee59152524e73b904b67705eeb8
 - name: github.com/klauspost/cpuid
-  version: eae9b3e628d72774e13bdf024e78c0802f85a5b9
+  version: ae832f27941af41db13bd6d8efd2493e3b22415a
 - name: github.com/klauspost/reedsolomon
-  version: e52c150f961e65ab9538bf1276b33bf469f919d8
+  version: 0b30fa71cc8e4e9010c9aba6d0320e2e5b163b29
 - name: github.com/lucas-clemente/aes12
   version: cd47fb39b79f867c6e4e5cd39cf7abd799f71670
 - name: github.com/lucas-clemente/fnv128a
   version: 393af48d391698c6ae4219566bfbdfef67269997
 - name: github.com/lucas-clemente/quic-go
-  version: ccd91a36b7692601fb1f8a21c1b51a48c08d4d88
+  version: 6ca44459e588eb5f9ebd7df8ea4f3a1076ebfc65
   subpackages:
-  - ackhandler
-  - congestion
+  - internal/ackhandler
+  - internal/congestion
   - internal/crypto
   - internal/flowcontrol
   - internal/handshake
@@ -112,23 +121,19 @@ imports:
 - name: github.com/lucas-clemente/quic-go-certificates
   version: d2f86524cced5186554df90d92529757d22c1cb6
 - name: github.com/marten-seemann/quic-conn
-  version: 00b4bd4d14b59a4823aaab31e0b6220198b1ae36
+  version: 3e21efba0ef7cf9910b2ca4f70ced3e8a04bd3cf
 - name: github.com/mattn/go-colorable
-  version: 5411d3eea5978e6cdc258b30de592b60df6aba96
-  repo: https://github.com/mattn/go-colorable
+  version: 7dc3415be66d7cc68bf0182f35c8d31f8d2ad8a7
 - name: github.com/mattn/go-isatty
-  version: 57fdcb988a5c543893cc61bce354a6e24ab70022
-  repo: https://github.com/mattn/go-isatty
+  version: 6ca4dbf54d38eea1a992b3c722a76a5d1c4cb25c
 - name: github.com/micro/go-micro
-  version: c82dadfa55c7e8800e8b3d6fa4e2c94ba7ca9e2e
+  version: d0d9582b81e3944edca78b1db6ed9619d0729cee
   subpackages:
   - codec
   - codec/jsonrpc
   - metadata
 - name: github.com/miekg/dns
-  version: 6da3249dfb57fbaa16efafcd8744cee8809d80cd
-  subpackages:
-  - internal/socket
+  version: 5364553f1ee9cddc7ac8b62dce148309c386695b
 - name: github.com/mitchellh/go-homedir
   version: b8bc1bf767474819792c23f32d8286a45736f1c6
 - name: github.com/mreiferson/go-snappystream
@@ -140,15 +145,15 @@ imports:
 - name: github.com/philhofer/fwd
   version: bb6d471dc95d4fe11e432687f8b70ff496cf3136
 - name: github.com/pkg/errors
-  version: f15c970de5b76fac0b59abb32d62c17cc7bed265
+  version: 30136e27e2ac8d167177e8a583aa4c3fea5be833
 - name: github.com/rcrowley/go-metrics
-  version: e181e095bae94582363434144c61a9653aff6e50
+  version: 8732c616f52954686704c8645fe1a9d59e9df7c1
   subpackages:
   - exp
 - name: github.com/rubyist/circuitbreaker
-  version: 7e3e7fbe9c62b943d487af023566a79d9eb22d3b
+  version: 2074adba5ddc7d5f7559448a9c3066573521c5bf
 - name: github.com/samuel/go-zookeeper
-  version: 471cd4e61d7a78ece1791fa5faa0345dc8c7d5a5
+  version: c4fab1ac1bec58281ad0667dc3f0907a9476ac47
   subpackages:
   - zk
 - name: github.com/satori/go.uuid
@@ -157,7 +162,8 @@ imports:
   version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
   repo: https://github.com/sirupsen/logrus.git
 - name: github.com/smallnest/rpcx
-  version: 6d646e54c461b2adbd2d673fc5b5482826a9b86c
+  version: f47187b4fe4eea765ae244f916f6facef29ff2b9
+  repo: git@git.in.codoon.com:ClubCodoon/rpcx.git
   subpackages:
   - client
   - codec
@@ -168,6 +174,8 @@ imports:
   - serverplugin
   - share
   - util
+- name: github.com/soheilhy/cmux
+  version: e09e9389d85d8492d313d73d1469c029e710623f
 - name: github.com/tatsushid/go-fastping
   version: d7bb493dee3e090e2ffb6914adddf17c1e7c026c
 - name: github.com/templexxx/cpufeat
@@ -175,7 +183,7 @@ imports:
 - name: github.com/templexxx/xor
   version: 0af8e873c554da75f37f2049cdffda804533d44c
 - name: github.com/tinylib/msgp
-  version: 3b556c64540842d4f82967be066a7f7fffc3adad
+  version: 3b5c87ab5fb00c660bf85b888445d9a01db64db4
   subpackages:
   - msgp
 - name: github.com/tjfoc/gmsm
@@ -189,15 +197,15 @@ imports:
 - name: github.com/valyala/fastrand
   version: 19dd0f0bf014a807b05fd196f4da235af618fc94
 - name: github.com/vmihailenco/msgpack
-  version: 85895ca68143a957c0a9abf3d130c8b1b300824e
+  version: b83fb55e0632418103602b3b23851cabc5d11762
   subpackages:
   - codes
 - name: github.com/vrischmann/go-metrics-influxdb
   version: 43af8332c303f62ef62663b02b3b7d8a9802002a
 - name: github.com/xtaci/kcp-go
-  version: 0dc7be275bda3ba07791a211981b80f2af5d9361
+  version: 42bc1dfefff592fdb3affa793980c4f6ab4213e5
 - name: golang.org/x/crypto
-  version: 94eea52f7b742c7cbe0b03b22f0c4c8631ece122
+  version: 49796115aa4b964c318aad4f3084fdb41e9aa067
   repo: https://github.com/golang/crypto.git
   subpackages:
   - blowfish
@@ -213,22 +221,36 @@ imports:
   - twofish
   - xtea
 - name: golang.org/x/net
-  version: 894f8ed5849b15b810ae41e9590a0d05395bba27
+  version: cbe0f9307d0156177f9dd5dc85da1a31abc5f2fb
   subpackages:
   - bpf
   - context
   - http2
+  - http2/hpack
   - icmp
+  - idna
   - internal/iana
   - internal/socket
+  - internal/timeseries
   - ipv4
   - ipv6
+  - lex/httplex
+  - trace
 - name: golang.org/x/sys
-  version: 1006bb3484c92b19a5b6612452e038b554fadb9c
+  version: 88d2dcc510266da9f7f8c7f34e1940716cab5f5c
   subpackages:
   - unix
+- name: golang.org/x/text
+  version: 27420a1a391f5504f73155051cd274311bf70883
+  repo: https://github.com/golang/text
+  vcs: git
+  subpackages:
+  - secure/bidirule
+  - transform
+  - unicode/bidi
+  - unicode/norm
 - name: google.golang.org/appengine
-  version: 9d8544a6b2c7df9cff240fcf92d7b2f59bc13416
+  version: 5bee14b453b4c71be47ec1781b0fa61c2ea182db
   repo: https://github.com/golang/appengine
   vcs: git
   subpackages:

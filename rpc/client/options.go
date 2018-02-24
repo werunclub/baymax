@@ -1,15 +1,12 @@
 package client
 
 import (
-	"os"
 	"time"
 )
 
 var (
-	DefaultRegistry      = "consul" // consul or etcd
-	DefaultEtcdAddress   = "http://127.0.0.1:2379"
-	DefaultConsulAddress = "127.0.0.1:8500"
-	DefaultPoolSize      = 100
+	DefaultEtcdAddress = "127.0.0.1:2379"
+	DefaultPoolSize    = 100
 )
 
 type Option func(*Options)
@@ -19,9 +16,6 @@ type Options struct {
 
 	// EtcdAddress 地址用于注册服务
 	EtcdAddress []string
-
-	// Consul 地址用于注册服务
-	ConsulAddress string
 
 	SessionTimeout time.Duration
 
@@ -46,17 +40,8 @@ func newOptions(opt ...Option) Options {
 		o(&opts)
 	}
 
-	opts.Registry = os.Getenv("RPC_REGISTRY")
-	if opts.Registry == "" {
-		opts.Registry = DefaultRegistry
-	}
-
 	if len(opts.EtcdAddress) == 0 {
 		opts.EtcdAddress = []string{DefaultEtcdAddress}
-	}
-
-	if opts.ConsulAddress == "" {
-		opts.ConsulAddress = DefaultConsulAddress
 	}
 
 	if opts.SessionTimeout == 0 {
@@ -98,13 +83,6 @@ func Registry(a string) Option {
 func EtcdAddress(a []string) Option {
 	return func(o *Options) {
 		o.EtcdAddress = a
-	}
-}
-
-// Consul 地址
-func ConsulAddress(a string) Option {
-	return func(o *Options) {
-		o.ConsulAddress = a
 	}
 }
 
