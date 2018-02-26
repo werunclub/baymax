@@ -34,3 +34,5 @@ import:
   version: 8c0409fcbb70099c748d71f714529204975f6c3f
 - package: github.com/hashicorp/consul
   vesion: v0.9.3
+- package: github.com/satori/go.uuid
+  version: 5bf94b69c6b68ee1b541973bb8e1144db23a194b
