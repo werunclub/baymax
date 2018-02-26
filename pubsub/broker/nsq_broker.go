@@ -262,6 +262,8 @@ func NewNsqBroker(opts ...Option) Broker {
 
 	config := nsq.NewConfig()
 	config.MaxInFlight = 12
+	config.LookupdPollInterval = time.Second * 5
+	config.MaxAttempts = 10
 
 	return &nsqBroker{
 		addrs:  cAddrs,
