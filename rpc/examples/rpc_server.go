@@ -54,7 +54,7 @@ func (t *Arith) Div(ctx context.Context, args *Args, reply *Reply) error {
 
 type Arith2 int
 
-func (t *Arith2) Add(args *Args, reply *Reply) error {
+func (t *Arith2) Add(args Args, reply *Reply) error {
 	log.Info("Arith2.add")
 	reply.C = args.A + args.B
 	return nil

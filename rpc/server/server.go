@@ -17,6 +17,7 @@ import (
 	"baymax/rpc/helpers"
 )
 
+// Server rpc server
 type Server struct {
 	opts      Options
 	rpcServer *rpcxServer.Server
