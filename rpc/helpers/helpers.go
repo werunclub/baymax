@@ -130,21 +130,36 @@ func NewMetaDataContext(req map[string]string) context.Context {
 // MetaData 元数据
 type MetaData struct {
 	ctx context.Context
+	req map[string]string
+	res map[string]string
 }
 
 // NewMetaDataFormContext 上下文生成元数据
 func NewMetaDataFormContext(ctx context.Context) MetaData {
 	return MetaData{
 		ctx: ctx,
+		req: ctx.Value(share.ReqMetaDataKey).(map[string]string),
+		res: ctx.Value(share.ResMetaDataKey).(map[string]string),
 	}
 }
 
 // Request 请求元数据
 func (m MetaData) Request() map[string]string {
-	return m.ctx.Value(share.ReqMetaDataKey).(map[string]string)
+	return m.req
 }
 
 // Response 响应元数据
 func (m MetaData) Response() map[string]string {
-	return m.ctx.Value(share.ResMetaDataKey).(map[string]string)
+	return m.res
+}
+
+// Get 获取元数据
+func (m MetaData) Get(key string) string {
+	return m.req[key]
+}
+
+// Set 添加元数据
+func (m MetaData) Set(key, val string) error {
+	m.res[key] = val
+	return nil
 }

@@ -35,12 +35,13 @@ func (t *Arith) Add(ctx context.Context, args *Args, reply *Reply) error {
 
 func (t *Arith) Mul(ctx context.Context, args *Args, reply *Reply) error {
 	meta := helpers.NewMetaDataFormContext(ctx)
-	lang := meta.Request()["lang"]
+	lang := meta.Get("lang")
 	resMeta := meta.Response()
 
 	log.Infof("Mul: %s", lang)
 	reply.C = args.A * args.B
 	resMeta["echo"] = "hello"
+	meta.Set("hello", "world")
 	return nil
 }
 

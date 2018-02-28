@@ -78,7 +78,7 @@ func main() {
 				"lang": "cn",
 			})
 
-			err1 := client.CallContext(ctx, "Arith.Mul", args, reply)
+			err1 := client.CallWithContext(ctx, "Arith.Mul", args, reply)
 			if err1 != nil {
 				log.Printf("error: %v", err1.Error())
 			}
