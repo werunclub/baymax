@@ -6,6 +6,7 @@ import (
 	"hash/fnv"
 	"net"
 
+	"github.com/satori/go.uuid"
 	"github.com/smallnest/rpcx/share"
 )
 
@@ -162,4 +163,16 @@ func (m MetaData) Get(key string) string {
 func (m MetaData) Set(key, val string) error {
 	m.res[key] = val
 	return nil
+}
+
+// GetRequestID 获取 requestID
+func GetRequestID(ctx context.Context) string {
+	meta := NewMetaDataFormContext(ctx)
+	requestID := meta.Get("request_id")
+
+	if requestID == "" {
+		requestID = uuid.NewV4().String()
+	}
+
+	return requestID
 }
