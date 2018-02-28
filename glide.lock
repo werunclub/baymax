@@ -1,5 +1,5 @@
-hash: c5b6bc1a70fa8c7b3308759b8f64126f8e2470c038bf8e3d716ea44989a9bd8f
-updated: 2018-02-24T18:25:25.94324+08:00
+hash: 758bbdbddb966d91843cc362bb6718c23b20d252207a3e1472c3f44b752d4c0e
+updated: 2018-02-27T17:09:31.715335+08:00
 imports:
 - name: github.com/aead/chacha20
   version: c8d29375923a8e1d2a0f0dc0fc1d8a0aba5b97ba
@@ -10,7 +10,7 @@ imports:
 - name: github.com/armon/go-metrics
   version: 783273d703149aaeb9897cf58613d5af48861c25
 - name: github.com/bifurcation/mint
-  version: 340be3ae8c0ff8edce24cf59e7acdb1432bd5ce5
+  version: 30a67d8540b4f721cfea9f9ae1cd7f22d227a054
   subpackages:
   - syntax
 - name: github.com/cenk/backoff
@@ -53,7 +53,7 @@ imports:
   subpackages:
   - fluent
 - name: github.com/go-errors/errors
-  version: 3afebba5a48dbc89b574d890b6b34d9ee10b4785
+  version: a6af135bd4e28680facf08a3d206b454abc877a4
 - name: github.com/gogo/protobuf
   version: 342cbe0a04158f6dcb03ca0079991a51a4248c02
   subpackages:
@@ -83,7 +83,7 @@ imports:
   subpackages:
   - coordinate
 - name: github.com/influxdata/influxdb
-  version: 89a88d218e3a79bdaa35e45a53b0a5fe6a5f3bd0
+  version: 632e01e0686d65840f9cc18353cfac576951c7af
   subpackages:
   - client
   - models
@@ -107,7 +107,7 @@ imports:
 - name: github.com/lucas-clemente/fnv128a
   version: 393af48d391698c6ae4219566bfbdfef67269997
 - name: github.com/lucas-clemente/quic-go
-  version: 6ca44459e588eb5f9ebd7df8ea4f3a1076ebfc65
+  version: be2be3872f6608f29b379c422b2a885d521cb597
   subpackages:
   - internal/ackhandler
   - internal/congestion
@@ -159,10 +159,10 @@ imports:
 - name: github.com/satori/go.uuid
   version: 5bf94b69c6b68ee1b541973bb8e1144db23a194b
 - name: github.com/Sirupsen/logrus
-  version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
+  version: 4b6ea7319e214d98c938f12692336f7ca9348d6b
   repo: https://github.com/sirupsen/logrus.git
 - name: github.com/smallnest/rpcx
-  version: f47187b4fe4eea765ae244f916f6facef29ff2b9
+  version: f03658be7de9f70f3c8a435ce792fe5e1cb029d3
   repo: git@git.in.codoon.com:ClubCodoon/rpcx.git
   subpackages:
   - client
@@ -205,7 +205,7 @@ imports:
 - name: github.com/xtaci/kcp-go
   version: 42bc1dfefff592fdb3affa793980c4f6ab4213e5
 - name: golang.org/x/crypto
-  version: 49796115aa4b964c318aad4f3084fdb41e9aa067
+  version: 8c653846df49742c4c85ec37e5d9f8d3ba657895
   repo: https://github.com/golang/crypto.git
   subpackages:
   - blowfish
@@ -237,7 +237,7 @@ imports:
   - lex/httplex
   - trace
 - name: golang.org/x/sys
-  version: 88d2dcc510266da9f7f8c7f34e1940716cab5f5c
+  version: f6cff0780e542efa0c8e864dc8fa522808f6a598
   subpackages:
   - unix
 - name: golang.org/x/text

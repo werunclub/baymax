@@ -134,7 +134,6 @@ func (s *Server) start() error {
 	}
 	go s.rpcServer.Serve(s.opts.Protocol, s.opts.Address)
 	time.Sleep(time.Millisecond * 500)
-	log.SourcedLogrus().Printf("already")
 	return nil
 }
 
@@ -149,8 +148,6 @@ func (s *Server) RegisterAndRun() error {
 		log.SourcedLogrus().Printf("Rpc server exit.")
 		s.Exit <- true
 	}()
-
-	log.SourcedLogrus().Printf("start")
 
 	if err := s.start(); err != nil {
 		return err

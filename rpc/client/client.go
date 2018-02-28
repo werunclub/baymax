@@ -69,26 +69,26 @@ func (c *Client) cleanServiceMethod(serviceMethod string) string {
 
 // Call 同步执行
 func (c *Client) Call(serviceMethod string, args interface{}, reply interface{}) *errors.Error {
-	return c.CallContext(context.Background(), serviceMethod, args, reply)
+	return c.CallWithContext(context.Background(), serviceMethod, args, reply)
 }
 
 // Go 异步执行
 func (c *Client) Go(serviceMethod string, args interface{}, reply interface{}, done chan *rpcxClient.Call) (*rpcxClient.Call, error) {
-	return c.GoContext(context.Background(), serviceMethod, args, reply, done)
+	return c.GoWithContext(context.Background(), serviceMethod, args, reply, done)
 }
 
-// CallContext 使用上下文同步执行
-func (c *Client) CallContext(ctx context.Context, serviceMethod string, args interface{}, reply interface{}) *errors.Error {
+// CallWithContext 使用上下文同步执行
+func (c *Client) CallWithContext(ctx context.Context, serviceMethod string, args interface{}, reply interface{}) *errors.Error {
 	err := c.rpcClient.Call(ctx, c.cleanServiceMethod(serviceMethod), args, reply)
 	if err != nil {
-		logrus.WithField("serviceMethod", serviceMethod).WithError(err).Errorf("rpc call fail")
+		logrus.WithField("serviceMethod", serviceMethod).WithField("serviceName", "serviceName").WithError(err).Errorf("rpc call fail")
 		return errors.Parse(err.Error())
 	}
 	return nil
 }
 
-// GoContext 使用上下文异步执行
-func (c *Client) GoContext(ctx context.Context, serviceMethod string, args interface{},
+// GoWithContext 使用上下文异步执行
+func (c *Client) GoWithContext(ctx context.Context, serviceMethod string, args interface{},
 	reply interface{}, done chan *rpcxClient.Call) (*rpcxClient.Call, error) {
 	return c.rpcClient.Go(ctx, c.cleanServiceMethod(serviceMethod), args, reply, done)
 }

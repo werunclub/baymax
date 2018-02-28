@@ -96,12 +96,114 @@ func main() {
 		args := &Args{7, 8}
 		reply := new(Reply)
 
-		err1 := client.Call("Add", args, reply)
+		err1 := client.Call("Add2", args, reply)
 		if err1 != nil {
 			log.Printf("error: %v", err1.Error())
 		}
 
-		log.Printf("Arith2.Add: %v", reply)
+		log.Printf("Arith2.Add2: %v", reply)
+	}
+
+	{
+		client := rpcClient.NewClient("Arith3",
+			rpcClient.EtcdAddress([]string{"127.0.0.1:2379"}),
+			rpcClient.ConnTimeout(time.Second*5),
+		)
+
+		args := &Args{7, 8}
+		reply := new(Reply)
+
+		err1 := client.Call("Add3", args, reply)
+		if err1 != nil {
+			log.Printf("error: %v", err1.Error())
+		}
+
+		log.Printf("Arith3.Add3: %v", reply)
+	}
+
+	{
+		client := rpcClient.NewClient("Arith4",
+			rpcClient.EtcdAddress([]string{"127.0.0.1:2379"}),
+			rpcClient.ConnTimeout(time.Second*5),
+		)
+
+		args := &Args{7, 8}
+		reply := new(Reply)
+
+		err1 := client.Call("Add4", args, reply)
+		if err1 != nil {
+			log.Printf("error: %v", err1.Error())
+		}
+
+		log.Printf("Arith4.Add4: %v", reply)
+	}
+
+	{
+		client := rpcClient.NewClient("Arith5",
+			rpcClient.EtcdAddress([]string{"127.0.0.1:2379"}),
+			rpcClient.ConnTimeout(time.Second*5),
+		)
+
+		args := &Args{7, 8}
+		reply := new(Reply)
+
+		err1 := client.Call("Add5", args, reply)
+		if err1 != nil {
+			log.Printf("error: %v", err1.Error())
+		}
+
+		log.Printf("Arith5.Add5: %v", reply)
+	}
+
+	{
+		client := rpcClient.NewClient("Arith6",
+			rpcClient.EtcdAddress([]string{"127.0.0.1:2379"}),
+			rpcClient.ConnTimeout(time.Second*5),
+		)
+
+		args := &Args{7, 8}
+		reply := new(Reply)
+
+		err1 := client.Call("Add6", args, reply)
+		if err1 != nil {
+			log.Printf("error: %v", err1.Error())
+		}
+
+		log.Printf("Arith6.Add6: %v", reply)
+	}
+
+	{
+		client := rpcClient.NewClient("Arith7",
+			rpcClient.EtcdAddress([]string{"127.0.0.1:2379"}),
+			rpcClient.ConnTimeout(time.Second*5),
+		)
+
+		args := &Args{7, 8}
+		reply := new(Reply)
+
+		err1 := client.Call("Add7", args, reply)
+		if err1 != nil {
+			log.Printf("error: %v", err1.Error())
+		}
+
+		log.Printf("Arith7.Add7: %v", reply)
+	}
+
+	{
+		client := rpcClient.NewClient("Arith8",
+			rpcClient.EtcdAddress([]string{"127.0.0.1:2379"}),
+			rpcClient.ConnTimeout(time.Second*5),
+		)
+
+		args := &Args{7, 8}
+		reply := new(Reply)
+
+		err1 := client.Call("Add8", args, reply)
+		if err1 != nil {
+			log.Printf("error: %v", err1.Error())
+		}
+
+		log.Printf("Arith8.Add8: %v", reply)
 	}
 
 	fmt.Printf("du: %d", time.Now().Nanosecond()-start.Nanosecond())
