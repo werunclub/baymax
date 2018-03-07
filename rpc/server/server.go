@@ -47,7 +47,7 @@ func NewServer(opts ...Option) *Server {
 
 	server.registry = &serverplugin.EtcdRegisterPlugin{
 		EtcdServers:    options.EtcdAddress,
-		BasePath:       helpers.RPCRath,
+		BasePath:       helpers.RPCPath,
 		UpdateInterval: server.opts.RegisterTTL,
 	}
 

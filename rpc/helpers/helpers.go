@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	RPCRath = "/rpc"
+	RPCPath = "/rpc"
 )
 
 var (

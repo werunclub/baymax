@@ -40,7 +40,7 @@ func NewClient(serviceName string, opts ...Option) *Client {
 	rpcxOption.ConnectTimeout = options.ConnTimeout
 	rpcxOption.SerializeType = protocol.JSON
 
-	client.discovery = rpcxClient.NewEtcdDiscovery(helpers.RPCRath, serviceName,
+	client.discovery = rpcxClient.NewEtcdDiscovery(helpers.RPCPath, serviceName,
 		options.EtcdAddress, nil)
 
 	client.rpcClient = rpcxClient.NewXClient(
