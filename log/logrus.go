@@ -7,8 +7,8 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/evalphobia/logrus_fluent"
+	"github.com/sirupsen/logrus"
 )
 
 // 设置 logrus, 支持同步日志到 fluent

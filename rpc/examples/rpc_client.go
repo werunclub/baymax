@@ -9,7 +9,7 @@ import (
 	rpcClient "baymax/rpc/client"
 	"baymax/rpc/helpers"
 
-	"github.com/Sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"github.com/smallnest/rpcx/share"
 )
 

@@ -1,5 +1,5 @@
-hash: 7bd4d2782c244ee45cb520f7806ce8d43c6438ea6b313d7c4a7a5e73c23d9c4e
-updated: 2018-03-09T12:24:39.040919+08:00
+hash: f07862e6a0b0ec5c66e075ed616b89bfa5f9fb868e020c778b41a9ba079b41a6
+updated: 2018-03-09T13:46:14.930889+08:00
 imports:
 - name: github.com/aead/chacha20
   version: c8d29375923a8e1d2a0f0dc0fc1d8a0aba5b97ba
@@ -65,7 +65,7 @@ imports:
 - name: github.com/grandcat/zeroconf
   version: 8219919fca892353a082b184bca66db55c55b583
 - name: github.com/hashicorp/consul
-  version: 112c0603d3d6fb23ab5f15e8fdb1a761da8eaf9a
+  version: fb9b0181282ec41fee8bf4fdb4f0aef8f451398e
   subpackages:
   - api
 - name: github.com/hashicorp/go-cleanhttp
@@ -95,7 +95,7 @@ imports:
 - name: github.com/juju/ratelimit
   version: 59fac5042749a5afb9af70e813da1dd5474f0167
 - name: github.com/julienschmidt/httprouter
-  version: 8c199fb6259ffc1af525cc3ad52ee60ba8359669
+  version: d1898390779332322e6b5ca5011da4bf249bb056
 - name: github.com/kavu/go_reuseport
   version: 3d6c1e425f717ee59152524e73b904b67705eeb8
 - name: github.com/klauspost/cpuid
@@ -168,10 +168,9 @@ imports:
 - name: github.com/satori/go.uuid
   version: 5bf94b69c6b68ee1b541973bb8e1144db23a194b
 - name: github.com/Sirupsen/logrus
-  version: d682213848ed68c0a260ca37d6dd5ace8423f5ba
-  repo: https://github.com/sirupsen/logrus.git
+  version: f4ee69125072b22721efbe639bd0da9c9d19b8cc
 - name: github.com/sirupsen/logrus
-  version: d682213848ed68c0a260ca37d6dd5ace8423f5ba
+  version: f4ee69125072b22721efbe639bd0da9c9d19b8cc
   repo: https://github.com/sirupsen/logrus.git
 - name: github.com/smallnest/rpcx
   version: f03658be7de9f70f3c8a435ce792fe5e1cb029d3
@@ -203,7 +202,7 @@ imports:
   subpackages:
   - sm4
 - name: github.com/ugorji/go
-  version: 8c0409fcbb70099c748d71f714529204975f6c3f
+  version: ded73eae5db7e7a0ef6f55aace87a2873c5d2b74
   subpackages:
   - codec
 - name: github.com/valyala/fastrand
@@ -292,11 +291,11 @@ testImports:
   subpackages:
   - spew
 - name: github.com/pmezard/go-difflib
-  version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
+  version: 792786c7400a136282c1664665ae0a8db921c6c2
   subpackages:
   - difflib
 - name: github.com/stretchr/testify
-  version: 69483b4bd14f5845b5a1e55bca19e954e827f1d0
+  version: b89eecf5ca5db6d3ba60b237ffe3df7bafb7662f
   subpackages:
   - assert
   - require

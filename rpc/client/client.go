@@ -7,7 +7,7 @@ import (
 	"baymax/errors"
 	"baymax/rpc/helpers"
 
-	"github.com/Sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	rpcxClient "github.com/smallnest/rpcx/client"
 	"github.com/smallnest/rpcx/protocol"
 )
