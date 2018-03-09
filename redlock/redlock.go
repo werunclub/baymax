@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/Sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 	"gopkg.in/redis.v5"
 
 	"baymax/log"

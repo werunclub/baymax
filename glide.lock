@@ -167,7 +167,7 @@ imports:
   - zk
 - name: github.com/satori/go.uuid
   version: 5bf94b69c6b68ee1b541973bb8e1144db23a194b
-- name: github.com/Sirupsen/logrus
+- name: github.com/sirupsen/logrus
   version: f4ee69125072b22721efbe639bd0da9c9d19b8cc
 - name: github.com/sirupsen/logrus
   version: f4ee69125072b22721efbe639bd0da9c9d19b8cc

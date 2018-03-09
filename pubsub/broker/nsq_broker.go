@@ -6,9 +6,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/club-codoon/go-nsq"
 	"github.com/pborman/uuid"
+	"github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
 )
 

@@ -1,8 +1,9 @@
 package log
 
 import (
-	log "github.com/Sirupsen/logrus"
 	"testing"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func TestSetLogurs(t *testing.T) {
