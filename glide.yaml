@@ -9,6 +9,7 @@ import:
   version: ^1.0.0
 - package: github.com/sirupsen/logrus
   repo: https://github.com/sirupsen/logrus.git
+  version: ^v1.0.4
 - package: github.com/evalphobia/logrus_fluent
   version: ~v0.4.0
 - package: gopkg.in/redis.v5
