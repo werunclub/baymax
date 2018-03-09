@@ -21,7 +21,12 @@ func SetLogrus(logLevel, logFormat, logOut string, fluentdEnable bool,
 	}
 
 	if fluentdEnable {
-		hook, err := logrus_fluent.New(fluentdHost, fluentdPort)
+		hook, err := logrus_fluent.NewWithConfig(logrus_fluent.Config{
+			Host:                fluentdHost,
+			Port:                fluentdPort,
+			DefaultMessageField: logrus_fluent.MessageField,
+			MarshalAsJSON:       true,
+		})
 		if err != nil {
 			return err
 		}

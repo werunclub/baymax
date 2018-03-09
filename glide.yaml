@@ -8,11 +8,9 @@ import:
 - package: github.com/pborman/uuid
   version: ^1.0.0
 - package: github.com/evalphobia/logrus_fluent
-  version: ~v0.1.0
+  version: ~v0.4.0
 - package: gopkg.in/redis.v5
   version: ~5.2.9
-- package: github.com/Sirupsen/logrus
-  repo: https://github.com/sirupsen/logrus.git
 - package: golang.org/x/crypto
   repo: https://github.com/golang/crypto.git
 - package: github.com/docker/libkv
@@ -26,10 +24,12 @@ import:
   version: v3.0
 - package: github.com/Sirupsen/logrus
   repo: https://github.com/sirupsen/logrus.git
+- package: github.com/sirupsen/logrus
+  repo: https://github.com/sirupsen/logrus.git
 - package: github.com/coreos/etcd
   version: v3.2.7
 - package: github.com/ugorji/go
-  version: 8c0409fcbb70099c748d71f714529204975f6c3f
+  version: ded73eae5db7e7a0ef6f55aace87a2873c5d2b74
 - package: github.com/hashicorp/consul
   vesion: v0.9.3
 - package: github.com/satori/go.uuid

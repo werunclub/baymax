@@ -1,5 +1,5 @@
-hash: 758bbdbddb966d91843cc362bb6718c23b20d252207a3e1472c3f44b752d4c0e
-updated: 2018-02-27T17:09:31.715335+08:00
+hash: 7bd4d2782c244ee45cb520f7806ce8d43c6438ea6b313d7c4a7a5e73c23d9c4e
+updated: 2018-03-09T12:24:39.040919+08:00
 imports:
 - name: github.com/aead/chacha20
   version: c8d29375923a8e1d2a0f0dc0fc1d8a0aba5b97ba
@@ -10,7 +10,7 @@ imports:
 - name: github.com/armon/go-metrics
   version: 783273d703149aaeb9897cf58613d5af48861c25
 - name: github.com/bifurcation/mint
-  version: 30a67d8540b4f721cfea9f9ae1cd7f22d227a054
+  version: 198357931e6129b810c9c77c12e0dd754846170c
   subpackages:
   - syntax
 - name: github.com/cenk/backoff
@@ -43,7 +43,7 @@ imports:
   - store/etcd
   - store/zookeeper
 - name: github.com/evalphobia/logrus_fluent
-  version: 86bb83d119886b935a52194cad48fd01815b0125
+  version: 76779e73f35d90f5a873e7feaf6691999b2c5db4
 - name: github.com/facebookgo/clock
   version: 600d898af40aa09a7a93ecb9265d87b0504b6f03
 - name: github.com/fatih/color
@@ -59,7 +59,7 @@ imports:
   subpackages:
   - proto
 - name: github.com/golang/protobuf
-  version: 4bd1920723d7b7c925de087aa32e2187708897f7
+  version: bbd03ef6da3a115852eaf24c8a1c46aeb39aa175
   subpackages:
   - proto
 - name: github.com/grandcat/zeroconf
@@ -79,11 +79,11 @@ imports:
   subpackages:
   - simplelru
 - name: github.com/hashicorp/serf
-  version: d4f33d5b6a0b7b252b122dc80d559e9e5280d2d4
+  version: 3b250ce4404edb266330f53fcfc8ad0d0dacfae7
   subpackages:
   - coordinate
 - name: github.com/influxdata/influxdb
-  version: 632e01e0686d65840f9cc18353cfac576951c7af
+  version: c75c824c8c65ae1e60896c99dc5a8be2188c1a88
   subpackages:
   - client
   - models
@@ -91,11 +91,11 @@ imports:
 - name: github.com/jinzhu/gorm
   version: 5174cc5c242a728b435ea2be8a2f7f998e15429b
 - name: github.com/jinzhu/inflection
-  version: 1c35d901db3da928c72a72d8458480cc9ade058f
+  version: 04140366298a54a039076d798123ffa108fff46c
 - name: github.com/juju/ratelimit
   version: 59fac5042749a5afb9af70e813da1dd5474f0167
 - name: github.com/julienschmidt/httprouter
-  version: d1898390779332322e6b5ca5011da4bf249bb056
+  version: 8c199fb6259ffc1af525cc3ad52ee60ba8359669
 - name: github.com/kavu/go_reuseport
   version: 3d6c1e425f717ee59152524e73b904b67705eeb8
 - name: github.com/klauspost/cpuid
@@ -107,7 +107,7 @@ imports:
 - name: github.com/lucas-clemente/fnv128a
   version: 393af48d391698c6ae4219566bfbdfef67269997
 - name: github.com/lucas-clemente/quic-go
-  version: be2be3872f6608f29b379c422b2a885d521cb597
+  version: 7b43d17faba54d35724b7402f002fb757473c0b1
   subpackages:
   - internal/ackhandler
   - internal/congestion
@@ -127,21 +127,30 @@ imports:
 - name: github.com/mattn/go-isatty
   version: 6ca4dbf54d38eea1a992b3c722a76a5d1c4cb25c
 - name: github.com/micro/go-micro
-  version: d0d9582b81e3944edca78b1db6ed9619d0729cee
+  version: 6246fa2bcb781619ab295df972a65f092124a8df
   subpackages:
   - codec
   - codec/jsonrpc
   - metadata
 - name: github.com/miekg/dns
-  version: 5364553f1ee9cddc7ac8b62dce148309c386695b
+  version: 906238edc6eb0ddface4a1923f6d41ef2a5ca59b
 - name: github.com/mitchellh/go-homedir
   version: b8bc1bf767474819792c23f32d8286a45736f1c6
 - name: github.com/mreiferson/go-snappystream
   version: 028eae7ab5c4c9e2d1cb4c4ca1e53259bbe7e504
   subpackages:
   - snappy-go
+- name: github.com/nicksnyder/go-i18n
+  version: 0dc1626d56435e9d605a29875701721c54bc9bbd
+  subpackages:
+  - i18n
+  - i18n/bundle
+  - i18n/language
+  - i18n/translation
 - name: github.com/pborman/uuid
   version: e790cca94e6cc75c7064b1332e63811d4aae1a53
+- name: github.com/pelletier/go-toml
+  version: 05bcc0fb0d3e60da4b8dd5bd7e0ea563eb4ca943
 - name: github.com/philhofer/fwd
   version: bb6d471dc95d4fe11e432687f8b70ff496cf3136
 - name: github.com/pkg/errors
@@ -159,7 +168,10 @@ imports:
 - name: github.com/satori/go.uuid
   version: 5bf94b69c6b68ee1b541973bb8e1144db23a194b
 - name: github.com/Sirupsen/logrus
-  version: 4b6ea7319e214d98c938f12692336f7ca9348d6b
+  version: d682213848ed68c0a260ca37d6dd5ace8423f5ba
+  repo: https://github.com/sirupsen/logrus.git
+- name: github.com/sirupsen/logrus
+  version: d682213848ed68c0a260ca37d6dd5ace8423f5ba
   repo: https://github.com/sirupsen/logrus.git
 - name: github.com/smallnest/rpcx
   version: f03658be7de9f70f3c8a435ce792fe5e1cb029d3
@@ -205,7 +217,7 @@ imports:
 - name: github.com/xtaci/kcp-go
   version: 42bc1dfefff592fdb3affa793980c4f6ab4213e5
 - name: golang.org/x/crypto
-  version: 8c653846df49742c4c85ec37e5d9f8d3ba657895
+  version: c7dcf104e3a7a1417abc0230cb0d5240d764159d
   repo: https://github.com/golang/crypto.git
   subpackages:
   - blowfish
@@ -217,11 +229,12 @@ imports:
   - pbkdf2
   - salsa20
   - salsa20/salsa
+  - ssh/terminal
   - tea
   - twofish
   - xtea
 - name: golang.org/x/net
-  version: cbe0f9307d0156177f9dd5dc85da1a31abc5f2fb
+  version: d0aafc73d5cdc42264b0af071c261abac580695e
   subpackages:
   - bpf
   - context
@@ -237,11 +250,12 @@ imports:
   - lex/httplex
   - trace
 - name: golang.org/x/sys
-  version: f6cff0780e542efa0c8e864dc8fa522808f6a598
+  version: 7dca6fe1f43775aa6d1334576870ff63f978f539
   subpackages:
   - unix
+  - windows
 - name: golang.org/x/text
-  version: 27420a1a391f5504f73155051cd274311bf70883
+  version: b7ef84aaf62aa3e70962625c80a571ae7c17cb40
   repo: https://github.com/golang/text
   vcs: git
   subpackages:
@@ -270,6 +284,8 @@ imports:
   - internal/hashtag
   - internal/pool
   - internal/proto
+- name: gopkg.in/yaml.v2
+  version: 7f97868eec74b32b0982dd158a51a446d1da7eb5
 testImports:
 - name: github.com/davecgh/go-spew
   version: 346938d642f2ec3594ed81d874461961cd0faa76
