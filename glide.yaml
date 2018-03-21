@@ -37,3 +37,5 @@ import:
   version: 1.0.0
 - package: github.com/nicksnyder/go-i18n/i18n
   version: v1.10.0
+- package: github.com/jinzhu/now
+  version: d939ba741945c047cac69c329c5fb0d6b4a06520
