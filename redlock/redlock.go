@@ -140,6 +140,6 @@ func (s *Sequence) Get() int64 {
 }
 
 func (s *Sequence) Set(val int64) {
-	err := client.Set(s.Key, val, 0).Err()
+	err := client.Set(s.Key, val, time.Duration(24)*time.Hour).Err()
 	s.Error = err
 }
