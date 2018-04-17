@@ -42,3 +42,4 @@ import:
 - package: go4.org/syncutil/singleflight
   vcs: git
   version: master
+  repo: https://github.com/go4org/go4.git
