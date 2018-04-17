@@ -41,3 +41,4 @@ import:
   version: d939ba741945c047cac69c329c5fb0d6b4a06520
 - package: go4.org/syncutil/singleflight
   vcs: git
+  version: master
