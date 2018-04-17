@@ -4,9 +4,9 @@ import:
   subpackages:
   - http2
 - package: github.com/appleboy/gin-jwt
-  version: ^2.1.0
+  version: ~2.1.0
 - package: github.com/pborman/uuid
-  version: ^1.0.0
+  version: ~1.0.0
 - package: github.com/sirupsen/logrus
   repo: https://github.com/sirupsen/logrus.git
   version: ^v1.0.4
@@ -17,7 +17,7 @@ import:
 - package: golang.org/x/crypto
   repo: https://github.com/golang/crypto.git
 - package: github.com/docker/libkv
-  version: ^0.2.1
+  version: ~0.2.1
   subpackages:
   - store
   - store/consul
@@ -39,3 +39,5 @@ import:
   version: v1.10.0
 - package: github.com/jinzhu/now
   version: d939ba741945c047cac69c329c5fb0d6b4a06520
+- package: go4.org/syncutil/singleflight
+  vcs: git
