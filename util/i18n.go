@@ -16,18 +16,23 @@ var (
 )
 
 func init() {
-	defaultLanguage := os.Getenv("DEFAULTLANGUAGE")
-	if defaultLanguage == "" {
-		defaultLanguage = "zh-Hans"
+	Init()
+}
+
+// Init 初始化
+func Init() {
+	languageCode := os.Getenv("DEFAULTLANGUAGE")
+	if languageCode == "" {
+		languageCode = "zh-Hans"
 	}
-    
-    logrus.WithField("lang_code", defaultLanguage).Debugf("init T")
-	T, _ = i18n.Tfunc(defaultLanguage)
+
+	logrus.WithField("lang_code", languageCode).Debugf("Init TranslateFunc")
+	T, _ = i18n.Tfunc(languageCode)
 }
 
 // TfuncForRPC 返回翻译方法
-func TfuncForRPC(ctx context.Context, defaultLanguage string) (i18n.TranslateFunc, error) {
+func TfuncForRPC(ctx context.Context, languageCode string) (i18n.TranslateFunc, error) {
 	meta := helpers.NewMetaDataFormContext(ctx)
 	acceptLang := meta.Get("lang")
-	return i18n.Tfunc(acceptLang, defaultLanguage)
+	return i18n.Tfunc(acceptLang, languageCode)
 }
