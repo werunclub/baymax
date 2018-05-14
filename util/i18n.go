@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/nicksnyder/go-i18n/i18n"
+	"github.com/sirupsen/logrus"
 
 	"baymax/rpc/helpers"
 )
@@ -19,7 +20,8 @@ func init() {
 	if defaultLanguage == "" {
 		defaultLanguage = "zh-Hans"
 	}
-
+    
+    logrus.WithField("lang_code", defaultLanguage).Debugf("init T")
 	T, _ = i18n.Tfunc(defaultLanguage)
 }
 
