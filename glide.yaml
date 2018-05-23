@@ -5,8 +5,6 @@ import:
   - http2
 - package: github.com/appleboy/gin-jwt
   version: ~2.1.0
-- package: github.com/pborman/uuid
-  version: ~1.0.0
 - package: github.com/sirupsen/logrus
   repo: https://github.com/sirupsen/logrus.git
   version: ^v1.0.4
