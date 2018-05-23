@@ -31,8 +31,8 @@ import:
   version: ded73eae5db7e7a0ef6f55aace87a2873c5d2b74
 - package: github.com/hashicorp/consul
   vesion: v0.9.3
-- package: github.com/satori/go.uuid
-  version: 5bf94b69c6b68ee1b541973bb8e1144db23a194b
+- package: github.com/pborman/uuid
+  version: v1.1
 - package: github.com/jinzhu/gorm
   version: 1.0.0
 - package: github.com/nicksnyder/go-i18n/i18n

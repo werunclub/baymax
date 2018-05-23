@@ -6,7 +6,7 @@ import (
 	"hash/fnv"
 	"net"
 
-	"github.com/satori/go.uuid"
+	"github.com/pborman/uuid"
 	"github.com/smallnest/rpcx/share"
 )
 
@@ -171,7 +171,7 @@ func GetRequestID(ctx context.Context) string {
 	requestID := meta.Get("request_id")
 
 	if requestID == "" {
-		requestID = uuid.NewV4().String()
+		requestID = uuid.NewRandom().String()
 	}
 
 	return requestID

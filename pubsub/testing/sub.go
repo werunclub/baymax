@@ -6,7 +6,8 @@ import (
 	"golang.org/x/net/context"
 
 	"baymax/pubsub"
-	"github.com/satori/go.uuid"
+
+	"github.com/pborman/uuid"
 )
 
 type Message struct {
@@ -35,7 +36,7 @@ func main() {
 
 	server := pubsub.NewServer("127.0.0.1:4161")
 
-	queueName := uuid.NewV4().String()
+	queueName := uuid.NewUUID().String()
 	var err error
 
 	err = server.Subscribe(server.NewSubscriber(
