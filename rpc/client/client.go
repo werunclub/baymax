@@ -54,6 +54,34 @@ func NewClient(serviceName string, opts ...Option) *Client {
 	return &client
 }
 
+// NewDirectClient 初始化直连客户端
+func NewDirectClient(serviceName, addr string, opts ...Option) *Client {
+
+	options := newOptions(opts...)
+
+	client := Client{
+		opts:        options,
+		ServiceName: serviceName,
+		Retries:     options.Retries,
+	}
+
+	rpcxOption := rpcxClient.DefaultOption
+	rpcxOption.ConnectTimeout = options.ConnTimeout
+	rpcxOption.SerializeType = protocol.JSON
+
+	client.discovery := rpcxClient.NewPeer2PeerDiscovery("tcp@"+addr, "")
+
+	client.rpcClient = rpcxClient.NewXClient(
+		serviceName,
+		rpcxClient.Failtry,
+		rpcxClient.RandomSelect,
+		client.discovery,
+		rpcxOption,
+	)
+
+	return &client
+}
+
 func (c *Client) getServiceName() string {
 	return c.ServiceName
 }
