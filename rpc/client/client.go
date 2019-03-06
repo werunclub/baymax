@@ -69,7 +69,7 @@ func NewDirectClient(serviceName, addr string, opts ...Option) *Client {
 	rpcxOption.ConnectTimeout = options.ConnTimeout
 	rpcxOption.SerializeType = protocol.JSON
 
-	client.discovery := rpcxClient.NewPeer2PeerDiscovery("tcp@"+addr, "")
+	client.discovery = rpcxClient.NewPeer2PeerDiscovery("tcp@"+addr, "")
 
 	client.rpcClient = rpcxClient.NewXClient(
 		serviceName,
