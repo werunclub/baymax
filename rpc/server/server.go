@@ -168,7 +168,7 @@ func (s *Server) RegisterAndRun() error {
 	}
 
 	// 注销服务
-	s.Deregister()
+	// s.Deregister()
 
 	// 暂停10s
 	if s.opts.StopWait > 0 {
