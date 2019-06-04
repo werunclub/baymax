@@ -21,8 +21,8 @@ import:
   - store/consul
   - store/etcd
 - package: github.com/smallnest/rpcx
-  repo: github.com/werunclub/rpcx
-  version: v3.0
+  repo: https://github.com/werunclub/rpcx.git
+  version: v3.0.0
 - package: github.com/coreos/etcd
   version: v3.2.7
 - package: github.com/ugorji/go
