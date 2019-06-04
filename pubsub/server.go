@@ -7,8 +7,8 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/werunclub/baymax/log"
-	"github.com/werunclub/baymax/pubsub/broker"
+	"baymax/log"
+	"baymax/pubsub/broker"
 	"github.com/go-errors/errors"
 )
 
