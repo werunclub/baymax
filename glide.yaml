@@ -21,7 +21,7 @@ import:
   - store/consul
   - store/etcd
 - package: github.com/smallnest/rpcx
-  repo: git@git.in.codoon.com:ClubCodoon/rpcx.git
+  repo: github.com/werunclub/rpcx
   version: v3.0
 - package: github.com/coreos/etcd
   version: v3.2.7

@@ -10,8 +10,8 @@ import (
 	"github.com/micro/go-micro/metadata"
 	"golang.org/x/net/context"
 
-	"baymax/log"
-	"baymax/pubsub/broker"
+	"github.com/werunclub/baymax/log"
+	"github.com/werunclub/baymax/pubsub/broker"
 )
 
 const (

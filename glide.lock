@@ -170,7 +170,7 @@ imports:
   repo: https://github.com/sirupsen/logrus.git
 - name: github.com/smallnest/rpcx
   version: 9581515fab35f26814bdb5c30208b05347990360
-  repo: git@git.in.codoon.com:ClubCodoon/rpcx.git
+  repo: github.com/werunclub/rpcx
   subpackages:
   - client
   - codec

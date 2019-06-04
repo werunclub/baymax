@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"sync"
 
-	"baymax/pubsub/broker"
+	"github.com/werunclub/baymax/pubsub/broker"
 
 	"github.com/micro/go-micro/codec"
 	mj "github.com/micro/go-micro/codec/jsonrpc"
