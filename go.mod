@@ -76,6 +76,8 @@ require (
 	golang.org/x/sys v0.0.0-20180417080122-b126b21c05a9 // indirect
 	golang.org/x/text v0.0.0-20180410181320-7922cc490dd5 // indirect
 	google.golang.org/appengine v0.0.0-20180405220334-0a24098c0ec6 // indirect
+	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
+	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
 	gopkg.in/redis.v5 v5.2.9
 	gopkg.in/yaml.v2 v2.2.1 // indirect
 )

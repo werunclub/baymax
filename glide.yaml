@@ -41,3 +41,5 @@ import:
   vcs: git
   version: master
   repo: https://github.com/go4org/go4.git
+- package: github.com/micro/go-micro
+  version: v0.27.1
