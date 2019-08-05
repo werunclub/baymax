@@ -109,7 +109,7 @@ func (c *Client) Go(serviceMethod string, args interface{}, reply interface{}, d
 func (c *Client) CallWithContext(ctx context.Context, serviceMethod string, args interface{}, reply interface{}) *errors.Error {
 	err := c.rpcClient.Call(ctx, c.cleanServiceMethod(serviceMethod), args, reply)
 	if err != nil {
-		logrus.WithField("serviceMethod", serviceMethod).WithField("serviceName", "serviceName").WithError(err).Errorf("rpc call fail")
+		logrus.WithField("serviceMethod", serviceMethod).WithError(err).Errorf("rpc call fail")
 		return errors.Parse(err.Error())
 	}
 	return nil
