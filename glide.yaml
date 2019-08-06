@@ -22,7 +22,6 @@ import:
   - store/etcd
 - package: github.com/smallnest/rpcx
   repo: https://github.com/werunclub/rpcx.git
-  version: v3.1
 - package: github.com/coreos/etcd
   version: v3.2.7
 - package: github.com/ugorji/go
