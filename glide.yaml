@@ -42,3 +42,5 @@ import:
   repo: https://github.com/go4org/go4.git
 - package: github.com/micro/go-micro
   version: v0.27.1
+- package: github.com/vrischmann/go-metrics-influxdb
+  repo: https://github.com/werunclub/go-metrics-influxdb.git
