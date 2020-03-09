@@ -1,14 +1,13 @@
 package main
 
 import (
-	"baymax/errors"
-	"baymax/log"
-	"baymax/rpc/server"
 	"fmt"
-
 	"context"
 
-	"baymax/rpc/helpers"
+	"github.com/werunclub/baymax/rpc/helpers"
+	"github.com/werunclub/baymax/errors"
+	"github.com/werunclub/baymax/log"
+	"github.com/werunclub/baymax/rpc/server"
 )
 
 type Args struct {

@@ -5,9 +5,9 @@ import (
 	"log"
 	"time"
 
-	"baymax/errors"
-	rpcClient "baymax/rpc/client"
-	"baymax/rpc/helpers"
+	"github.com/werunclub/baymax/errors"
+	rpcClient "github.com/werunclub/baymax/rpc/client"
+	"github.com/werunclub/baymax/rpc/helpers"
 
 	"github.com/sirupsen/logrus"
 	"github.com/smallnest/rpcx/share"
