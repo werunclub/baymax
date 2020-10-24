@@ -22,7 +22,7 @@ imports:
   subpackages:
   - generic
 - name: github.com/club-codoon/go-nsq
-  version: 8113779eb9536c03af8bed4b9098e7230edab89f
+  version: 3caecb86f3155a3aed636726c4949b5d68e0ecd1
 - name: github.com/coreos/etcd
   version: bb66589f8cf18960c7f3d56b1b83753caeed9c7a
   subpackages:
