@@ -48,7 +48,6 @@ func (t *Arith) Div(args *Args, reply *Reply) error {
 }
 
 func main() {
-
 	logrus.SetLevel(logrus.DebugLevel)
 
 	start := time.Now()
@@ -59,7 +58,6 @@ func main() {
 	)
 
 	for i := 0; i <= 10; i++ {
-
 		args := &Args{7, 8}
 		reply := new(Reply)
 

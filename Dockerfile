@@ -4,3 +4,4 @@ RUN mkdir -p /go/src/baymax
 COPY . /go/src/baymax
 WORKDIR /go/src/baymax
 RUN glide install
+RUN cd rpc/examples && go run rpc_client.go
