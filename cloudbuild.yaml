@@ -9,3 +9,6 @@ steps:
         "asia.gcr.io/$PROJECT_ID/baymax:$BRANCH_NAME",
         ".",
       ]
+
+images:
+  - "asia.gcr.io/$PROJECT_ID/baymax:latest"
