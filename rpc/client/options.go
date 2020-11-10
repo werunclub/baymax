@@ -2,13 +2,12 @@ package client
 
 import (
 	"os"
-	"strings"
 	"time"
 )
 
 var (
-	DefaultEtcdAddress = "127.0.0.1:2379"
-	DefaultPoolSize    = 100
+	DefaultConfigFile = "/etc/discovery/config.json"
+	DefaultPoolSize   = 100
 )
 
 type Option func(*Options)
@@ -16,8 +15,8 @@ type Option func(*Options)
 type Options struct {
 	Registry string
 
-	// EtcdAddress 地址用于注册服务
-	EtcdAddress []string
+	// ConfigFile 注册表文件地址
+	ConfigFile string
 
 	SessionTimeout time.Duration
 
@@ -42,8 +41,8 @@ func newOptions(opt ...Option) Options {
 		o(&opts)
 	}
 
-	if len(opts.EtcdAddress) == 0 {
-		opts.EtcdAddress = []string{DefaultEtcdAddress}
+	if len(opts.ConfigFile) == 0 {
+		opts.ConfigFile = DefaultConfigFile
 	}
 
 	if opts.SessionTimeout == 0 {
@@ -66,10 +65,9 @@ func newOptions(opt ...Option) Options {
 		opts.Retries = 3
 	}
 
-	envEtcdAddress := os.Getenv("REGISTRY_ADDRESS")
-	if envEtcdAddress != "" {
-		addrs := strings.Split(envEtcdAddress, ",")
-		opts.EtcdAddress = addrs
+	envConfigFile := os.Getenv("REGISTRY_CONFIG_FILE")
+	if envConfigFile != "" {
+		opts.ConfigFile = envConfigFile
 	}
 
 	return opts
@@ -90,7 +88,6 @@ func Registry(a string) Option {
 // EtcdAddress 地址
 func EtcdAddress(a []string) Option {
 	return func(o *Options) {
-		o.EtcdAddress = a
 	}
 }
 
@@ -119,5 +116,12 @@ func Retries(times int) Option {
 // deprecated
 func ConsulAddress(addr string) Option {
 	return func(o *Options) {
+	}
+}
+
+// ConfigFile 注册表文件
+func ConfigFile(a string) Option {
+	return func(o *Options) {
+		o.ConfigFile = a
 	}
 }

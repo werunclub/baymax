@@ -1,45 +1,51 @@
 package: baymax
 import:
-- package: golang.org/x/net
-  subpackages:
-  - http2
-- package: github.com/appleboy/gin-jwt
-  version: ~2.1.0
-- package: github.com/sirupsen/logrus
-  repo: https://github.com/sirupsen/logrus.git
-  version: ^v1.0.4
-- package: github.com/evalphobia/logrus_fluent
-  version: ~v0.4.0
-- package: gopkg.in/redis.v5
-  version: ~5.2.9
-- package: golang.org/x/crypto
-  repo: https://github.com/golang/crypto.git
-- package: github.com/docker/libkv
-  version: ~0.2.1
-  subpackages:
-  - store
-  - store/consul
-  - store/etcd
-- package: github.com/smallnest/rpcx
-  repo: https://github.com/werunclub/rpcx.git
-  version: v3.0.1
-- package: github.com/coreos/etcd
-  version: v3.2.7
-- package: github.com/ugorji/go
-  version: ded73eae5db7e7a0ef6f55aace87a2873c5d2b74
-- package: github.com/hashicorp/consul
-  vesion: v0.9.3
-- package: github.com/pborman/uuid
-  version: v1.1
-- package: github.com/jinzhu/gorm
-  version: 1.0.0
-- package: github.com/nicksnyder/go-i18n/i18n
-  version: v1.10.0
-- package: github.com/jinzhu/now
-  version: d939ba741945c047cac69c329c5fb0d6b4a06520
-- package: go4.org/syncutil/singleflight
-  vcs: git
-  version: master
-  repo: https://github.com/go4org/go4.git
-- package: github.com/micro/go-micro
-  version: v0.27.1
+  - package: golang.org/x/net
+    subpackages:
+      - http2
+  - package: github.com/appleboy/gin-jwt
+    version: ~2.1.0
+  - package: github.com/sirupsen/logrus
+    repo: https://github.com/sirupsen/logrus.git
+    version: ^v1.0.4
+  - package: github.com/evalphobia/logrus_fluent
+    version: ~v0.4.0
+  - package: gopkg.in/redis.v5
+    version: ~5.2.9
+  - package: golang.org/x/crypto
+    repo: https://github.com/golang/crypto.git
+  - package: github.com/docker/libkv
+    version: ~0.2.1
+    subpackages:
+      - store
+      - store/consul
+      - store/etcd
+  - package: github.com/werunclub/rpcx
+    repo: https://github.com/werunclub/rpcx.git
+    version: develop
+    vcs: git
+  - package: github.com/coreos/etcd
+    version: v3.2.7
+  - package: github.com/ugorji/go
+    version: ded73eae5db7e7a0ef6f55aace87a2873c5d2b74
+  - package: github.com/hashicorp/consul
+    vesion: v0.9.3
+  - package: github.com/pborman/uuid
+    version: v1.1
+  - package: github.com/jinzhu/gorm
+    version: 1.0.0
+  - package: github.com/nicksnyder/go-i18n/i18n
+    version: v1.10.0
+  - package: github.com/jinzhu/now
+    version: d939ba741945c047cac69c329c5fb0d6b4a06520
+  - package: go4.org/syncutil/singleflight
+    vcs: git
+    version: master
+    repo: https://github.com/go4org/go4.git
+  - package: github.com/micro/go-micro
+    version: v0.27.1
+
+ignore:
+  - crypto/ed25519
+  - golang.org/x/crypto/chacha20
+  - github.com/cpuguy83/go-md2man/v2/md2man

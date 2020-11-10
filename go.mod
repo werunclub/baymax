@@ -65,7 +65,7 @@ require (
 	github.com/rubyist/circuitbreaker v2.2.1+incompatible // indirect
 	github.com/samuel/go-zookeeper v0.0.0-20180130194729-c4fab1ac1bec // indirect
 	github.com/sirupsen/logrus v1.0.5
-	github.com/smallnest/rpcx v0.0.0-20171123072017-6d646e54c461
+	github.com/werunclub/rpcx v0.0.0-20171123072017-6d646e54c461
 	github.com/soheilhy/cmux v0.1.4 // indirect
 	github.com/stretchr/testify v1.3.0
 	github.com/tatsushid/go-fastping v0.0.0-20160109021039-d7bb493dee3e // indirect
@@ -86,4 +86,4 @@ require (
 	gopkg.in/redis.v5 v5.2.9
 )
 
-replace github.com/smallnest/rpcx v0.0.0-20171123072017-6d646e54c461 => github.com/werunclub/rpcx v3.0.0+incompatible
+replace github.com/werunclub/rpcx v0.0.0-20171123072017-6d646e54c461 => github.com/werunclub/rpcx v3.0.0+incompatible

@@ -8,8 +8,8 @@ import (
 	"github.com/werunclub/baymax/rpc/helpers"
 
 	"github.com/sirupsen/logrus"
-	rpcxClient "github.com/smallnest/rpcx/client"
-	"github.com/smallnest/rpcx/protocol"
+	rpcxClient "github.com/werunclub/rpcx/client"
+	"github.com/werunclub/rpcx/protocol"
 )
 
 // Client represents a RPC client.
@@ -40,8 +40,7 @@ func NewClient(serviceName string, opts ...Option) *Client {
 	rpcxOption.ConnectTimeout = options.ConnTimeout
 	rpcxOption.SerializeType = protocol.JSON
 
-	client.discovery = rpcxClient.NewEtcdDiscovery(helpers.RPCPath, serviceName,
-		options.EtcdAddress, nil)
+	client.discovery = rpcxClient.NewStaticDiscovery(helpers.RPCPath, serviceName)
 
 	client.rpcClient = rpcxClient.NewXClient(
 		serviceName,

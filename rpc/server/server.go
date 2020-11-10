@@ -10,8 +10,8 @@ import (
 	"syscall"
 	"time"
 
-	rpcxServer "github.com/smallnest/rpcx/server"
-	"github.com/smallnest/rpcx/serverplugin"
+	rpcxServer "github.com/werunclub/rpcx/server"
+	"github.com/werunclub/rpcx/serverplugin"
 
 	"github.com/werunclub/baymax/log"
 	"github.com/werunclub/baymax/rpc/helpers"
@@ -22,7 +22,7 @@ type Server struct {
 	opts      Options
 	rpcServer *rpcxServer.Server
 
-	registry *serverplugin.EtcdRegisterPlugin
+	registry *serverplugin.StaticRegisterPlugin
 
 	Handlers map[string]interface{}
 
@@ -45,11 +45,7 @@ func NewServer(opts ...Option) *Server {
 		Exit: make(chan bool, 1),
 	}
 
-	server.registry = &serverplugin.EtcdRegisterPlugin{
-		EtcdServers:    options.EtcdAddress,
-		BasePath:       helpers.RPCPath,
-		UpdateInterval: server.opts.RegisterTTL,
-	}
+	server.registry = &serverplugin.StaticRegisterPlugin{}
 
 	server.rpcServer.Plugins.Add(server.registry)
 

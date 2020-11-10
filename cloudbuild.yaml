@@ -1,0 +1,11 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "asia.gcr.io/$PROJECT_ID/baymax:latest",
+        "-t",
+        "asia.gcr.io/$PROJECT_ID/baymax:$BRANCH_NAME",
+        ".",
+      ]

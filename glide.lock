@@ -168,9 +168,10 @@ imports:
 - name: github.com/sirupsen/logrus
   version: c155da19408a8799da419ed3eeb0cb5db0ad5dbc
   repo: https://github.com/sirupsen/logrus.git
-- name: github.com/smallnest/rpcx
-  version: 9581515fab35f26814bdb5c30208b05347990360
+- name: github.com/werunclub/rpcx
+  version: 65d9cc0894fda4a3ef556be8359d7754b5d57554
   repo: github.com/werunclub/rpcx
+  vcs: git
   subpackages:
   - client
   - codec
