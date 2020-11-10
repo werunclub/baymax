@@ -40,7 +40,7 @@ func NewClient(serviceName string, opts ...Option) *Client {
 	rpcxOption.ConnectTimeout = options.ConnTimeout
 	rpcxOption.SerializeType = protocol.JSON
 
-	client.discovery = rpcxClient.NewStaticDiscovery(helpers.RPCPath, serviceName)
+	client.discovery = rpcxClient.NewStaticDiscovery(helpers.RPCPath, serviceName, options.ConfigFile)
 
 	client.rpcClient = rpcxClient.NewXClient(
 		serviceName,
