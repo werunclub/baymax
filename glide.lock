@@ -169,7 +169,7 @@ imports:
   version: c155da19408a8799da419ed3eeb0cb5db0ad5dbc
   repo: https://github.com/sirupsen/logrus.git
 - name: github.com/werunclub/rpcx
-  version: 65d9cc0894fda4a3ef556be8359d7754b5d57554
+  version: 2868ebf05c6f37b1b13cb00ac4c330c8b61e0b27
   vcs: git
   subpackages:
   - client
