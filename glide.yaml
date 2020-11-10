@@ -21,7 +21,6 @@ import:
       - store/consul
       - store/etcd
   - package: github.com/werunclub/rpcx
-    repo: https://github.com/werunclub/rpcx.git
     version: develop
     vcs: git
   - package: github.com/coreos/etcd

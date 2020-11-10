@@ -170,7 +170,6 @@ imports:
   repo: https://github.com/sirupsen/logrus.git
 - name: github.com/werunclub/rpcx
   version: 65d9cc0894fda4a3ef556be8359d7754b5d57554
-  repo: github.com/werunclub/rpcx
   vcs: git
   subpackages:
   - client
