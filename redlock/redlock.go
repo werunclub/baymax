@@ -8,7 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"gopkg.in/redis.v5"
 
-	"github.com/werunclub/baymax/log"
+	"baymax/log"
 )
 
 var client *redis.Client

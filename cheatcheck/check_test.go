@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/werunclub/baymax/util"
+	"baymax/util"
 )
 
 // 计步数据排序

@@ -5,7 +5,7 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/werunclub/baymax/pubsub"
+	"baymax/pubsub"
 
 	"github.com/pborman/uuid"
 )

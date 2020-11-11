@@ -13,8 +13,8 @@ import (
 	rpcxServer "github.com/werunclub/rpcx/server"
 	"github.com/werunclub/rpcx/serverplugin"
 
-	"github.com/werunclub/baymax/log"
-	"github.com/werunclub/baymax/rpc/helpers"
+	"baymax/log"
+	"baymax/rpc/helpers"
 )
 
 // Server rpc server

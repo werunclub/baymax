@@ -3,7 +3,7 @@ package service
 import (
 	"github.com/sirupsen/logrus"
 
-	"github.com/werunclub/baymax/rpc/client"
+	"baymax/rpc/client"
 )
 
 type Service struct {
