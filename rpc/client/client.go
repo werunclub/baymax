@@ -55,7 +55,6 @@ func NewClient(serviceName string, opts ...Option) *Client {
 
 // NewDirectClient 初始化直连客户端
 func NewDirectClient(serviceName, addr string, opts ...Option) *Client {
-
 	options := newOptions(opts...)
 
 	client := Client{
