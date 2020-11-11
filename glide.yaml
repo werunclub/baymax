@@ -42,6 +42,7 @@ import:
     version: master
     repo: https://github.com/go4org/go4.git
   - package: github.com/micro/go-micro
+    repo: https://github.com/werunclub/nitro.git
     version: v0.27.1
   - package: github.com/cenkalti/backoff
     version: 31cc31bb63269a3c813d1f26e0ab058452b7d803
