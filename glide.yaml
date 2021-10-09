@@ -22,7 +22,6 @@ import:
   - store/etcd
 - package: github.com/smallnest/rpcx
   repo: https://github.com/werunclub/rpcx.git
-  version: v3.0.1
 - package: github.com/coreos/etcd
   version: v3.2.7
 - package: github.com/ugorji/go
@@ -43,3 +42,5 @@ import:
   repo: https://github.com/go4org/go4.git
 - package: github.com/micro/go-micro
   version: v0.27.1
+- package: github.com/vrischmann/go-metrics-influxdb
+  repo: https://github.com/werunclub/go-metrics-influxdb.git

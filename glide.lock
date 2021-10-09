@@ -22,7 +22,7 @@ imports:
   subpackages:
   - generic
 - name: github.com/club-codoon/go-nsq
-  version: 8113779eb9536c03af8bed4b9098e7230edab89f
+  version: 9b417f42636fd83b354965cdfbe6a0ece7b2cae0
 - name: github.com/coreos/etcd
   version: bb66589f8cf18960c7f3d56b1b83753caeed9c7a
   subpackages:
@@ -168,19 +168,6 @@ imports:
 - name: github.com/sirupsen/logrus
   version: c155da19408a8799da419ed3eeb0cb5db0ad5dbc
   repo: https://github.com/sirupsen/logrus.git
-- name: github.com/smallnest/rpcx
-  version: 9581515fab35f26814bdb5c30208b05347990360
-  repo: github.com/werunclub/rpcx
-  subpackages:
-  - client
-  - codec
-  - errors
-  - log
-  - protocol
-  - server
-  - serverplugin
-  - share
-  - util
 - name: github.com/soheilhy/cmux
   version: e09e9389d85d8492d313d73d1469c029e710623f
 - name: github.com/tatsushid/go-fastping
