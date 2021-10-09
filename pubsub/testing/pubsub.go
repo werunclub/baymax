@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"baymax/pubsub/broker"
+	"github.com/werunclub/baymax/v2/pubsub/broker"
 )
 
 var (

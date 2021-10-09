@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	concurrentHandlerKey = contextKeyT("baymax/broker/nsq/concurrentHandlers")
+	concurrentHandlerKey = contextKeyT("github.com/werunclub/baymax/v2/broker/nsq/concurrentHandlers")
 )
 
 type nsqBroker struct {

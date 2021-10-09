@@ -4,8 +4,8 @@ import (
 	"context"
 	"strings"
 
-	"baymax/errors"
-	"baymax/rpc/helpers"
+	"github.com/werunclub/baymax/v2/errors"
+	"github.com/werunclub/baymax/v2/rpc/helpers"
 
 	"github.com/sirupsen/logrus"
 	rpcxClient "github.com/werunclub/rpcx/client"
@@ -27,7 +27,6 @@ type Client struct {
 
 // NewClient 初始化客户端
 func NewClient(serviceName string, opts ...Option) *Client {
-
 	options := newOptions(opts...)
 
 	client := Client{

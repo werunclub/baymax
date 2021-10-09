@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"baymax/errors"
-	"baymax/log"
-	"baymax/rpc/helpers"
-	"baymax/rpc/server"
+	"github.com/werunclub/baymax/v2/errors"
+	"github.com/werunclub/baymax/v2/log"
+	"github.com/werunclub/baymax/v2/rpc/helpers"
+	"github.com/werunclub/baymax/v2/rpc/server"
 )
 
 type Args struct {
