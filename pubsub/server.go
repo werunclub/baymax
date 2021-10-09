@@ -8,8 +8,8 @@ import (
 	"syscall"
 
 	"github.com/go-errors/errors"
-	"github.com/werunclub/baymax/log"
-	"github.com/werunclub/baymax/pubsub/broker"
+	"github.com/werunclub/baymax/v2/log"
+	"github.com/werunclub/baymax/v2/pubsub/broker"
 )
 
 type Server struct {

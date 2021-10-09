@@ -7,7 +7,7 @@ import (
 	"github.com/nicksnyder/go-i18n/i18n"
 	"github.com/sirupsen/logrus"
 
-	"github.com/werunclub/baymax/rpc/helpers"
+	"github.com/werunclub/baymax/v2/rpc/helpers"
 )
 
 var (

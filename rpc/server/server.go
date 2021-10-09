@@ -13,8 +13,8 @@ import (
 	rpcxServer "github.com/smallnest/rpcx/server"
 	"github.com/smallnest/rpcx/serverplugin"
 
-	"github.com/werunclub/baymax/log"
-	"github.com/werunclub/baymax/rpc/helpers"
+	"github.com/werunclub/baymax/v2/log"
+	"github.com/werunclub/baymax/v2/rpc/helpers"
 )
 
 // Server rpc server

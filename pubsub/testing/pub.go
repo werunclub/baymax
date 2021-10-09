@@ -6,7 +6,7 @@ import (
 	"github.com/micro/go-micro/metadata"
 	"golang.org/x/net/context"
 
-	"github.com/werunclub/baymax/pubsub"
+	"github.com/werunclub/baymax/v2/pubsub"
 )
 
 type Message struct {

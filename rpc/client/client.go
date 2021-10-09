@@ -4,8 +4,8 @@ import (
 	"context"
 	"strings"
 
-	"github.com/werunclub/baymax/errors"
-	"github.com/werunclub/baymax/rpc/helpers"
+	"github.com/werunclub/baymax/v2/errors"
+	"github.com/werunclub/baymax/v2/rpc/helpers"
 
 	"github.com/sirupsen/logrus"
 	rpcxClient "github.com/smallnest/rpcx/client"
