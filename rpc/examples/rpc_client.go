@@ -10,7 +10,7 @@ import (
 	"github.com/werunclub/baymax/v2/rpc/helpers"
 
 	"github.com/sirupsen/logrus"
-	"github.com/smallnest/rpcx/share"
+	"github.com/werunclub/rpcx/share"
 )
 
 type Args struct {

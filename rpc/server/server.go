@@ -10,8 +10,8 @@ import (
 	"syscall"
 	"time"
 
-	rpcxServer "github.com/smallnest/rpcx/server"
-	"github.com/smallnest/rpcx/serverplugin"
+	rpcxServer "github.com/werunclub/rpcx/server"
+	"github.com/werunclub/rpcx/serverplugin"
 
 	"github.com/werunclub/baymax/v2/log"
 	"github.com/werunclub/baymax/v2/rpc/helpers"
