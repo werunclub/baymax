@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
+	redis "github.com/go-redis/redis/v7"
 	"github.com/sirupsen/logrus"
-	redis "gopkg.in/redis.v5"
 
 	"github.com/werunclub/baymax/v2/log"
 )

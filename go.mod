@@ -11,6 +11,7 @@ require (
 	github.com/fatih/color v1.6.0 // indirect
 	github.com/fluent/fluent-logger-golang v1.3.0 // indirect
 	github.com/go-errors/errors v1.0.1
+	github.com/go-redis/redis/v7 v7.4.1
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/gogo/protobuf v0.0.0-20171007142547-342cbe0a0415 // indirect
 	github.com/jinzhu/gorm v0.0.0-20160404144928-5174cc5c242a
@@ -38,5 +39,4 @@ require (
 	golang.org/x/net v0.0.0-20210428140749-89ef3d95e781
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
-	gopkg.in/redis.v5 v5.2.9
 )
