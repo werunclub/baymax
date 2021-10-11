@@ -3,11 +3,9 @@ package main
 import (
 	"log"
 
-	"golang.org/x/net/context"
-
-	"github.com/werunclub/baymax/v2/pubsub"
-
 	"github.com/pborman/uuid"
+	"github.com/werunclub/baymax/v2/pubsub"
+	"golang.org/x/net/context"
 )
 
 type Message struct {

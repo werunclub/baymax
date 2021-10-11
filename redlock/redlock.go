@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
-	"gopkg.in/redis.v5"
+	redis "gopkg.in/redis.v5"
 
 	"github.com/werunclub/baymax/v2/log"
 )
