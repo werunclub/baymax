@@ -34,7 +34,6 @@ type Options struct {
 }
 
 func newOptions(opt ...Option) Options {
-
 	opts := Options{}
 
 	for _, o := range opt {

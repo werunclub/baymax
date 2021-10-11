@@ -43,7 +43,7 @@ require (
 	github.com/tinylib/msgp v1.0.3-0.20180215042507-3b5c87ab5fb0 // indirect
 	github.com/vmihailenco/msgpack v3.3.1+incompatible // indirect
 	github.com/vrischmann/go-metrics-influxdb v0.0.0-20160917065939-43af8332c303 // indirect
-	github.com/werunclub/rpcx v0.0.0-20211011023836-ff9e14581163
+	github.com/werunclub/rpcx v0.0.0-20211011025909-01ab4c4cfabb
 	golang.org/x/net v0.0.0-20210428140749-89ef3d95e781
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
