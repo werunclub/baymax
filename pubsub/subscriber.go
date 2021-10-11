@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/micro/go-micro/codec"
-	mj "github.com/micro/go-micro/codec/jsonrpc"
-	"github.com/micro/go-micro/metadata"
 	"golang.org/x/net/context"
 
 	"github.com/werunclub/baymax/v2/log"
 	"github.com/werunclub/baymax/v2/pubsub/broker"
+	"github.com/werunclub/baymax/v2/pubsub/codec"
+	mj "github.com/werunclub/baymax/v2/pubsub/codec/jsonrpc"
+	"github.com/werunclub/baymax/v2/pubsub/metadata"
 )
 
 const (

@@ -102,8 +102,6 @@ github.com/mattn/go-isatty v0.0.4 h1:bnP0vzxcAdeI1zdubAl5PjU6zsERjGZb7raWodagDYs
 github.com/mattn/go-isatty v0.0.4/go.mod h1:M+lRXTBqGeGNdLjl/ufCoiOlB5xdOkqRJdNxMWT7Zi4=
 github.com/mattn/go-sqlite3 v1.14.8 h1:gDp86IdQsN/xWjIEmr9MF6o9mpksUgh0fu+9ByFxzIU=
 github.com/mattn/go-sqlite3 v1.14.8/go.mod h1:NyWgC/yNuGj7Q9rpYnZvas74GogHl5/Z4A/KQRfk6bU=
-github.com/micro/go-micro v0.8.0 h1:j5ELiYJs1X1hIjArKmFfrM8zON2PT5R/HXNfwnK/ELQ=
-github.com/micro/go-micro v0.8.0/go.mod h1:3z3lfMkNU9Sr1L/CxL++8pVJmQapRo0N6kNjwYDtOVs=
 github.com/mreiferson/go-snappystream v0.2.3 h1:ETSjz9NhUz13J3Aq0NisB/8h0nb2QG8DAcQNEw1T8cw=
 github.com/mreiferson/go-snappystream v0.2.3/go.mod h1:hPB+SkMcb49n7i7BErAtgT4jFQcaCVp6Vyu7aZ46qQo=
 github.com/nicksnyder/go-i18n v1.10.0 h1:5AzlPKvXBH4qBzmZ09Ua9Gipyruv6uApMcrNZdo96+Q=

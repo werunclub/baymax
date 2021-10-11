@@ -5,13 +5,12 @@ import (
 	"sync"
 
 	"github.com/werunclub/baymax/v2/pubsub/broker"
-
-	"github.com/micro/go-micro/codec"
-	mj "github.com/micro/go-micro/codec/jsonrpc"
-	"github.com/micro/go-micro/metadata"
-	"golang.org/x/net/context"
+	"github.com/werunclub/baymax/v2/pubsub/codec"
+	mj "github.com/werunclub/baymax/v2/pubsub/codec/jsonrpc"
+	"github.com/werunclub/baymax/v2/pubsub/metadata"
 
 	log "github.com/sirupsen/logrus"
+	"golang.org/x/net/context"
 )
 
 var (

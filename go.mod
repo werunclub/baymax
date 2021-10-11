@@ -22,7 +22,6 @@ require (
 	github.com/mattn/go-colorable v0.1.0 // indirect
 	github.com/mattn/go-isatty v0.0.4 // indirect
 	github.com/mattn/go-sqlite3 v1.14.8 // indirect
-	github.com/micro/go-micro v0.8.0
 	github.com/mreiferson/go-snappystream v0.2.3 // indirect
 	github.com/nicksnyder/go-i18n v1.10.0
 	github.com/nsqio/go-nsq v1.0.8 // indirect

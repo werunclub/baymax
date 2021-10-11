@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 
-	"github.com/micro/go-micro/metadata"
 	"golang.org/x/net/context"
 
 	"github.com/werunclub/baymax/v2/pubsub"
+	"github.com/werunclub/baymax/v2/pubsub/metadata"
 )
 
 type Message struct {
