@@ -46,7 +46,6 @@ func NewServer(opts ...Option) *Server {
 	}
 
 	server.registry = &serverplugin.StaticRegisterPlugin{}
-
 	server.rpcServer.Plugins.Add(server.registry)
 
 	return server
@@ -73,7 +72,6 @@ func (s *Server) RegisterName(serviceName string, service interface{}) {
 
 // Register 将服务注册到服务注册发现服务器
 func (s *Server) Register() error {
-
 	s.opts.Address = s.Address().String()
 
 	var advt, host string

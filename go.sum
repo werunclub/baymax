@@ -172,6 +172,8 @@ github.com/vrischmann/go-metrics-influxdb v0.0.0-20160917065939-43af8332c303 h1:
 github.com/vrischmann/go-metrics-influxdb v0.0.0-20160917065939-43af8332c303/go.mod h1:Xdcad1nGVhQfhoV0go+/4WaI/RZkWlvfjkVCdpMTxPY=
 github.com/werunclub/rpcx v0.0.0-20211009113611-8099f0176f55 h1:KWX0wP2G2rpyDKTyDJGYQ9cNDnyqdSSA4cLx1PRpttU=
 github.com/werunclub/rpcx v0.0.0-20211009113611-8099f0176f55/go.mod h1:o8L/E41zk0j6hRes3BxjZVuoSQNMd5Nbmd+BL8XTQjA=
+github.com/werunclub/rpcx v0.0.0-20211011023836-ff9e14581163 h1:7hU1npMhDTp3tDvCsQdYpUR2avIuhHuQfBc4VYh/wpQ=
+github.com/werunclub/rpcx v0.0.0-20211011023836-ff9e14581163/go.mod h1:P11Fj8UXQS/DdD6noM2RJHdPo47QnfetF/DtzxG8euk=
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 go.opentelemetry.io/proto/otlp v0.7.0/go.mod h1:PqfVotwruBrMGOCsRd/89rSnXhoiJIqeYNgFYFoEGnI=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=

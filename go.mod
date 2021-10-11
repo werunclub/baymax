@@ -9,6 +9,7 @@ require (
 	github.com/denisenkom/go-mssqldb v0.11.0 // indirect
 	github.com/erikstmartin/go-testdb v0.0.0-20160219214506-8d10e4a1bae5 // indirect
 	github.com/evalphobia/logrus_fluent v0.4.0
+	github.com/facebookgo/clock v0.0.0-20150410010913-600d898af40a // indirect
 	github.com/fatih/color v1.6.0 // indirect
 	github.com/fluent/fluent-logger-golang v1.3.0 // indirect
 	github.com/go-errors/errors v1.0.1
@@ -32,6 +33,7 @@ require (
 	github.com/onsi/gomega v1.16.0 // indirect
 	github.com/pborman/uuid v0.0.0-20160209185913-a97ce2ca70fa
 	github.com/pelletier/go-toml v1.1.1-0.20180323185243-66540cf1fcd2 // indirect
+	github.com/peterbourgon/g2s v0.0.0-20170223122336-d4e7ad98afea // indirect
 	github.com/philhofer/fwd v1.0.0 // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20180406234716-d932a24a8ccb // indirect
 	github.com/rubyist/circuitbreaker v2.2.1+incompatible // indirect
@@ -40,7 +42,8 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/tinylib/msgp v1.0.3-0.20180215042507-3b5c87ab5fb0 // indirect
 	github.com/vmihailenco/msgpack v3.3.1+incompatible // indirect
-	github.com/werunclub/rpcx v0.0.0-20211009113611-8099f0176f55
+	github.com/vrischmann/go-metrics-influxdb v0.0.0-20160917065939-43af8332c303 // indirect
+	github.com/werunclub/rpcx v0.0.0-20211011023836-ff9e14581163
 	golang.org/x/net v0.0.0-20210428140749-89ef3d95e781
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
