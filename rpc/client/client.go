@@ -8,8 +8,8 @@ import (
 	"github.com/werunclub/baymax/v2/rpc/helpers"
 
 	"github.com/sirupsen/logrus"
-	rpcxClient "github.com/werunclub/rpcx/client"
-	"github.com/werunclub/rpcx/protocol"
+	rpcxClient "github.com/werunclub/rpcx/v4/client"
+	"github.com/werunclub/rpcx/v4/protocol"
 )
 
 // Client represents a RPC client.

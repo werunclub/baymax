@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/pborman/uuid"
-	"github.com/werunclub/rpcx/share"
+	"github.com/werunclub/rpcx/v4/share"
 )
 
 const (
