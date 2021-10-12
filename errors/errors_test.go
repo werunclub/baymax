@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/pborman/uuid"
+	"github.com/google/uuid"
 )
 
 func getError() *Error {
@@ -32,7 +32,7 @@ func TestNilError(t *testing.T) {
 func TestErrors(t *testing.T) {
 	testData := []*Error{
 		&Error{
-			Id:     uuid.New(),
+			Id:     uuid.NewString(),
 			Code:   "status_internal_server_error",
 			Detail: "Internal server error",
 			Status: http.StatusInternalServerError,

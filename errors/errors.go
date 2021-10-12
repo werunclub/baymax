@@ -2,8 +2,9 @@ package errors
 
 import (
 	"encoding/json"
-	"github.com/pborman/uuid"
 	"net/http"
+
+	"github.com/google/uuid"
 )
 
 // Errors provide a way to return detailed information
@@ -25,7 +26,7 @@ func (e *Error) Error() string {
 }
 
 func NewId() string {
-	return uuid.New()
+	return uuid.New().String()
 }
 
 func New(code string, detail string, status int32) error {

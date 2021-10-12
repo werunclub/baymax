@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/pborman/uuid"
+	"github.com/google/uuid"
 	"github.com/werunclub/baymax/v2/pubsub"
 	"golang.org/x/net/context"
 )
@@ -34,7 +34,7 @@ func main() {
 
 	server := pubsub.NewServer("127.0.0.1:4161")
 
-	queueName := uuid.NewUUID().String()
+	queueName := uuid.NewString()
 	var err error
 
 	err = server.Subscribe(server.NewSubscriber(
