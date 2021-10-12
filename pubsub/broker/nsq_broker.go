@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/club-codoon/go-nsq"
-	"github.com/pborman/uuid"
+	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
 )
@@ -88,7 +88,7 @@ func (n *nsqBroker) Connect() error {
 	for _, c := range n.c {
 		channel := c.opts.Queue
 		if len(channel) == 0 {
-			channel = uuid.NewUUID().String()
+			channel = uuid.NewString()
 		}
 
 		cm, err := nsq.NewConsumer(c.topic, channel, n.config)
@@ -169,7 +169,7 @@ func (n *nsqBroker) Subscribe(topic string, handler Handler, opts ...SubscribeOp
 
 	channel := options.Queue
 	if len(channel) == 0 {
-		channel = uuid.NewUUID().String()
+		channel = uuid.NewString()
 	}
 
 	c, err := nsq.NewConsumer(topic, channel, n.config)

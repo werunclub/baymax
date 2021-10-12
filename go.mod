@@ -14,6 +14,7 @@ require (
 	github.com/go-redis/redis/v7 v7.4.1
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/gogo/protobuf v0.0.0-20171007142547-342cbe0a0415 // indirect
+	github.com/google/uuid v1.3.0
 	github.com/jinzhu/gorm v0.0.0-20160404144928-5174cc5c242a
 	github.com/jinzhu/inflection v0.0.0-20180308033659-04140366298a // indirect
 	github.com/jinzhu/now v0.0.0-20170212112655-d939ba741945 // indirect
@@ -27,7 +28,6 @@ require (
 	github.com/nicksnyder/go-i18n v1.10.0
 	github.com/nsqio/go-nsq v1.0.8 // indirect
 	github.com/onsi/gomega v1.16.0 // indirect
-	github.com/pborman/uuid v0.0.0-20160209185913-a97ce2ca70fa
 	github.com/pelletier/go-toml v1.1.1-0.20180323185243-66540cf1fcd2 // indirect
 	github.com/philhofer/fwd v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.0.5

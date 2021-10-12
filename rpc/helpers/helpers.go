@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/pborman/uuid"
+	"github.com/google/uuid"
 	"github.com/werunclub/rpcx/v4/share"
 )
 
@@ -183,7 +183,7 @@ func GetRequestID(ctx context.Context) string {
 	requestID := meta.Get("request_id")
 
 	if requestID == "" {
-		requestID = uuid.NewRandom().String()
+		requestID = uuid.NewString()
 	}
 
 	return requestID

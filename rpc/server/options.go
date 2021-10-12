@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pborman/uuid"
+	"github.com/google/uuid"
 )
 
 var (
@@ -80,7 +80,7 @@ func newOptions(opt ...Option) Options {
 	}
 
 	if len(opts.ID) == 0 {
-		opts.ID = uuid.NewUUID().String()
+		opts.ID = uuid.NewString()
 	}
 
 	if len(opts.Version) == 0 {
