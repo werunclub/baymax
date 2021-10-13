@@ -3,13 +3,12 @@ package log
 import (
 	"testing"
 
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 )
 
 func TestSetLogurs(t *testing.T) {
-
 	SetLogrus("info", "json", "stdout", false, "", 0, "")
 
-	log.Infof("info log")
-	log.Errorf("error log")
+	logrus.Infof("info log")
+	logrus.Errorf("error log")
 }

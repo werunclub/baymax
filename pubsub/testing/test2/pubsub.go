@@ -12,7 +12,7 @@ var (
 	topic = "go.baymax.topic.testing"
 )
 
-func pub() {
+func doPub() {
 	tick := time.NewTicker(time.Second)
 	i := 0
 	for _ = range tick.C {
@@ -51,7 +51,7 @@ func main() {
 		log.Fatalf("Broker Connect error: %v", err)
 	}
 
-	go pub()
+	go doPub()
 	go sub()
 	go sub()
 

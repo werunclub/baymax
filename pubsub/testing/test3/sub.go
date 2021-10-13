@@ -31,7 +31,6 @@ func (SubHandler) Bad2Handler(ctx context.Context, msg *Message) error {
 }
 
 func main() {
-
 	server := pubsub.NewServer("127.0.0.1:4161")
 
 	queueName := uuid.NewString()

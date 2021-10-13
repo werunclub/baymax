@@ -2,8 +2,9 @@ package database
 
 import (
 	"fmt"
-	"github.com/jinzhu/gorm"
 	"strings"
+
+	"github.com/jinzhu/gorm"
 )
 
 var MysqlUtil mysqlUtil

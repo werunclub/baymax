@@ -15,7 +15,6 @@ type Message struct {
 
 // publishes a message
 func pub(i int) {
-
 	client := pubsub.NewClient("127.0.0.1:4161")
 
 	msg := client.NewPublication("go.testing.topic.good", Message{
@@ -38,7 +37,7 @@ func pub(i int) {
 }
 
 func main() {
-	fmt.Println("\n--- Publisher example ---\n")
+	fmt.Printf("\n--- Publisher example ---\n")
 	for i := 0; i < 1; i++ {
 		pub(i)
 	}
