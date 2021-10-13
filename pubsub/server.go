@@ -66,7 +66,6 @@ func (s *Server) Subscribe(sb Subscriber) error {
 }
 
 func (s *Server) Register() error {
-
 	for sb, _ := range s.subscribers {
 		handler := s.createSubHandler(sb)
 		var opts []broker.SubscribeOption
@@ -114,13 +113,11 @@ func (s *Server) Run() error {
 	if err := s.Start(); err != nil {
 		log.SourcedLogrus().WithError(err).Errorf("pubsub start fail")
 		panic("pubsub start fail")
-		return err
 	}
 
 	if err := s.Register(); err != nil {
 		log.SourcedLogrus().WithError(err).Errorf("pubsub register fail")
 		panic("pubsub register fail")
-		return err
 	}
 
 	ch := make(chan os.Signal, 1)

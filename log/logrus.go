@@ -7,7 +7,6 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/evalphobia/logrus_fluent"
 	"github.com/sirupsen/logrus"
 )
 
@@ -18,49 +17,6 @@ func SetLogrus(logLevel, logFormat, logOut string, fluentdEnable bool,
 	level, err := logrus.ParseLevel(logLevel)
 	if err != nil {
 		level = logrus.InfoLevel
-	}
-
-	if fluentdEnable {
-		hook, err := logrus_fluent.NewWithConfig(logrus_fluent.Config{
-			Host:                fluentdHost,
-			Port:                fluentdPort,
-			DefaultMessageField: logrus_fluent.MessageField,
-			MarshalAsJSON:       true,
-		})
-		if err != nil {
-			return err
-		}
-
-		// set custom fire level
-		if level == logrus.DebugLevel {
-			hook.SetLevels([]logrus.Level{
-				logrus.PanicLevel,
-				logrus.ErrorLevel,
-				logrus.DebugLevel,
-				logrus.WarnLevel,
-				logrus.InfoLevel,
-				logrus.FatalLevel,
-			})
-		} else {
-			hook.SetLevels([]logrus.Level{
-				logrus.InfoLevel,
-				logrus.PanicLevel,
-				logrus.ErrorLevel,
-				logrus.WarnLevel,
-				logrus.FatalLevel,
-			})
-		}
-
-		// set static tag
-		hook.SetTag("go." + fluentdTag)
-
-		// ignore field
-		hook.AddIgnore("context")
-
-		// filter func
-		hook.AddFilter("error", logrus_fluent.FilterError)
-
-		logrus.AddHook(hook)
 	}
 
 	logrus.SetLevel(level)

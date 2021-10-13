@@ -1,9 +1,10 @@
 package model
 
 import (
-	"github.com/jinzhu/gorm"
 	"strings"
 	"time"
+
+	"github.com/jinzhu/gorm"
 )
 
 func init() {

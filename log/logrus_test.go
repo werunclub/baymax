@@ -7,7 +7,6 @@ import (
 )
 
 func TestSetLogurs(t *testing.T) {
-
 	SetLogrus("info", "json", "stdout", false, "", 0, "")
 
 	log.Infof("info log")

@@ -1,14 +1,7 @@
 steps:
-  - name: "gcr.io/cloud-builders/docker"
+  - name: golang
+    entrypoint: /bin/bash
     args:
-      [
-        "build",
-        "-t",
-        "asia.gcr.io/$PROJECT_ID/baymax:latest",
-        "-t",
-        "asia.gcr.io/$PROJECT_ID/baymax:$BRANCH_NAME",
-        ".",
-      ]
-
-images:
-  - "asia.gcr.io/$PROJECT_ID/baymax:latest"
+      - -c
+      - |
+        go test

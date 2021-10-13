@@ -3,14 +3,11 @@ module github.com/werunclub/baymax/v2
 go 1.16
 
 require (
-	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
 	github.com/club-codoon/go-nsq v1.0.7-0.20211012102604-8bc26bfde5f7
 	github.com/denisenkom/go-mssqldb v0.11.0 // indirect
 	github.com/erikstmartin/go-testdb v0.0.0-20160219214506-8d10e4a1bae5 // indirect
-	github.com/evalphobia/logrus_fluent v0.4.0
 	github.com/fatih/color v1.6.0 // indirect
-	github.com/fluent/fluent-logger-golang v1.3.0 // indirect
-	github.com/go-errors/errors v1.0.1
+	github.com/go-errors/errors v1.4.1
 	github.com/go-redis/redis/v7 v7.4.1
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/gogo/protobuf v0.0.0-20171007142547-342cbe0a0415 // indirect
@@ -22,19 +19,15 @@ require (
 	github.com/julienschmidt/httprouter v1.1.1-0.20180411154501-adbc77eec0d9 // indirect
 	github.com/kavu/go_reuseport v1.3.0 // indirect
 	github.com/lib/pq v1.10.3 // indirect
-	github.com/mattn/go-colorable v0.1.0 // indirect
-	github.com/mattn/go-isatty v0.0.4 // indirect
 	github.com/mattn/go-sqlite3 v1.14.8 // indirect
 	github.com/nicksnyder/go-i18n v1.10.0
-	github.com/onsi/gomega v1.16.0 // indirect
+	github.com/onsi/ginkgo v1.11.0 // indirect
 	github.com/pelletier/go-toml v1.1.1-0.20180323185243-66540cf1fcd2 // indirect
-	github.com/sirupsen/logrus v1.0.5
+	github.com/sirupsen/logrus v1.8.1
 	github.com/soheilhy/cmux v0.1.4 // indirect
 	github.com/stretchr/testify v1.7.0
-	github.com/tinylib/msgp v1.1.6 // indirect
 	github.com/vmihailenco/msgpack v3.3.1+incompatible // indirect
 	github.com/werunclub/rpcx/v4 v4.0.3
 	golang.org/x/net v0.0.0-20210428140749-89ef3d95e781
-	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
-	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
