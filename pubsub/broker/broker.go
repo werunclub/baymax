@@ -4,12 +4,13 @@ package broker
 // Its an abstraction over various message brokers
 // {NATS, RabbitMQ, Kafka, ...}
 type Broker interface {
+	Init(...Option) error
 	Options() Options
 	Address() string
 	Connect() error
 	Disconnect() error
-	Init(...Option) error
-	Publish(string, *Message, ...PublishOption) error
+
+	Publish(topic string, m *Message, opts ...PublishOption) error
 	Subscribe(string, Handler, ...SubscribeOption) (Subscriber, error)
 	String() string
 }
@@ -29,6 +30,7 @@ type Publication interface {
 	Topic() string
 	Message() *Message
 	Ack() error
+	Error() error
 }
 
 type Subscriber interface {
@@ -37,34 +39,34 @@ type Subscriber interface {
 	Unsubscribe() error
 }
 
-var (
-	DefaultBroker Broker = NewNsqBroker()
-)
+// var (
+// 	DefaultBroker Broker = NewNatsBroker()
+// )
 
 func NewBroker(opts ...Option) Broker {
-	return NewNsqBroker(opts...)
+	return NewNatsBroker(opts...)
 }
 
-func Init(opts ...Option) error {
-	return DefaultBroker.Init(opts...)
-}
+// func Init(opts ...Option) error {
+// 	return DefaultBroker.Init(opts...)
+// }
 
-func Connect() error {
-	return DefaultBroker.Connect()
-}
+// func Connect() error {
+// 	return DefaultBroker.Connect()
+// }
 
-func Disconnect() error {
-	return DefaultBroker.Disconnect()
-}
+// func Disconnect() error {
+// 	return DefaultBroker.Disconnect()
+// }
 
-func Publish(topic string, msg *Message, opts ...PublishOption) error {
-	return DefaultBroker.Publish(topic, msg, opts...)
-}
+// func Publish(topic string, msg *Message, opts ...PublishOption) error {
+// 	return DefaultBroker.Publish(topic, msg, opts...)
+// }
 
-func Subscribe(topic string, handler Handler, opts ...SubscribeOption) (Subscriber, error) {
-	return DefaultBroker.Subscribe(topic, handler, opts...)
-}
+// func Subscribe(topic string, handler Handler, opts ...SubscribeOption) (Subscriber, error) {
+// 	return DefaultBroker.Subscribe(topic, handler, opts...)
+// }
 
-func String() string {
-	return DefaultBroker.String()
-}
+// func String() string {
+// 	return DefaultBroker.String()
+// }

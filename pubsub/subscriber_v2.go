@@ -1,17 +1,8 @@
 package pubsub
 
 import (
-	"bytes"
 	"fmt"
 	"reflect"
-
-	"golang.org/x/net/context"
-
-	"github.com/werunclub/baymax/v2/log"
-	"github.com/werunclub/baymax/v2/pubsub/broker"
-	"github.com/werunclub/baymax/v2/pubsub/codec"
-	mj "github.com/werunclub/baymax/v2/pubsub/codec/jsonrpc"
-	"github.com/werunclub/baymax/v2/pubsub/metadata"
 )
 
 const (
@@ -58,7 +49,6 @@ func newSubscriber(topic string, sub interface{}, opts ...SubscriberOption) Subs
 		}
 
 		handlers = append(handlers, h)
-
 	} else {
 		for m := 0; m < typ.NumMethod(); m++ {
 			method := typ.Method(m)
@@ -140,100 +130,6 @@ func validateSubscriber(sub Subscriber) error {
 	}
 
 	return nil
-}
-
-func (s *Server) createSubHandler(sb *subscriber) broker.Handler {
-	return func(p broker.Publication) error {
-		msg := p.Message()
-
-		hdr := make(map[string]string)
-		for k, v := range msg.Header {
-			hdr[k] = v
-		}
-		ctx := metadata.NewContext(context.Background(), hdr)
-
-		done := make(chan bool, len(sb.handlers))
-
-		for i := 0; i < len(sb.handlers); i++ {
-			handler := sb.handlers[i]
-
-			var isVal bool
-			var req reflect.Value
-
-			if handler.reqType.Kind() == reflect.Ptr {
-				req = reflect.New(handler.reqType.Elem())
-			} else {
-				req = reflect.New(handler.reqType)
-				isVal = true
-			}
-			if isVal {
-				req = req.Elem()
-			}
-
-			b := &buffer{bytes.NewBuffer(msg.Body)}
-			co := mj.NewCodec(b)
-			defer co.Close()
-
-			if err := co.ReadHeader(&codec.Message{}, codec.Publication); err != nil {
-				return err
-			}
-
-			if err := co.ReadBody(req.Interface()); err != nil {
-				return err
-			}
-
-			fn := func(ctx context.Context, msg *publication, done chan bool) error {
-				var vals []reflect.Value
-				if sb.typ.Kind() != reflect.Func {
-					vals = append(vals, sb.rcvr)
-				}
-				if handler.ctxType != nil {
-					vals = append(vals, reflect.ValueOf(ctx))
-				}
-				vals = append(vals, reflect.ValueOf(msg.Message()))
-
-				returnValues := handler.method.Call(vals)
-				if err := returnValues[0].Interface(); err != nil {
-					log.SourcedLogrus().WithField("topic", msg.topic).
-						WithField("msg", msg).
-						WithError(err.(error)).
-						Errorf("call msg handler fail")
-					done <- false
-					return err.(error)
-				}
-				done <- true
-				return nil
-			}
-
-			go fn(ctx, &publication{
-				topic:   sb.topic,
-				message: req.Interface(),
-			}, done)
-		}
-
-		var (
-			finished int
-			failures int
-		)
-
-		for {
-			success := <-done
-			finished++
-			if !success {
-				failures++
-			}
-
-			if finished == len(sb.handlers) {
-				break
-			}
-		}
-
-		if failures == 0 && sb.opts.AutoAck {
-			return p.Ack()
-		}
-
-		return nil
-	}
 }
 
 func (s *subscriber) Topic() string {

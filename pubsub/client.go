@@ -17,7 +17,7 @@ var (
 	contentType = "application/json"
 )
 
-// Client represents a RPC client.
+// Client represents a broker client.
 type Client struct {
 	broker broker.Broker
 	once   sync.Once

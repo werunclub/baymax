@@ -1,20 +1,32 @@
 package pubsub
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"os/signal"
+	"reflect"
 	"sync"
 	"syscall"
 
 	"github.com/werunclub/baymax/v2/log"
 	"github.com/werunclub/baymax/v2/pubsub/broker"
+	"github.com/werunclub/baymax/v2/pubsub/codec"
+	mj "github.com/werunclub/baymax/v2/pubsub/codec/jsonrpc"
+	"github.com/werunclub/baymax/v2/pubsub/metadata"
+	"golang.org/x/net/context"
 
 	"github.com/go-errors/errors"
 )
 
+// 新建订阅器
+func NewSubscriber(topic string, sub interface{}, opts ...SubscriberOption) Subscriber {
+	return newSubscriber(topic, sub, opts...)
+}
+
 type Server struct {
-	broker broker.Broker
+	broker     broker.Broker
+	registered bool
 
 	Exit chan bool
 
@@ -23,10 +35,10 @@ type Server struct {
 }
 
 func NewServer(addrs ...string) *Server {
-	opt := broker.Addrs(addrs...)
+	opts := broker.Addrs(addrs...)
 
 	return &Server{
-		broker:      broker.NewBroker(opt),
+		broker:      broker.NewBroker(opts),
 		subscribers: make(map[*subscriber][]broker.Subscriber),
 
 		Exit: make(chan bool, 1),
@@ -34,8 +46,9 @@ func NewServer(addrs ...string) *Server {
 }
 
 // 新建订阅器
-func (s *Server) NewSubscriber(topic string, sb interface{}, opts ...SubscriberOption) Subscriber {
-	return newSubscriber(topic, sb, opts...)
+// Deprecated:  使用 pubsub.NewSubscriber
+func (s *Server) NewSubscriber(topic string, sub interface{}, opts ...SubscriberOption) Subscriber {
+	return NewSubscriber(topic, sub, opts...)
 }
 
 func (s *Server) Subscribe(sb Subscriber) error {
@@ -66,18 +79,26 @@ func (s *Server) Subscribe(sb Subscriber) error {
 }
 
 func (s *Server) Register() error {
-	for sb, _ := range s.subscribers {
-		handler := s.createSubHandler(sb)
+	// subscribe for all of the subscribers
+	for sb := range s.subscribers {
 		var opts []broker.SubscribeOption
-
-		opts = append(opts, broker.DisableAutoAck())
 		if queue := sb.Options().Queue; len(queue) > 0 {
 			opts = append(opts, broker.Queue(queue))
 		}
-		sub, err := s.broker.Subscribe(sb.Topic(), handler, opts...)
+
+		if cx := sb.Options().Context; cx != nil {
+			opts = append(opts, broker.SubscribeContext(cx))
+		}
+
+		if !sb.Options().AutoAck {
+			opts = append(opts, broker.DisableAutoAck())
+		}
+
+		sub, err := s.broker.Subscribe(sb.Topic(), createSubHandler(sb), opts...)
 		if err != nil {
 			return err
 		}
+		log.SourcedLogrus().Infof("Subscribing to topic: %s", sub.Topic())
 		s.subscribers[sb] = []broker.Subscriber{sub}
 	}
 
@@ -95,7 +116,7 @@ func (s *Server) Deregister() error {
 	return nil
 }
 
-func (s *Server) Start() error {
+func (s *Server) Connect() error {
 	return s.broker.Connect()
 }
 
@@ -110,9 +131,9 @@ func (s *Server) Run() error {
 		s.Exit <- true
 	}()
 
-	if err := s.Start(); err != nil {
-		log.SourcedLogrus().WithError(err).Errorf("pubsub start fail")
-		panic("pubsub start fail")
+	if err := s.Connect(); err != nil {
+		log.SourcedLogrus().WithError(err).Errorf("pubsub connect fail")
+		panic("pubsub connect fail")
 	}
 
 	if err := s.Register(); err != nil {
@@ -133,4 +154,95 @@ func (s *Server) Run() error {
 	log.SourcedLogrus().Printf("exit.")
 
 	return nil
+}
+
+func createSubHandler(sb *subscriber) broker.Handler {
+	return func(p broker.Publication) error {
+		msg := p.Message()
+
+		hdr := make(map[string]string)
+		for k, v := range msg.Header {
+			hdr[k] = v
+		}
+		ctx := metadata.NewContext(context.Background(), hdr)
+
+		done := make(chan bool, len(sb.handlers))
+
+		for i := 0; i < len(sb.handlers); i++ {
+			handler := sb.handlers[i]
+
+			var isVal bool
+			var req reflect.Value
+
+			if handler.reqType.Kind() == reflect.Ptr {
+				req = reflect.New(handler.reqType.Elem())
+			} else {
+				req = reflect.New(handler.reqType)
+				isVal = true
+			}
+			if isVal {
+				req = req.Elem()
+			}
+
+			b := &buffer{bytes.NewBuffer(msg.Body)}
+			co := mj.NewCodec(b)
+			defer co.Close()
+
+			if err := co.ReadHeader(&codec.Message{}, codec.Publication); err != nil {
+				return err
+			}
+
+			if err := co.ReadBody(req.Interface()); err != nil {
+				return err
+			}
+
+			fn := func(ctx context.Context, msg *publication, done chan bool) error {
+				var vals []reflect.Value
+				if sb.typ.Kind() != reflect.Func {
+					vals = append(vals, sb.rcvr)
+				}
+				if handler.ctxType != nil {
+					vals = append(vals, reflect.ValueOf(ctx))
+				}
+				vals = append(vals, reflect.ValueOf(msg.Message()))
+
+				returnValues := handler.method.Call(vals)
+				if err := returnValues[0].Interface(); err != nil {
+					log.SourcedLogrus().WithField("topic", msg.topic).WithField("msg", msg).WithError(err.(error)).Errorf("msg handle fail")
+					done <- false
+					return err.(error)
+				}
+				done <- true
+				return nil
+			}
+
+			go fn(ctx, &publication{
+				topic:   sb.topic,
+				message: req.Interface(),
+			}, done)
+		}
+
+		var (
+			finished int
+			failures int
+		)
+
+		for {
+			success := <-done
+			finished++
+			if !success {
+				failures++
+			}
+
+			if finished == len(sb.handlers) {
+				break
+			}
+		}
+
+		if failures == 0 && sb.opts.AutoAck {
+			return p.Ack()
+		}
+
+		return nil
+	}
 }

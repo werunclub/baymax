@@ -1,5 +1,7 @@
 package pubsub
 
+import "context"
+
 type SubscriberOption func(*SubscriberOptions)
 
 // Subscriber interface represents a subscription to a given topic using
@@ -13,6 +15,10 @@ type Subscriber interface {
 type SubscriberOptions struct {
 	Queue   string
 	AutoAck bool
+
+	// Other options for implementations of the interface
+	// can be stored in a context
+	Context context.Context
 }
 
 // Shared queue name distributed messages across subscribers

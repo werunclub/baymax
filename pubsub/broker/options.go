@@ -11,6 +11,10 @@ type Options struct {
 	Secure    bool
 	TLSConfig *tls.Config
 
+	// Handler executed when error happens in broker mesage
+	// processing
+	ErrorHandler Handler
+
 	// Other options for implementations of the interface
 	// can be stored in a context
 	Context context.Context
@@ -37,12 +41,12 @@ type SubscribeOptions struct {
 }
 
 type Option func(*Options)
-
 type PublishOption func(*PublishOptions)
-
 type SubscribeOption func(*SubscribeOptions)
 
 type contextKeyT string
+type optionsKey struct{}
+type drainConnectionKey struct{}
 
 func newSubscribeOptions(opts ...SubscribeOption) SubscribeOptions {
 	opt := SubscribeOptions{
@@ -89,5 +93,20 @@ func Secure(b bool) Option {
 func TLSConfig(t *tls.Config) Option {
 	return func(o *Options) {
 		o.TLSConfig = t
+	}
+}
+
+// ErrorHandler will catch all broker errors that cant be handled
+// in normal way, for example Codec errors
+func ErrorHandler(h Handler) Option {
+	return func(o *Options) {
+		o.ErrorHandler = h
+	}
+}
+
+// SubscribeContext set context
+func SubscribeContext(ctx context.Context) SubscribeOption {
+	return func(o *SubscribeOptions) {
+		o.Context = ctx
 	}
 }

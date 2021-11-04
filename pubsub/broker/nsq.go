@@ -1,3 +1,4 @@
+// Deprecated:  使用 nats 或 redis
 package broker
 
 import (
@@ -13,7 +14,7 @@ import (
 )
 
 var (
-	concurrentHandlerKey = contextKeyT("github.com/werunclub/baymax/v2/broker/nsq/concurrentHandlers")
+	concurrentHandlerKey = contextKeyT("concurrentHandlers")
 )
 
 type nsqBroker struct {
@@ -33,6 +34,7 @@ type nsqPublication struct {
 	m     *Message
 	nm    *nsq.Message
 	opts  PublishOptions
+	err   error
 }
 
 type nsqSubscriber struct {
@@ -227,6 +229,10 @@ func (p *nsqPublication) Message() *Message {
 func (p *nsqPublication) Ack() error {
 	p.nm.Finish()
 	return nil
+}
+
+func (p *nsqPublication) Error() error {
+	return p.err
 }
 
 func (s *nsqSubscriber) Options() SubscribeOptions {
