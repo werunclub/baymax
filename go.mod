@@ -26,7 +26,8 @@ require (
 	github.com/sirupsen/logrus v1.8.1
 	github.com/soheilhy/cmux v0.1.4 // indirect
 	github.com/stretchr/testify v1.7.0
-	github.com/werunclub/rpcx/v4 v4.0.4-0.20211014042151-e19e8ae95842
+	github.com/vmihailenco/msgpack v3.2.4+incompatible // indirect
+	github.com/werunclub/rpcx/v4 v4.0.4
 	golang.org/x/net v0.0.0-20210428140749-89ef3d95e781
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
