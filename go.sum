@@ -127,14 +127,10 @@ github.com/tatsushid/go-fastping v0.0.0-20160109021039-d7bb493dee3e h1:nt2877sKf
 github.com/tatsushid/go-fastping v0.0.0-20160109021039-d7bb493dee3e/go.mod h1:B4+Kq1u5FlULTjFSM707Q6e/cOHFv0z/6QRoxubDIQ8=
 github.com/valyala/fastrand v0.0.0-20170531153657-19dd0f0bf014 h1:wMIk7zCJy828JUr6OlYwXO11ijcXtEPDxoCaktP5p8w=
 github.com/valyala/fastrand v0.0.0-20170531153657-19dd0f0bf014/go.mod h1:HWqCzkrkg6QXT8V2EXWvXCoow7vLwOFN002oeRzjapQ=
-github.com/vmihailenco/msgpack v3.2.4+incompatible h1:e8igmQGrPR2YPgc55SnOTdhKEcEmXQ8kb34kkQCBrno=
-github.com/vmihailenco/msgpack v3.2.4+incompatible/go.mod h1:fy3FlTQTDXWkZ7Bh6AcGMlsjHatGryHQYUTf1ShIgkk=
 github.com/vmihailenco/msgpack/v4 v4.3.12 h1:07s4sz9IReOgdikxLTKNbBdqDMLsjPKXwvCazn8G65U=
 github.com/vmihailenco/msgpack/v4 v4.3.12/go.mod h1:gborTTJjAo/GWTqqRjrLCn9pgNN+NXzzngzBKDPIqw4=
 github.com/vmihailenco/tagparser v0.1.1 h1:quXMXlA39OCbd2wAdTsGDlK9RkOk6Wuw+x37wVyIuWY=
 github.com/vmihailenco/tagparser v0.1.1/go.mod h1:OeAg3pn3UbLjkWt+rN9oFYB6u/cQgqMEUPoW2WPyhdI=
-github.com/werunclub/rpcx/v4 v4.0.4-0.20211014042151-e19e8ae95842 h1:qqhKd4JsmSbLd4CwdHteV6PxmiefvHi0bLcVplngpjk=
-github.com/werunclub/rpcx/v4 v4.0.4-0.20211014042151-e19e8ae95842/go.mod h1:boR9paiFm5Iv/i2tUzWZMuH1P2gxFuykMOH6ZhY03ZI=
 github.com/werunclub/rpcx/v4 v4.0.4 h1:by3rW4Qto9xD0RuXpXhYh4cAP81hYhAVO7fRcIla/v0=
 github.com/werunclub/rpcx/v4 v4.0.4/go.mod h1:QVq7kx1csLcvqBRjQNLX4L/xO2m++VhrY4OvnZJdNYg=
 go.opentelemetry.io/proto/otlp v0.7.0/go.mod h1:PqfVotwruBrMGOCsRd/89rSnXhoiJIqeYNgFYFoEGnI=
