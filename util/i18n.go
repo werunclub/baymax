@@ -36,3 +36,7 @@ func TfuncForRPC(ctx context.Context, languageCode string) (i18n.TranslateFunc, 
 	acceptLang := meta.Get("lang")
 	return i18n.Tfunc(acceptLang, languageCode)
 }
+
+func GetTfunc(languageCode string, defaultlanguageCode string) (i18n.TranslateFunc, error) {
+	return i18n.Tfunc(languageCode, defaultlanguageCode)
+}
