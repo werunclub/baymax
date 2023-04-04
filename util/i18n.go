@@ -30,10 +30,14 @@ func Init() {
 	T, _ = i18n.Tfunc(languageCode)
 }
 
+func GetLangFromCtx(ctx context.Context) (string) {
+	meta := helpers.NewMetaDataFormContext(ctx)
+	return meta.Get("lang")
+}
+
 // TfuncForRPC 返回翻译方法
 func TfuncForRPC(ctx context.Context, languageCode string) (i18n.TranslateFunc, error) {
-	meta := helpers.NewMetaDataFormContext(ctx)
-	acceptLang := meta.Get("lang")
+	acceptLang := GetLangFromCtx(ctx)
 	return i18n.Tfunc(acceptLang, languageCode)
 }
 
