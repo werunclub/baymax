@@ -1,6 +1,7 @@
 package pubsub
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"os/signal"
@@ -9,8 +10,6 @@ import (
 
 	"github.com/werunclub/baymax/v2/log"
 	"github.com/werunclub/baymax/v2/pubsub/broker"
-
-	"github.com/go-errors/errors"
 )
 
 type Server struct {

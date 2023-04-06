@@ -3,7 +3,6 @@ module github.com/werunclub/baymax/v2
 go 1.20
 
 require (
-	github.com/go-errors/errors v1.4.1
 	github.com/go-redis/redis/v7 v7.4.1
 	github.com/google/uuid v1.3.0
 	github.com/jinzhu/gorm v0.0.0-20160404144928-5174cc5c242a
@@ -29,8 +28,8 @@ require (
 	github.com/julienschmidt/httprouter v1.1.1-0.20180411154501-adbc77eec0d9 // indirect
 	github.com/kavu/go_reuseport v1.3.0 // indirect
 	github.com/lib/pq v1.10.3 // indirect
-	github.com/mattn/go-colorable v0.0.8-0.20170327083344-ded68f7a9561 // indirect
-	github.com/mattn/go-isatty v0.0.4-0.20170925054904-a5cdd64afdee // indirect
+	github.com/mattn/go-colorable v0.1.0 // indirect
+	github.com/mattn/go-isatty v0.0.4 // indirect
 	github.com/mattn/go-sqlite3 v1.14.8 // indirect
 	github.com/onsi/ginkgo v1.11.0 // indirect
 	github.com/pelletier/go-toml v1.1.1-0.20180323185243-66540cf1fcd2 // indirect
