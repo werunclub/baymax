@@ -3,7 +3,7 @@ module github.com/werunclub/baymax/v2
 go 1.16
 
 require (
-	github.com/club-codoon/go-nsq v1.0.7-0.20211012102604-8bc26bfde5f7
+	github.com/club-codoon/go-nsq v1.0.7-0.20211012102604-8bc26bfde5f7 // indirect
 	github.com/denisenkom/go-mssqldb v0.11.0 // indirect
 	github.com/erikstmartin/go-testdb v0.0.0-20160219214506-8d10e4a1bae5 // indirect
 	github.com/fatih/color v1.6.0 // indirect
@@ -26,6 +26,7 @@ require (
 	github.com/sirupsen/logrus v1.8.1
 	github.com/soheilhy/cmux v0.1.4 // indirect
 	github.com/stretchr/testify v1.7.0
+	github.com/werunclub/go-nsq v1.0.7
 	github.com/werunclub/rpcx/v4 v4.0.4
 	golang.org/x/net v0.0.0-20210428140749-89ef3d95e781
 	gopkg.in/yaml.v2 v2.4.0 // indirect

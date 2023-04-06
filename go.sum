@@ -131,6 +131,8 @@ github.com/vmihailenco/msgpack/v4 v4.3.12 h1:07s4sz9IReOgdikxLTKNbBdqDMLsjPKXwvC
 github.com/vmihailenco/msgpack/v4 v4.3.12/go.mod h1:gborTTJjAo/GWTqqRjrLCn9pgNN+NXzzngzBKDPIqw4=
 github.com/vmihailenco/tagparser v0.1.1 h1:quXMXlA39OCbd2wAdTsGDlK9RkOk6Wuw+x37wVyIuWY=
 github.com/vmihailenco/tagparser v0.1.1/go.mod h1:OeAg3pn3UbLjkWt+rN9oFYB6u/cQgqMEUPoW2WPyhdI=
+github.com/werunclub/go-nsq v1.0.7 h1:OUtsanN8PB3UgFJ37fjT0kpAPrb3VA6uHwMXI7lzO2o=
+github.com/werunclub/go-nsq v1.0.7/go.mod h1:u1jpJ5YFMxcgqYck9XfXZTA+31msn8XOlL+I1fzDkp8=
 github.com/werunclub/rpcx/v4 v4.0.4 h1:by3rW4Qto9xD0RuXpXhYh4cAP81hYhAVO7fRcIla/v0=
 github.com/werunclub/rpcx/v4 v4.0.4/go.mod h1:QVq7kx1csLcvqBRjQNLX4L/xO2m++VhrY4OvnZJdNYg=
 go.opentelemetry.io/proto/otlp v0.7.0/go.mod h1:PqfVotwruBrMGOCsRd/89rSnXhoiJIqeYNgFYFoEGnI=
