@@ -103,6 +103,13 @@ func TLSConfig(t *tls.Config) Option {
 	}
 }
 
+// 设置错误回调
+func ErrorHandler(handler Handler) Option {
+	return func(o *Options) {
+		o.ErrorHandler = handler
+	}
+}
+
 func NewOptions(opts ...Option) *Options {
 	options := Options{
 		Context: context.Background(),

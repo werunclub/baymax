@@ -24,17 +24,23 @@ type Server struct {
 }
 
 func NewServer(addrs ...string) *Server {
-	return NewServerWithName(getBrokerName(), addrs...)
+	opts := broker.Addrs(addrs...)
+	return NewServerWithOpts(getBrokerName(), opts)
 }
 
-func NewServerWithName(brokerName string, addrs ...string) *Server {
-	opts := broker.Addrs(addrs...)
+func NewServerWithOpts(name string, opts ...broker.Option) *Server {
+	options := broker.NewOptions(opts...)
+
+	if len(options.Addrs) == 0 {
+		log.Fatalf("broker.Addrs is required")
+		return nil
+	}
 
 	var b broker.Broker
-	if brokerName == "nats" {
-		b = nats.NewNatsBroker(opts)
+	if name == "nats" {
+		b = nats.NewNatsBroker(opts...)
 	} else {
-		b = nsq.NewNsqBroker(opts)
+		b = nsq.NewNsqBroker(opts...)
 	}
 
 	return &Server{
