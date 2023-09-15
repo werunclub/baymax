@@ -1,12 +1,12 @@
 package broker
 
 import (
+	"context"
 	"crypto/tls"
-
-	"golang.org/x/net/context"
 )
 
 type Options struct {
+	Name      string
 	Addrs     []string
 	Secure    bool
 	TLSConfig *tls.Config
@@ -14,6 +14,10 @@ type Options struct {
 	// Other options for implementations of the interface
 	// can be stored in a context
 	Context context.Context
+
+	// Handler executed when error happens in broker mesage
+	// processing
+	ErrorHandler Handler
 }
 
 type PublishOptions struct {
@@ -56,6 +60,13 @@ func newSubscribeOptions(opts ...SubscribeOption) SubscribeOptions {
 	return opt
 }
 
+// name  broker
+func Name(name string) Option {
+	return func(o *Options) {
+		o.Name = name
+	}
+}
+
 // Addrs sets the host addresses to be used by the broker
 func Addrs(addrs ...string) Option {
 	return func(o *Options) {
@@ -90,4 +101,16 @@ func TLSConfig(t *tls.Config) Option {
 	return func(o *Options) {
 		o.TLSConfig = t
 	}
+}
+
+func NewOptions(opts ...Option) *Options {
+	options := Options{
+		Context: context.Background(),
+	}
+
+	for _, o := range opts {
+		o(&options)
+	}
+
+	return &options
 }

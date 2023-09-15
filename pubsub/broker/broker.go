@@ -37,34 +37,43 @@ type Subscriber interface {
 	Unsubscribe() error
 }
 
-var (
-	DefaultBroker Broker = NewNsqBroker()
-)
+// var (
+// 	DefaultBroker Broker = NewBroker()
+// )
 
-func NewBroker(opts ...Option) Broker {
-	return NewNsqBroker(opts...)
-}
+// func NewBroker(opts ...Option) Broker {
+// 	var options Options
+// 	for _, o := range opts {
+// 		o(&options)
+// 	}
 
-func Init(opts ...Option) error {
-	return DefaultBroker.Init(opts...)
-}
+// 	if options.Name == "nats" {
+// 		return nats.NewNatsBroker(opts...)
+// 	}
 
-func Connect() error {
-	return DefaultBroker.Connect()
-}
+// 	return nsq.NewNsqBroker(opts...)
+// }
 
-func Disconnect() error {
-	return DefaultBroker.Disconnect()
-}
+// func Init(opts ...Option) error {
+// 	return DefaultBroker.Init(opts...)
+// }
 
-func Publish(topic string, msg *Message, opts ...PublishOption) error {
-	return DefaultBroker.Publish(topic, msg, opts...)
-}
+// func Connect() error {
+// 	return DefaultBroker.Connect()
+// }
 
-func Subscribe(topic string, handler Handler, opts ...SubscribeOption) (Subscriber, error) {
-	return DefaultBroker.Subscribe(topic, handler, opts...)
-}
+// func Disconnect() error {
+// 	return DefaultBroker.Disconnect()
+// }
 
-func String() string {
-	return DefaultBroker.String()
-}
+// func Publish(topic string, msg *Message, opts ...PublishOption) error {
+// 	return DefaultBroker.Publish(topic, msg, opts...)
+// }
+
+// func Subscribe(topic string, handler Handler, opts ...SubscribeOption) (Subscriber, error) {
+// 	return DefaultBroker.Subscribe(topic, handler, opts...)
+// }
+
+// func String() string {
+// 	return DefaultBroker.String()
+// }

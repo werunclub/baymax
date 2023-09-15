@@ -1,4 +1,4 @@
-package broker
+package nsq
 
 import (
 	"encoding/json"
@@ -8,9 +8,12 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
+	"github.com/werunclub/baymax/v2/pubsub/broker"
 	"github.com/werunclub/go-nsq"
 	"golang.org/x/net/context"
 )
+
+type contextKeyT string
 
 var (
 	concurrentHandlerKey = contextKeyT("github.com/werunclub/baymax/v2/broker/nsq/concurrentHandlers")
@@ -18,7 +21,7 @@ var (
 
 type nsqBroker struct {
 	addrs  []string
-	opts   Options
+	opts   broker.Options
 	config *nsq.Config
 
 	sync.Mutex
@@ -30,14 +33,14 @@ type nsqBroker struct {
 
 type nsqPublication struct {
 	topic string
-	m     *Message
+	m     *broker.Message
 	nm    *nsq.Message
-	opts  PublishOptions
+	opts  broker.PublishOptions
 }
 
 type nsqSubscriber struct {
 	topic string
-	opts  SubscribeOptions
+	opts  broker.SubscribeOptions
 
 	c *nsq.Consumer
 
@@ -55,14 +58,14 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
-func (n *nsqBroker) Init(opts ...Option) error {
+func (n *nsqBroker) Init(opts ...broker.Option) error {
 	for _, o := range opts {
 		o(&n.opts)
 	}
 	return nil
 }
 
-func (n *nsqBroker) Options() Options {
+func (n *nsqBroker) Options() broker.Options {
 	return n.opts
 }
 
@@ -138,7 +141,7 @@ func (n *nsqBroker) Disconnect() error {
 	return nil
 }
 
-func (n *nsqBroker) Publish(topic string, message *Message, opts ...PublishOption) error {
+func (n *nsqBroker) Publish(topic string, message *broker.Message, opts ...broker.PublishOption) error {
 	b, err := json.Marshal(message)
 	if err != nil {
 		return err
@@ -146,8 +149,8 @@ func (n *nsqBroker) Publish(topic string, message *Message, opts ...PublishOptio
 	return n.d.Publish(topic, b)
 }
 
-func (n *nsqBroker) Subscribe(topic string, handler Handler, opts ...SubscribeOption) (Subscriber, error) {
-	options := SubscribeOptions{
+func (n *nsqBroker) Subscribe(topic string, handler broker.Handler, opts ...broker.SubscribeOption) (broker.Subscriber, error) {
+	options := broker.SubscribeOptions{
 		AutoAck: true,
 	}
 
@@ -182,7 +185,7 @@ func (n *nsqBroker) Subscribe(topic string, handler Handler, opts ...SubscribeOp
 			nm.DisableAutoResponse()
 		}
 
-		var m *Message
+		var m *broker.Message
 
 		if err := json.Unmarshal(nm.Body, &m); err != nil {
 			logrus.WithError(err).Errorf("can not parse message")
@@ -220,7 +223,7 @@ func (p *nsqPublication) Topic() string {
 	return p.topic
 }
 
-func (p *nsqPublication) Message() *Message {
+func (p *nsqPublication) Message() *broker.Message {
 	return p.m
 }
 
@@ -229,7 +232,7 @@ func (p *nsqPublication) Ack() error {
 	return nil
 }
 
-func (s *nsqSubscriber) Options() SubscribeOptions {
+func (s *nsqSubscriber) Options() broker.SubscribeOptions {
 	return s.opts
 }
 
@@ -242,8 +245,8 @@ func (s *nsqSubscriber) Unsubscribe() error {
 	return nil
 }
 
-func NewNsqBroker(opts ...Option) Broker {
-	var options Options
+func NewNsqBroker(opts ...broker.Option) broker.Broker {
+	var options broker.Options
 	for _, o := range opts {
 		o(&options)
 	}
@@ -272,8 +275,8 @@ func NewNsqBroker(opts ...Option) Broker {
 	}
 }
 
-func ConcurrentHandlers(n int) SubscribeOption {
-	return func(o *SubscribeOptions) {
+func ConcurrentHandlers(n int) broker.SubscribeOption {
+	return func(o *broker.SubscribeOptions) {
 		o.Context = context.WithValue(o.Context, concurrentHandlerKey, n)
 	}
 }

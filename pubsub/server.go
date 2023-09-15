@@ -10,6 +10,8 @@ import (
 
 	"github.com/werunclub/baymax/v2/log"
 	"github.com/werunclub/baymax/v2/pubsub/broker"
+	"github.com/werunclub/baymax/v2/pubsub/broker/nats"
+	"github.com/werunclub/baymax/v2/pubsub/broker/nsq"
 )
 
 type Server struct {
@@ -22,10 +24,17 @@ type Server struct {
 }
 
 func NewServer(addrs ...string) *Server {
-	opt := broker.Addrs(addrs...)
+	opts := broker.Addrs(addrs...)
+
+	var b broker.Broker
+	if brokerType == "nats" {
+		b = nats.NewNatsBroker(opts)
+	} else {
+		b = nsq.NewNsqBroker(opts)
+	}
 
 	return &Server{
-		broker:      broker.NewBroker(opt),
+		broker:      b,
 		subscribers: make(map[*subscriber][]broker.Subscriber),
 
 		Exit: make(chan bool, 1),

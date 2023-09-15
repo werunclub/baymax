@@ -5,6 +5,8 @@ import (
 	"sync"
 
 	"github.com/werunclub/baymax/v2/pubsub/broker"
+	"github.com/werunclub/baymax/v2/pubsub/broker/nats"
+	"github.com/werunclub/baymax/v2/pubsub/broker/nsq"
 	"github.com/werunclub/baymax/v2/pubsub/codec"
 	mj "github.com/werunclub/baymax/v2/pubsub/codec/jsonrpc"
 	"github.com/werunclub/baymax/v2/pubsub/metadata"
@@ -24,9 +26,17 @@ type Client struct {
 }
 
 func NewClient(addrs ...string) *Client {
-	opt := broker.Addrs(addrs...)
+	opts := broker.Addrs(addrs...)
+
+	var b broker.Broker
+	if brokerType == "nats" {
+		b = nats.NewNatsBroker(opts)
+	} else {
+		b = nsq.NewNsqBroker(opts)
+	}
+
 	return &Client{
-		broker: broker.NewBroker(opt),
+		broker: b,
 		once:   sync.Once{},
 	}
 }

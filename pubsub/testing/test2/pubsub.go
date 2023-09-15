@@ -6,13 +6,14 @@ import (
 	"time"
 
 	"github.com/werunclub/baymax/v2/pubsub/broker"
+	"github.com/werunclub/baymax/v2/pubsub/broker/nats"
 )
 
 var (
 	topic = "go.baymax.topic.testing"
 )
 
-func doPub() {
+func doPub(mq broker.Broker) {
 	tick := time.NewTicker(time.Second)
 	i := 0
 	for _ = range tick.C {
@@ -22,7 +23,7 @@ func doPub() {
 			},
 			Body: []byte(fmt.Sprintf("%d: %s", i, time.Now().String())),
 		}
-		if err := broker.Publish(topic, msg); err != nil {
+		if err := mq.Publish(topic, msg); err != nil {
 			log.Printf("[pub] failed: %v", err)
 		} else {
 			fmt.Println("[pub] pubbed message:", string(msg.Body))
@@ -31,8 +32,8 @@ func doPub() {
 	}
 }
 
-func sub() {
-	_, err := broker.Subscribe(topic, func(p broker.Publication) error {
+func sub(mq broker.Broker) {
+	_, err := mq.Subscribe(topic, func(p broker.Publication) error {
 		fmt.Println("[sub] received message:", string(p.Message().Body), "header", p.Message().Header)
 		return nil
 	}, broker.Queue("testing"))
@@ -42,18 +43,15 @@ func sub() {
 }
 
 func main() {
-	err := broker.Init(broker.Addrs("127.0.0.1:4150"))
+	mq := nats.NewNatsBroker(broker.Addrs("127.0.0.1:4222"))
 
-	if err != nil {
-		log.Fatalf("Broker Init error: %v", err)
-	}
-	if err := broker.Connect(); err != nil {
+	if err := mq.Connect(); err != nil {
 		log.Fatalf("Broker Connect error: %v", err)
 	}
 
-	go doPub()
-	go sub()
-	go sub()
+	go doPub(mq)
+	go sub(mq)
+	go sub(mq)
 
 	<-time.After(time.Second * 30)
 }
