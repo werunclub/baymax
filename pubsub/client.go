@@ -26,10 +26,14 @@ type Client struct {
 }
 
 func NewClient(addrs ...string) *Client {
+	return NewClientWithName(getBrokerName(), addrs...)
+}
+
+func NewClientWithName(brokerName string, addrs ...string) *Client {
 	opts := broker.Addrs(addrs...)
 
 	var b broker.Broker
-	if brokerType == "nats" {
+	if brokerName == "nats" {
 		b = nats.NewNatsBroker(opts)
 	} else {
 		b = nsq.NewNsqBroker(opts)

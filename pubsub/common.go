@@ -1,5 +1,9 @@
 package pubsub
 
-import "os"
+import (
+	"os"
+)
 
-var brokerType = os.Getenv("PUBSUB_BRORKER")
+func getBrokerName() string {
+	return os.Getenv("PUBSUB_BRORKER")
+}

@@ -24,10 +24,14 @@ type Server struct {
 }
 
 func NewServer(addrs ...string) *Server {
+	return NewServerWithName(getBrokerName(), addrs...)
+}
+
+func NewServerWithName(brokerName string, addrs ...string) *Server {
 	opts := broker.Addrs(addrs...)
 
 	var b broker.Broker
-	if brokerType == "nats" {
+	if brokerName == "nats" {
 		b = nats.NewNatsBroker(opts)
 	} else {
 		b = nsq.NewNsqBroker(opts)
