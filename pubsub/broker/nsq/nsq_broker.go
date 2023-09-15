@@ -232,6 +232,10 @@ func (p *nsqPublication) Ack() error {
 	return nil
 }
 
+func (p *nsqPublication) Error() error {
+	return nil
+}
+
 func (s *nsqSubscriber) Options() broker.SubscribeOptions {
 	return s.opts
 }

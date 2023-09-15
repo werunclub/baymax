@@ -29,6 +29,7 @@ type Publication interface {
 	Topic() string
 	Message() *Message
 	Ack() error
+	Error() error
 }
 
 type Subscriber interface {
