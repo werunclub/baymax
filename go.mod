@@ -21,7 +21,7 @@ require (
 	github.com/erikstmartin/go-testdb v0.0.0-20160219214506-8d10e4a1bae5 // indirect
 	github.com/fatih/color v1.6.0 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
-	github.com/gogo/protobuf v0.0.0-20171007142547-342cbe0a0415 // indirect
+	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/jinzhu/inflection v0.0.0-20180308033659-04140366298a // indirect
