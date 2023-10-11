@@ -25,6 +25,26 @@ func (e *Error) Error() string {
 	return ""
 }
 
+func (e *Error) IsNotFound() bool {
+	return e.Code == "not_found"
+}
+
+func (e *Error) IsBadRequest() bool {
+	return e.Code == "bad_request"
+}
+
+func (e *Error) IsUnauthorized() bool {
+	return e.Code == "unauthorized"
+}
+
+func (e *Error) IsForbidden() bool {
+	return e.Code == "forbidden"
+}
+
+func (e *Error) IsInternalServerError() bool {
+	return e.Code == "internal_server_error"
+}
+
 func NewId() string {
 	return uuid.New().String()
 }
