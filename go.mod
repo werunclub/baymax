@@ -9,7 +9,7 @@ require (
 	github.com/nats-io/nats.go v1.29.0
 	github.com/nicksnyder/go-i18n v1.10.0
 	github.com/sirupsen/logrus v1.8.1
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.7.1
 	github.com/werunclub/go-nsq v1.0.8-0.20230406070614-0d095fe8d84d
 	github.com/werunclub/rpcx/v4 v4.0.4
 	golang.org/x/net v0.10.0
@@ -33,7 +33,7 @@ require (
 	github.com/mattn/go-colorable v0.1.0 // indirect
 	github.com/mattn/go-isatty v0.0.4 // indirect
 	github.com/mattn/go-sqlite3 v1.14.8 // indirect
-	github.com/nats-io/nats-server/v2 v2.9.22 // indirect
+	github.com/nats-io/nats-server/v2 v2.9.23 // indirect
 	github.com/nats-io/nkeys v0.4.4 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
 	github.com/onsi/ginkgo v1.11.0 // indirect
@@ -50,5 +50,5 @@ require (
 	google.golang.org/appengine v1.6.5 // indirect
 	google.golang.org/protobuf v1.26.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
