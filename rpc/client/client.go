@@ -102,8 +102,16 @@ func (c *Client) Go(serviceMethod string, args interface{}, reply interface{}, d
 	return c.GoWithContext(context.Background(), serviceMethod, args, reply, done)
 }
 
-// CallWithContext 使用上下文同步执行
+// CallWithContext 使用上下文同步执行。
+// 调用方 context 没有 deadline 时，按 Options.RequestTimeout（默认 30s）兜底，
+// 避免下游服务挂死时请求无限等待。
 func (c *Client) CallWithContext(ctx context.Context, serviceMethod string, args interface{}, reply interface{}) *errors.Error {
+	if _, hasDeadline := ctx.Deadline(); !hasDeadline && c.opts.RequestTimeout > 0 {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, c.opts.RequestTimeout)
+		defer cancel()
+	}
+
 	err := c.rpcClient.Call(ctx, c.cleanServiceMethod(serviceMethod), args, reply)
 	if err != nil {
 		logrus.WithField("serviceMethod", serviceMethod).WithError(err).Errorf("rpc call fail")
@@ -112,7 +120,9 @@ func (c *Client) CallWithContext(ctx context.Context, serviceMethod string, args
 	return nil
 }
 
-// GoWithContext 使用上下文异步执行
+// GoWithContext 使用上下文异步执行。
+// 注意：异步调用无法在返回前 cancel，不做 RequestTimeout 兜底，
+// 需要超时控制时请调用方自行传入带 deadline 的 context。
 func (c *Client) GoWithContext(ctx context.Context, serviceMethod string, args interface{},
 	reply interface{}, done chan *rpcxClient.Call) (*rpcxClient.Call, error) {
 	return c.rpcClient.Go(ctx, c.cleanServiceMethod(serviceMethod), args, reply, done)

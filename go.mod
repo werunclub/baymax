@@ -11,7 +11,7 @@ require (
 	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.8.3
 	github.com/werunclub/go-nsq v1.0.8-0.20230406070614-0d095fe8d84d
-	github.com/werunclub/rpcx/v4 v4.0.5
+	github.com/werunclub/rpcx/v4 v4.0.6
 	golang.org/x/net v0.23.0
 )
 
