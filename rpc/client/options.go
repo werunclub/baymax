@@ -23,6 +23,11 @@ type Options struct {
 	// 连接超时时长
 	ConnTimeout time.Duration
 
+	// RequestTimeout 单次 RPC 调用的整体超时（含等待响应）。
+	// 调用方传入的 context 没有 deadline 时，Call/CallWithContext 会用它兜底，
+	// 避免下游服务挂死时请求无限等待。默认 30s；传入负值可禁用兜底。
+	RequestTimeout time.Duration
+
 	// 连接池大小
 	PoolSize int
 
@@ -50,6 +55,10 @@ func newOptions(opt ...Option) Options {
 
 	if opts.ConnTimeout == 0 {
 		opts.ConnTimeout = time.Second * 5
+	}
+
+	if opts.RequestTimeout == 0 {
+		opts.RequestTimeout = time.Second * 30
 	}
 
 	if opts.PoolSize == 0 {
@@ -94,6 +103,14 @@ func EtcdAddress(a []string) Option {
 func ConnTimeout(t time.Duration) Option {
 	return func(o *Options) {
 		o.ConnTimeout = t
+	}
+}
+
+// RequestTimeout 单次 RPC 调用的整体超时，仅对没有 deadline 的 context 生效。
+// 传入负值可禁用兜底超时。
+func RequestTimeout(t time.Duration) Option {
+	return func(o *Options) {
+		o.RequestTimeout = t
 	}
 }
 
