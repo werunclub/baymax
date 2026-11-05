@@ -1,6 +1,6 @@
 module github.com/werunclub/baymax/v2
 
-go 1.20
+go 1.25
 
 require (
 	github.com/go-redis/redis/v7 v7.4.1
